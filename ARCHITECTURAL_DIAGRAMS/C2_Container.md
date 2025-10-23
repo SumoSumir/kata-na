@@ -34,15 +34,20 @@ This diagram zooms into the MobilityCorp platform, showing the high-level contai
 │                    CORE SERVICES LAYER                             │
 ├────────────────────────────────────────────────────────────────────┤
 │                                                                    │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐            │
-│  │   Booking    │  │   Payment    │  │   User/KYC   │            │
-│  │   Service    │  │   Service    │  │   Service    │            │
-│  └──────┬───────┘  └──────┬───────┘  └──────┬───────┘            │
-│         │                  │                  │                    │
-│  ┌──────▼───────┐  ┌──────▼───────┐  ┌──────▼───────┐            │
-│  │   Vehicle    │  │  Telemetry   │  │    Fleet     │            │
-│  │  Management  │  │   Service    │  │  Operations  │            │
-│  └──────────────┘  └──────────────┘  └──────────────┘            │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐              │
+│  │   Booking    │  │   Payment    │  │   User/KYC   │              │
+│  │   Service    │  │   Service    │  │   Service    │              │
+│  └──────────────┘  └──────────────┘  └──────────────┘              │
+│                                                                    │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐              │
+│  │   Vehicle    │  │  Telemetry   │  │    Fleet     │              │
+│  │  Management  │  │   Service    │  │  Operations  │              │
+│  └──────────────┘  └──────────────┘  └──────────────┘              │
+│                                                                    │
+│  ┌──────────────┐                                                  │
+│  │ Notification │                                                  │
+│  │   Service    │                                                  │
+│  └──────────────┘                                                  │
 │                                                                    │
 └────────────────────────────────────────────────────────────────────┘
                         │
@@ -50,17 +55,17 @@ This diagram zooms into the MobilityCorp platform, showing the high-level contai
 │                  AI/ML SERVICES LAYER  ⭐                          │
 ├────────────────────────────────────────────────────────────────────┤
 │                                                                    │
-│  ┌──────────────────┐  ┌──────────────────┐  ┌─────────────────┐ │
-│  │  Demand          │  │  Dynamic Pricing │  │  Predictive     │ │
-│  │  Forecasting     │  │  & Incentive     │  │  Maintenance    │ │
-│  │  Engine          │  │  Engine          │  │  Engine         │ │
-│  └──────────────────┘  └──────────────────┘  └─────────────────┘ │
+│  ┌──────────────────┐  ┌──────────────────┐  ┌─────────────────┐   │
+│  │  Demand          │  │  Dynamic Pricing │  │  Predictive     │   │
+│  │  Forecasting     │  │  & Incentive     │  │  Maintenance    │   │
+│  │  Engine          │  │  Engine          │  │  Engine         │   │
+│  └──────────────────┘  └──────────────────┘  └─────────────────┘   │
 │                                                                    │
-│  ┌──────────────────┐  ┌──────────────────┐  ┌─────────────────┐ │
-│  │  Vision AI       │  │  Conversational  │  │  Multi-Provider │ │
-│  │  (Damage         │  │  AI Assistant    │  │  AI Orchestrator│ │
-│  │  Detection)      │  │  (MCP)           │  │                 │ │
-│  └──────────────────┘  └──────────────────┘  └─────────────────┘ │
+│  ┌──────────────────┐  ┌──────────────────┐  ┌─────────────────┐   │
+│  │  Vision AI       │  │  Conversational  │  │  Multi-Provider │   │
+│  │  (Damage         │  │  AI Assistant    │  │  AI Orchestrator│   │
+│  │  Detection)      │  │  (MCP)           │  │                 │   │
+│  └──────────────────┘  └──────────────────┘  └─────────────────┘   │
 │                                                                    │
 └────────────────────────────────────────────────────────────────────┘
                         │

@@ -12,15 +12,19 @@ This diagram provides a high-level overview of the MobilityCorp platform and its
          │  (Mobile    │                    │ (Operations │
          │   App)      │                    │  Dashboard) │
          └──────┬──────┘                    └──────┬──────┘
-                │                                  │
-                │ Booking, Unlock,                 │ Task Management,
-                │ Payment, Feedback                │ Maintenance Logs
-                │                                  │
+                │  ▲                               │  ▲
+                │  │                               │  │
+                │  │ Booking, Unlock,              │  │ Task Management,
+                │  │ Payment, Feedback             │  │ Maintenance Logs
+                │  │                               │  │
+                │  └─ Smart Notifications,         │  └─ Alerts & Assignments
+                │     Recommendations              │
                 ▼                                  ▼
         ┌───────────────────────────────────────────────────┐
         │                                                   │
         │         MobilityCorp Platform                     │
         │  (Microservices + AI/ML + IoT + Events)           │
+        │  ⭐ Intelligent Notification Service              │
         │                                                   │
         └───────────────────────────────────────────────────┘
                 │              │              │
