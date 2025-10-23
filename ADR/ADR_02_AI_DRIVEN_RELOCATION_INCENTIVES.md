@@ -101,7 +101,7 @@ Implement an **AI-driven dynamic pricing and relocation incentive system** that 
 - **Booking Service:** Consumes pricing events to display current rates and incentives
 - **Vehicle Telemetry Service (ADR-03):** Provides real-time vehicle locations and availability
 - **Weather & Events API ([ADR-04](ADR_04_EXTERNAL_APIS.md)):** Supplies demand forecasting features
-- **Multi-Provider AI (ADR-12):** Uses ML models for demand forecasting and optimization
+- **Multi-Provider AI ([ADR-05](ADR_05_Orchestrator.md)):** Uses orchestrator to manage model deployments and updates
 
 ### Operational Practices
 - **Model monitoring:** Track forecast accuracy, pricing elasticity, and incentive acceptance rates

@@ -8,7 +8,7 @@ This document outlines the phased rollout strategy for the new MobilityCorp plat
 
 -   **Goal:** Establish the foundational infrastructure and launch a Minimum Viable Product (MVP) in a single, controlled region to validate the core business loop.
 -   **Key Features & Services:**
-    -   **Core Microservices:** Deploy essential services for User Management, Booking, Payments, and basic Vehicle Management.
+    -   **Core Microservices:** Deploy essential services for User Management, Booking, Payments, and basic Fleet Operations.
     -   **Customer App (MVP):** A functional mobile app allowing users to find, book, unlock, and pay for vehicles.
     -   **Staff Dashboard (MVP):** A simple web interface for staff to view real-time vehicle locations and battery status.
     -   **Infrastructure:** Set up the core infrastructure, including Kubernetes, API Gateway, Kafka for essential events, and PostgreSQL for transactional data.
