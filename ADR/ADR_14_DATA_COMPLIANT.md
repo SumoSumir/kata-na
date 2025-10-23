@@ -42,7 +42,7 @@ Examples: Vehicle locations, telemetry, battery status, booking IDs
 - **Use:** For fleet operations, maintenance, and dispatch optimization  
 
 **3. Aggregated / Anonymized Data**  
-Examples: Usage statistics, ML training datasets, aggregated demand data  
+Examples: Usage statistics, aggregated demand data  
 - **Storage:** Allowed in all regions  
 - **Replication:** Permitted globally for analytics and AI training  
 - **Privacy:** Must ensure irreversible anonymization before cross-region transfer  

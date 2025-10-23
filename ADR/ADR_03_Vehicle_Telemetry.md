@@ -48,13 +48,13 @@ MobilityCorp's multi-modal vehicle fleet (bikes, scooters, cars, vans) generates
 
 ## Decision
 
-Adopt a **hybrid edge-cloud telemetry architecture** with intelligent workload distribution based on latency requirements, privacy constraints, and bandwidth optimization.
+Adopt a **hybrid edge-cloud vehicle telemetry architecture** with intelligent workload distribution based on latency requirements, privacy constraints, and bandwidth optimization.
 
 ### Architecture Components
 
 **1. Collision Detection (Edge-First with Rule-Based Fallback)**
 
-- **Primary:** Lightweight on-device ML model fusing accelerometer/IMU data, wheel slip/ABS status, and camera motion vectors for immediate collision detection (<100ms latency)
+- **Primary:** Lightweight on-device ML model fusing accelerometer/IMU data and wheel slip/ABS status
 - **Fallback:** Deterministic rule engine (e.g., IMU g-force >4G + wheel slip + sudden deceleration) triggers emergency response if ML model is unavailable or low confidence
 - **Output:** Immediate safety actions (emergency alerts, automatic braking assist if applicable), incident metadata logged locally and synced to cloud
 - **Model specs:** Quantized neural network (<5MB), optimized for ARM processors, trained on labeled collision scenarios
@@ -71,6 +71,29 @@ Adopt a **hybrid edge-cloud telemetry architecture** with intelligent workload d
   - Model improvement (after anonymization and user opt-in)
   - Regulatory compliance (insurance claims, legal requirements)
 - **Model specs:** MobileNetV3-based damage classifier, YOLOv8-nano for object detection, encrypted local storage
+
+**2. Visual Pickup/Dropoff Verification (Cloud-Based)**
+
+- **How it Works**
+  - Mobile app captures and encrypts images, uploads to cloud
+  - Cloud ML models (YOLOv8, EfficientNet) detect damage and verify condition
+  - Returns: verification score, damage classification, blurred thumbnails
+
+- **Privacy & Security**
+  - Raw images stored encrypted for 7 days, then deleted
+  - Blurred thumbnails kept for disputes
+  - Full images retained only for: disputes, user opt-in (training), legal requirements
+  - Device attestation prevents tampering; all access audited
+
+- **Bandwidth & Performance**
+  - WiFi preferred; compression for cellular
+  - <1 second verification latency
+  - Full resolution requested only when needed
+
+- **Model Training**
+  - User opt-in required
+  - Images anonymized before training
+  - Differential privacy applied
 
 **3. Predictive Maintenance (Local Aggregation + Cloud Training)**
 
