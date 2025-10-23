@@ -1,4 +1,4 @@
-# ADR_05: Orchestrator 
+# ADR-05: Orchestrator 
       
 ## Status - accepted
 

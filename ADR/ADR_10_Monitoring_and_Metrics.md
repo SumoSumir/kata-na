@@ -1,4 +1,4 @@
-# ADR_08: Monitoring Data Store – VictoriaMetrics
+# ADR-10: Monitoring Data Store – VictoriaMetrics
 
 ## Status - accepted
 

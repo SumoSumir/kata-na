@@ -1,4 +1,4 @@
-# ADR-005: Conversational UX and AI Assistant Integration with MCP Server
+# ADR-13: Conversational UX and AI Assistant Integration with MCP Server
 
 ## Status
 Proposed

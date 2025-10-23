@@ -1,4 +1,4 @@
-# ADR-003: Multi-Provider AI Strategy
+# ADR-12: Multi-Provider AI Strategy
 
 ## Status
 Accepted

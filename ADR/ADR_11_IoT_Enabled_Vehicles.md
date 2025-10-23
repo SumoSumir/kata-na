@@ -1,4 +1,4 @@
-# ADR_11: IoT Security & Edge Computing for Vehicle Telemetry
+# ADR-11: IoT Security & Edge Computing for Vehicle Telemetry
 
 ## Status - accepted
 

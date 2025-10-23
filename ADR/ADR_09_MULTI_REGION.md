@@ -1,4 +1,4 @@
-# ADR-004: Multi-Region Deployment and Region-Wise AI Model Strategy
+# ADR-09: Multi-Region Deployment and Region-Wise AI Model Strategy
 
 ## Status
 Accepted

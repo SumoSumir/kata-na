@@ -1,4 +1,4 @@
-# ADR_07: Tracing & Logging Technology – OpenTelemetry
+# ADR-07: Tracing & Logging Technology – OpenTelemetry
 
 ## Status - accepted
 
