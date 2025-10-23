@@ -19,7 +19,6 @@ Enable intelligent circuit breaking and fallback logic
 
 Isolate business logic from provider specifics, maximizing flexibility
 
-We must also assess alternative approaches to determine if the orchestrator model is best for our needs.
 
 ### Decision
 We have accepted the idea of building an independent orchestrator module for each critical third-party service, which manages routing, circuit breaking, and provider selection based on business rules and system health.

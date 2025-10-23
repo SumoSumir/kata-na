@@ -15,7 +15,7 @@ Available alternatives include:
 - Event-driven analytics without ML or sensor fusion
 
 ## Decision
-We will implement **mutual TLS (mTLS)** for secure authentication of IoT vehicles to the backend server, ensuring only valid devices send telemetry and battery data. Edge computing modules will process sensor data locally—detecting collision events and aggregating driver analytics (speeding events, collision frequency) before transmitting summaries to the backend.
+We will implement **mutual TLS (mTLS)** with our custom CA for secure authentication of IoT vehicles to the backend server, ensuring only valid devices send telemetry and battery data. Edge computing modules will process sensor data locally—detecting collision events and aggregating driver analytics (speeding events, collision frequency) before transmitting summaries to the backend.
 
 **Justification:**
 - mTLS provides strong cryptographic assurance of device identity and secure transmission.
@@ -29,7 +29,7 @@ We will implement **mutual TLS (mTLS)** for secure authentication of IoT vehicle
 - **Pros:**
   - Security: mTLS prevents unauthorized data ingestion, isolates device streams, and protects data in transit.
   - Reliability: Edge analytics ensures collision detection is not dependent on cloud latency or connectivity.
-  - Efficiency: Offloading processing to the edge conserves bandwidth and reduces backend compute costs.
+  - Efficiency: Offloading processing to the edge conserves bandwidth and reduces backend compute costs. Only actionable/aggregated data sent to backend which will be easier to scale as well.
   - Rich analytics: Enables granular driver analysis (over-speed, collision frequency) with summarized reporting to backend.
 
 - **Cons:**
