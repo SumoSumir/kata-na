@@ -38,13 +38,13 @@ Key design:
 
 ## Consequences
 ✅ **Positive:**
-- Consistent schema across providers and models  
-- Reliable and resilient against provider outages  
-- Cached data reduces cost and latency  
-- Supports historical reprocessing for retraining  
+- **Consistency:** Unified schema across providers and models.
+- **Reliability:** Resilient against provider outages.
+- **Efficiency:** Cached data reduces API cost and latency.
+- **Reusability:** Enables historical reprocessing for retraining.
 
 ❌ **Negative:**
-- **Data Freshness:** Caching might introduce data staleness.
+- **Data Staleness:** Caching might introduce data staleness.
 - **Infrastructure Cost:** Requires a dedicated cache and aggregator service.
 - **Provider Reliability:** Data quality can be inconsistent across different APIs.
 - **API Switching Costs:** Migrating to a new provider requires complex data backfilling.
