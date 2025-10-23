@@ -52,10 +52,10 @@ Implement an **AI-driven dynamic pricing and relocation incentive system** that 
 - **Real-time prediction:** Forecast demand at 15-minute intervals for each 500m grid cell in each city
 - **Input features:**
   - Historical rental patterns (time of day, day of week, seasonality)
-  - Weather conditions (temperature, precipitation, wind via Weather & Events API - ADR-04)
-  - Events (concerts, sports, festivals via PredictHQ - ADR-04)
-  - Public holidays and school schedules
-  - Transit disruptions (metro closures, traffic accidents)
+  - Weather conditions (temperature, precipitation, wind via Weather & Events API - [ADR-04](ADR_04_EXTERNAL_APIS.md))
+  - Events (concerts, sports, festivals via PredictHQ - [ADR-04](ADR_04_EXTERNAL_APIS.md))
+  - Public holidays and school schedules (via Calendarific API - [ADR-04](ADR_04_EXTERNAL_APIS.md))
+  - Transit disruptions (metro closures, traffic accidents, grid lock via Map API - [ADR-04](ADR_04_EXTERNAL_APIS.md))
 - **Model:** Gradient boosting (XGBoost) or deep learning (LSTM) trained on historical data
 - **Output:** Predicted demand probability distribution per location and time window
 
@@ -100,7 +100,7 @@ Implement an **AI-driven dynamic pricing and relocation incentive system** that 
 - **Event-Driven Architecture (ADR-06):** Pricing updates published to Kafka topics (`pricing.updated`, `incentives.offered`)
 - **Booking Service:** Consumes pricing events to display current rates and incentives
 - **Vehicle Telemetry Service (ADR-03):** Provides real-time vehicle locations and availability
-- **Weather & Events API (ADR-04):** Supplies demand forecasting features
+- **Weather & Events API ([ADR-04](ADR_04_EXTERNAL_APIS.md)):** Supplies demand forecasting features
 - **Multi-Provider AI (ADR-12):** Uses ML models for demand forecasting and optimization
 
 ### Operational Practices
