@@ -30,7 +30,7 @@ Implement microservices architecture with services organized by business capabil
 - **Fault Isolation:** A booking service failure shouldn't disrupt vehicle tracking. Service-based architecture couples dissimilar functions, risking cascading failures. Microservices contain failures within service boundaries.
 - **Technology Flexibility:** Telemetry benefits from time-series databases, booking from relational databases, and fleet operations from graph databases. Service-based architecture forces technology compromises; microservices allow optimal stacks per capability.
 - **Development Velocity:** Enables independent changes and rollouts (e.g., Pricing, Booking) using backward‑compatible APIs, consumer‑driven contracts, and feature flags — reducing coordination and supporting incremental releases.
-- **Geographic Expansion:** Adding countries means deploying telemetry instances regionally while reusing booking infrastructure. Service-based architecture complicates regional scaling; microservices support flexible geographic distribution.
+- **Geographic Expansion:** Adding countries means deploying telemetry instances regionally while potentially reusing existing booking infrastructure within the country. Service-based architecture complicates regional scaling; microservices support flexible geographic distribution.
 
 Key principles:
 - Business capability alignment with independent deployability
