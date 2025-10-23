@@ -8,9 +8,9 @@ Accepted
 
 MobilityCorp's multi-modal vehicle fleet (bikes, scooters, cars, vans) generates continuous telemetry data that must support three critical AI-driven capabilities:
 
-1. **Collision Detection:** Real-time detection of vehicle collisions using accelerometer/IMU sensors, wheel/ABS status, and camera-based motion analysis to trigger immediate safety responses (alerts, emergency braking assist, incident logging).
+1. **Collision Detection:** Real-time detection of vehicle collisions using accelerometer/IMU sensors, wheel/ABS status to trigger immediate safety responses to generate alerts/emergency braking assist/incident logging.
 
-2. **Visual Pickup/Dropoff Verification:** Camera-based verification of rental start/end events to confirm vehicle condition, detect damage, and resolve disputes while minimizing privacy exposure and bandwidth usage.
+2. **Visual Pickup/Dropoff Verification:** Camera-based verification via end users mobile app at rental start/end events to confirm vehicle condition, detect damage, and resolve disputes while minimizing privacy exposure and bandwidth usage.
 
 3. **Predictive Maintenance:** Continuous monitoring of vehicle health metrics (battery temperature, vibration patterns, error codes, usage patterns) to forecast component failures and optimize maintenance scheduling, reducing downtime and operational costs.
 
@@ -20,7 +20,7 @@ MobilityCorp's multi-modal vehicle fleet (bikes, scooters, cars, vans) generates
 - **Privacy compliance:** GDPR and data protection regulations require minimizing raw image uploads and obtaining user consent.
 - **Intermittent connectivity:** Vehicles may operate in areas with poor network coverage; edge processing is essential.
 - **Limited edge compute:** Vehicle IoT hardware has constrained CPU/GPU resources; models must be lightweight and optimized.
-- **Bandwidth costs:** Continuous raw telemetry and image streaming would be prohibitively expensive at fleet scale (10,000+ vehicles per city).
+- **Bandwidth costs:** Continuous raw telemetry and image streaming would be prohibitively expensive at fleet scale (10,000+ vehicles per country).
 - **Fleet-wide learning:** Models should improve over time using aggregated data from all vehicles while preserving privacy.
 
 ### Alternatives Considered
@@ -97,11 +97,11 @@ Adopt a **hybrid edge-cloud vehicle telemetry architecture** with intelligent wo
 
 **3. Predictive Maintenance (Local Aggregation + Cloud Training)**
 
-- **Edge aggregation:** Vehicles continuously collect and compress sensor data:
+- **Edge aggregation:** Vehicles continuously collect, compress & stream minimal sensor data at short intervals:
   - Battery: voltage curves, temperature profiles, charging cycles, degradation rate
-  - Mechanical: vibration spectra (FFT), brake wear indicators, suspension stress
-  - Operational: error codes, usage intensity, environmental conditions (temperature, humidity)
-- **Periodic uploads:** Compressed, anonymized telemetry aggregates sent to cloud every 6 hours or when on WiFi
+  - Operational: error codes, usage intensity, environmental conditions (temperature, humidity), GPS.
+- **Periodic uploads:** Compressed, anonymized telemetry aggregates sent to cloud every couple of hours or when on WiFi.
+  - E.g. Mechanical: vibration spectra (FFT), brake wear indicators, suspension stress
 - **Cloud-based training:** Fleet-wide models trained on aggregated data to predict:
   - Battery failure (7-14 day advance warning)
   - Brake replacement needs (distance-based prediction)
