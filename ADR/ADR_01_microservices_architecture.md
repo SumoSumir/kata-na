@@ -23,7 +23,7 @@ Business requirements include high testability for minimal bug and rapid feature
 - **Accepted:** Best meets scaling, reliability, and development velocity requirements
 
 ## Decision
-Implement microservices architecture with services organized by business capability. Core services include Telemetry, Booking, Payment, Vehicle Management, User/KYC, and Fleet Operations.
+Implement microservices architecture with services organized by business capability. Core services include Vehicle Telemetry, Booking, Payment, User/KYC, and Fleet Operations.
 
 **Rationale for Microservices over Service-Based Architecture:**
 - **Independent Scaling:** Telemetry processes continuous high-volume data streams requiring aggressive scaling, while booking/payment services handle low-volume transactional loads. Service-based architecture would force scaling entire service groups together, wasting resources. Microservices enable precise capacity allocation per service.
