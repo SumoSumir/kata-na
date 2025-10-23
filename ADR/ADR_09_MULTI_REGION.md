@@ -2,7 +2,6 @@
 
 ## Status
 Accepted
-**Date:** 2024-10-22
 
 ## Context
 MobilityCorp’s AI services operate across multiple geographies (e.g., India, EU, North America). Regional deployment of AI workloads is essential to meet latency, data compliance, and availability requirements.  

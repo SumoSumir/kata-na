@@ -2,7 +2,6 @@
 
 ## Status
 Accepted
-**Date:** 2024-10-22
 
 ## Context
 MobilityCorp's AI platform depends on multiple external AI services (LLMs for personalization and vision APIs for image understanding). Key risks identified include:

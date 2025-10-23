@@ -2,7 +2,6 @@
 
 ## Status
 Accepted  
-**Date:** 2024-10-22
 
 ## Context
 AI demand forecasting and operational intelligence require external context data:

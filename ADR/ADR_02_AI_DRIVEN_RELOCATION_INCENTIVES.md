@@ -2,7 +2,6 @@
 
 ## Status
 Accepted  
-**Date:** 2024-10-22
 
 ## Context
 MobilityCorp operates multi-modal vehicle fleets (bikes, scoopers, cars, vans) across multiple EU cities. A critical operational challenge is **vehicle imbalance**: popular pickup locations become depleted while low-demand areas accumulate excess vehicles, leading to:
@@ -100,7 +99,7 @@ Implement an **AI-driven dynamic pricing and relocation incentive system** that 
 ### Integration with Existing Systems
 - **Event-Driven Architecture (ADR-06):** Pricing updates published to Kafka topics (`pricing.updated`, `incentives.offered`)
 - **Booking Service:** Consumes pricing events to display current rates and incentives
-- **Telemetry Service (ADR-03):** Provides real-time vehicle locations and availability
+- **Vehicle Telemetry Service (ADR-03):** Provides real-time vehicle locations and availability
 - **Weather & Events API (ADR-04):** Supplies demand forecasting features
 - **Multi-Provider AI (ADR-12):** Uses ML models for demand forecasting and optimization
 

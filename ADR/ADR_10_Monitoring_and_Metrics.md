@@ -1,6 +1,7 @@
 # ADR-10: Monitoring Data Store – VictoriaMetrics
 
-## Status - accepted
+## Status
+Accepted
 
 ## Context
 Selecting a backend data store for metrics is key to monitoring system performance and health. While **Prometheus** is the prevalent choice for time-series data, alternatives exist, including:

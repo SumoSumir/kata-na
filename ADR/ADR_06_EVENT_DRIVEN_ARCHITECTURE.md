@@ -2,7 +2,6 @@
 
 ## Status
 Accepted  
-**Date:** 2024-10-22
 
 ## Context
 The AI platform needs to react to real-time events (bookings, battery status changes, GPS updates) and perform asynchronous processing.  

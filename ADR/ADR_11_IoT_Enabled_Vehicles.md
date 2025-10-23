@@ -1,6 +1,7 @@
 # ADR-11: IoT Security & Edge Computing for Vehicle Telemetry
 
-## Status - accepted
+## Status
+Accepted
 
 ## Context
 Our automotive telematics platform requires collecting sensor and telemetry data from IoT-enabled vehicles to detect collisions (via accelerometer and other sensors), analyze driver behavior (speeding, collision events), and monitor battery health. The system must:

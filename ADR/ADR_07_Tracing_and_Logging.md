@@ -1,6 +1,7 @@
 # ADR-07: Tracing & Logging Technology – OpenTelemetry
 
-## Status - accepted
+## Status 
+Accepted
 
 ## Context
 Modern distributed applications require robust tracing and logging for monitoring, debugging, and performance optimization. Several solutions exist for this purpose, including but not limited to:

@@ -2,7 +2,6 @@
 
 ## Status
 Accepted  
-**Date:** 2024-10-22
 
 ## Context
 The AI platform runs multiple recurring and event-based workflows, including:
