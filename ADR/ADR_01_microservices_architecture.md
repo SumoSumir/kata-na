@@ -49,7 +49,7 @@ This microservices foundation enables and is supported by other architectural de
 - **Event-Driven Architecture (ADR-06):** Asynchronous communication between services using Kafka
 - **Distributed Tracing (ADR-07):** OpenTelemetry for observability across service boundaries
 - **Multi-Region Deployment (ADR-09):** Regional service deployment for geographic expansion
-- **Telemetry Architecture (ADR-03):** Edge-cloud hybrid processing within microservices framework
+- **Vehicle Telemetry Architecture (ADR-03):** Edge-cloud hybrid processing within microservices framework
 
 ## Consequences
 ✅ **Positive:**

@@ -3,7 +3,6 @@
 ## Status
 
 Accepted  
-**Date:** 2024-10-22
 
 ## Context
 
