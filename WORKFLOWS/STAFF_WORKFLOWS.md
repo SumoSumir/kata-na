@@ -45,7 +45,7 @@
 │ • AI identifies vehicles to relocate:                           │
 │   - Excess bikes/scooters in low-demand zones                   │
 │   - Move to predicted high-demand locations                     │
-│ • Staff loads vehicles into van                                 │
+│ • Staff loads vehicles into van/drives it themselves            │
 │ • Transports to target parking bays                             │
 │ • Unloads and verifies placement via app                        │
 │ • Event published: `operations.vehicle_relocated`               │

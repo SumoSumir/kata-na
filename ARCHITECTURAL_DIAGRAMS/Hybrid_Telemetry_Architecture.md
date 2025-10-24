@@ -16,7 +16,7 @@ This diagram details the hybrid edge-cloud architecture for processing vehicle t
 │  │  • GPS/GNSS Module                                 │            │
 │  │  • IMU/Accelerometer (collision detection)         │            │
 │  │  • Battery Management System (BMS)                 │            │
-│  │  • Camera (pickup/dropoff verification)            │            │
+│  │  • End users Camera (pickup/dropoff verification)  │            │
 │  │  • NFC/Bluetooth (unlock/lock)                     │            │
 │  │  • 4G/5G Modem (connectivity)                      │            │
 │  └────────────────────────────────────────────────────┘            │

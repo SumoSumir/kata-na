@@ -49,6 +49,5 @@ Key design:
 - **API Switching Costs:** Migrating to a new provider requires complex data backfilling.
 
 AI-Specific Impacts:
-- Weather and event data used as regressors in demand and battery models  
-- Metadata supports augmentations in vision models (e.g., rain/fog)  
+- Weather and event data used as regressors in demand and battery models
 - Historical archives enable model drift analysis and retraining consistency  

@@ -27,11 +27,13 @@
 │ • Booking confirmation sent via push + email                    │
 │ • Optional: allow bookings via a short conversational chat      │
 │   with the in‑app AI assistant                                  │
+│ • Optional: opt in for relocation incentive after mentioning    │
+|   your drop point                                               |
 ┌─────────────────────────────────────────────────────────────────┐
 │ 3. UNLOCK & START RENTAL                                        │
 ├─────────────────────────────────────────────────────────────────┤
 │ • User arrives at vehicle location                              │
-│ • NFC tap or QR scan via app to unlock                         │
+│ • NFC tap via app to unlock.                                    │
 │ • Vehicle unlocked remotely by backend                          │
 │ • Camera-based pickup verification:                             │
 │   - User takes photo of vehicle condition                       │
@@ -96,11 +98,10 @@
 │ 2. Incentive engine calculates offer:                           │
 │    - Distance: 2.5 km                                           │
 │    - Urgency: High (peak morning commute)                       │
-│    - Incentive: "50% off + €3 credit if you drop off in        │
+│    - Incentive: "50% off + €3 credit if you drop off in         │
 │      Downtown by 9 AM"                                          │
 │                                                                 │
-│ 3. User accepts incentive:                                      │
-│    - Books vehicle immediately                                  │
+│ 3. User accepts optional incentive:                             │
 │    - App provides navigation to incentive dropoff zone          │
 │    - Real-time progress tracking                                │
 │                                                                 │
