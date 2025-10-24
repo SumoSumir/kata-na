@@ -61,10 +61,7 @@ Adopt a **hybrid edge-cloud vehicle telemetry architecture** with intelligent wo
 
 **2. Visual Pickup/Dropoff Verification (Privacy-Preserving Edge Inference)**
 
-- **On-device processing:** Run lightweight computer vision models to detect damage, verify vehicle condition, and generate verification score (0-1 confidence)
 - **Privacy-first uploads:** Only upload privacy-preserving artifacts:
-  - Blurred thumbnails with damage regions highlighted
-  - Perceptual hashes or embeddings (not raw images)
   - Metadata: timestamp, GPS, verification score, damage classification
 - **Selective full-image upload:** Raw images retained locally for 7 days, uploaded only for:
   - Disputes requiring manual review (with user consent)
@@ -120,7 +117,7 @@ Adopt a **hybrid edge-cloud vehicle telemetry architecture** with intelligent wo
 
 **Privacy and Compliance**
 
-- **Data minimization:** Only collect and transmit necessary data; raw images ephemeral by default
+- **Data minimization:** Only collect and transmit necessary data (stream at regular intervals for time sensitive data); raw images ephemeral by default
 - **Consent management:** Users explicitly opt-in to image uploads and data sharing for model training
 - **Regional compliance:** Separate data retention policies per jurisdiction (GDPR, DPDP Act, etc.)
 - **Encryption:** End-to-end encryption for all telemetry data in transit and at rest

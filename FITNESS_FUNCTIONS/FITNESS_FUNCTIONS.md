@@ -49,6 +49,10 @@ Architectural fitness functions are quantifiable metrics that measure how well t
     -   **Description:** Percentage of time a vehicle is in a revenue-generating state (rented).
     -   **Target:** Increase by 15% YoY
     -   **Justification:** Directly measures the efficiency of the fleet and the impact of demand-shaping initiatives.
+-   **Reduction of Cloud Services Cost**
+    -   **Description:** Percentage decrease in total cloud infrastructure spending through optimization and automation initiatives.
+    -   **Target:** ≥ 10% annual reduction
+    -   **Justification:** Enhances cost efficiency by leveraging right-sized resources, reserved instances, bulk discounting and data transfer optimization.
 
 ---
 

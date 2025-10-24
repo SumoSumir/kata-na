@@ -23,7 +23,7 @@ This diagram details the hybrid edge-cloud architecture for processing vehicle t
 │                         │                                          │
 │                         ▼                                          │
 │  ┌────────────────────────────────────────────────────┐            │
-│  │  Edge Processing Module (Lightweight ML)           │            │
+│  │  Edge Processing Module                            │            │
 │  │                                                    │            │
 │  │  Collision Detection Model:                       │            │
 │  │  • Input: IMU data (50Hz), wheel slip, ABS        │            │
@@ -31,13 +31,6 @@ This diagram details the hybrid edge-cloud architecture for processing vehicle t
 │  │  • Latency: <100ms                                │            │
 │  │  • Fallback: Rule-based (g-force >4G)             │            │
 │  │  • Action: Immediate alert + disable vehicle      │            │
-│  │                                                    │            │
-│  │  Damage Detection Model:                          │            │
-│  │  • Input: Pickup/dropoff photos                   │            │
-│  │  • Model: MobileNetV3 (<10MB)                     │            │
-│  │  • Privacy: Generate blurred thumbnails           │            │
-│  │  • Output: Damage classification + confidence     │            │
-│  │  • Upload: Only metadata + embeddings (not raw)   │            │
 │  │                                                    │            │
 │  │  Telemetry Aggregation:                           │            │
 │  │  • GPS: 30s intervals → compressed batches        │            │

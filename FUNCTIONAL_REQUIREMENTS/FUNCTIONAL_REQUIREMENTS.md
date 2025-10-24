@@ -15,6 +15,8 @@ Functional requirements define the specific behaviors and functions of the syste
 -   **Vehicle Discovery & Booking:**
     -   Display a real-time map of available vehicles.
     -   Search and filter vehicles by type, proximity, battery level, and price.
+    -   Use conversational AI Assistant for booking your ride via text or voice.
+    -   Support Auto booking by vehicle type, time in stipulated price ranges.
     -   Receive personalized vehicle and route recommendations.
     -   Book vehicles for immediate use (scooters/eBikes) or schedule in advance (cars/vans).
     -   Receive booking confirmations via push notifications and email.

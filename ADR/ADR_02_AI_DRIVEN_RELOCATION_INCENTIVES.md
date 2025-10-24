@@ -115,12 +115,12 @@ Implement an **AI-driven dynamic pricing and relocation incentive system** that 
 ### ✅ Positive Impacts
 
 **Financial**
-- 30-50% reduction in manual relocation costs (€10-15/vehicle → customer self-relocations)
-- 10-20% revenue increase from dynamic pricing capturing willingness-to-pay during peak demand
+- Reduction in manual relocation costs (€10-15/vehicle → customer self-relocations)
+- Revenue increase from dynamic pricing capturing willingness-to-pay during peak demand
 - Improved fleet utilization and reduced idle inventory from better vehicle distribution
 
 **Customer Experience**
-- Higher availability reduces "no vehicles available" scenarios by 20%+
+- Higher availability reduces "no vehicles available" scenarios
 - Transparent dynamic pricing builds trust when supply/demand explained clearly
 - Gamification of relocation incentives creates positive engagement
 
