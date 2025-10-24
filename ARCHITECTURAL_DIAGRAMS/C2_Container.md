@@ -95,6 +95,7 @@ This diagram zooms into the MobilityCorp platform, showing the high-level contai
 │                                                                    │
 │  ┌──────────────────┐  ┌──────────────────┐  ┌─────────────────┐ │
 │  │ OpenTelemetry    │  │   Grafana        │  │   PagerDuty     │ │
+│  │ + VictoriaMetric │  │                  │  │                 │ │
 │  │ (Tracing/Logs)   │  │  (Dashboards)    │  │   (Alerts)      │ │
 │  └──────────────────┘  └──────────────────┘  └─────────────────┘ │
 │                                                                    │
