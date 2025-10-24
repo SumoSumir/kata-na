@@ -4,11 +4,11 @@
 Accepted  
 
 ## Context
-The AI platform needs to react to real-time events (bookings, battery status changes, GPS updates) and perform asynchronous processing.  
+The AI platform needs to react to real-time events (bookings, GPS updates) and perform asynchronous processing.  
 
 Key requirements include:
 - Real-time demand prediction updates when bookings occur  
-- Battery orchestrator monitoring vehicle status continuously
+- Monitoring vehicle GPS status continuously
 - Decoupling between event producers and consumers  
 - Ability to replay events for ML model training  
 - Support for multiple consumers of the same event (e.g., analytics, ML, core services)
