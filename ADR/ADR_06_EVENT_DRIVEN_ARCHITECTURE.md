@@ -8,8 +8,7 @@ The AI platform needs to react to real-time events (bookings, battery status cha
 
 Key requirements include:
 - Real-time demand prediction updates when bookings occur  
-- Battery orchestrator monitoring vehicle status continuously  
-- Pattern detection analyzing booking history  
+- Battery orchestrator monitoring vehicle status continuously
 - Decoupling between event producers and consumers  
 - Ability to replay events for ML model training  
 - Support for multiple consumers of the same event (e.g., analytics, ML, core services)
@@ -46,7 +45,7 @@ Implement an **event-driven architecture** using **Apache Kafka** as the central
 
 ### Event Schema
 - Use **Avro schemas** with **Schema Registry** for schema evolution  
-- Include **correlation IDs** for distributed tracing  
+- Include **parent IDs** for distributed tracing (opentelemetry)  
 - Timestamp all events with **event time** (not processing time)
 
 ### Processing Patterns

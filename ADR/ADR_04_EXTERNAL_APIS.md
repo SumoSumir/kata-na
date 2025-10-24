@@ -18,14 +18,13 @@ Requirements:
 - Fault tolerance and cost optimization
 
 Alternatives considered:
-1. **Direct calls from ML pipelines:** Simple, but inconsistent and prone to rate-limiting.
-2. **Third-party data aggregators:** Managed feeds, but expensive and inflexible.  
-3. **Static offline datasets:** No API dependency, but outdated and not real-time.
-4. **Build in-house data source:** Fetches and curates data internally. High initial effort but offers maximum control and avoids licensing fees.
-5. **Orchestrator-based integration:** As detailed in [ADR-05](./ADR_05_Orchestrator.md), an orchestrator could manage API calls, but this might centralize failure points.
+1. **Third-party data aggregators:** Managed feeds, but expensive and inflexible.  
+2. **Static offline datasets:** No API dependency, but outdated and not real-time.
+3. **Build in-house data source:** Fetches and curates data internally. High initial effort but offers maximum control and avoids licensing fees.
+4. **Orchestrator-based integration:** As detailed in [ADR-05](./ADR_05_Orchestrator.md), an orchestrator could manage API calls, but this might centralize failure points.
 
 ## Decision
-Implement a **Weather & Events Aggregation Service (WEA Service)** that integrates with external APIs and provides normalized data to AI services.
+Implement a separate orchestrator by business function/data required which integrates with external APIs and provides normalized data to our services.
 
 Key design:
 - **Providers:** OpenWeatherMap (primary), Tomorrow.io (fallback); Calendarific for holidays; PredictHQ for events.  

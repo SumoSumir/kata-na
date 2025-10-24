@@ -4,7 +4,7 @@
 Accepted
 
 ## Context
-MobilityCorp operates across multiple regions with strict data protection laws such as GDPR (Europe), DPDP (India), and CCPA (US).  
+MobilityCorp operates across multiple regions with strict data protection laws such as GDPR (Europe), FDPA (France) (Future with DPDP (India), and CCPA (US)).  
 The platform processes diverse data types — user profiles, ride telemetry, and aggregated analytics — each with unique residency and replication requirements.  
 
 Compliance and architecture must ensure:
@@ -21,7 +21,7 @@ Adopt a **data residency and classification policy** with region-scoped storage 
 **GDPR (Europe)**
 - **User Data Storage:** `eu-west-1` only  
 - **Processing:** Allowed only within `eu-west-1`  
-- **ML Training:** Only anonymized data can be exported to `us-east-1`  
+- **ML Training:** Only anonymized data can be exported to external regions example `us-east-1`  
 - **Model Serving:** Inference runs locally in `eu-west-1`  
 - **Deletion Requests:** Must delete records and derived artifacts from all regions  
 

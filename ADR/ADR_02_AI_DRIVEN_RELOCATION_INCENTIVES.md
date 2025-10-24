@@ -78,17 +78,18 @@ Implement an **AI-driven dynamic pricing and relocation incentive system** that 
 - **Transparency:** Display dynamic pricing clearly in app with explanations ("High demand in this area")
 
 **4. Relocation Incentive Engine**
-- **Route identification:** Identify beneficial relocation routes (high-supply to high-demand zones)
+- **Opt-in Service:** Users can enable this while booking. Our preferred destination will be within 2 km of theirs, and they won’t be billed if going slightly past their stop to our target zone. The system checks for existing bookings and nearby riders (within 2 km) finishing trips before scheduling a pickup.
+- **Route identification:** Identify beneficial relocation routes from high-supply to high-demand zones.
 - **Incentive calculation:**
-  - **Distance-based:** Longer relocations receive higher incentives
-  - **Urgency-based:** Critical imbalances trigger higher incentives
-  - **Vehicle type:** Cars/vans receive higher incentives than bikes/scooters (higher relocation value)
-  - **Customer segmentation:** Frequent users may receive personalized incentive offers
+ - Distance-based: Longer relocations earn higher incentives.
+ - Urgency-based: Zones with critical imbalances trigger higher rewards.
+ - Vehicle type: Cars/vans get higher incentives than bikes/scooters due to higher relocation value.
+ - Customer segmentation: Frequent users may receive personalized offers.
 - **Incentive types:**
-  - Percentage discounts (e.g., "50% off if you drop off in Zone B")
-  - Flat-rate bonuses (e.g., "Earn €5 credit for this relocation")
-  - Loyalty points multipliers (e.g., "2x points for relocations")
-- **Real-time updates:** Incentives adjust every 5-15 minutes based on current conditions
+ - Percentage discounts (e.g., “50% off if you drop off in Zone B”)
+ - Flat-rate bonuses (e.g., “Earn €5 credit for this relocation”)
+ - Loyalty points multipliers (e.g., “2× points for relocations”)
+- **Real-time updates:** Incentives adjust every 5–15 minutes based on live demand-supply conditions.​
 
 **5. Optimization and Constraints**
 - **Revenue optimization:** Balance incentive costs against avoided manual relocation costs and increased availability revenue
