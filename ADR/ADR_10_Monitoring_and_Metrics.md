@@ -23,6 +23,7 @@ We will use **VictoriaMetrics** as our primary metrics data store.
 - Offers lower memory footprint and resource usage compared to standard Prometheus, reducing operational costs.
 - Highly performant and scalable for high-cardinality, long-retention setups.
 - Maintains compatibility with Prometheus protocols (scraping, querying, remote write/read), ensuring seamless integration with Grafana and existing alert systems (including PagerDuty).
+- It also integrates easily with existing OpenTelemetry collector to export the metrics while being more efficient in storage & memory
 - Open-source and widely adopted in performance-intensive environments.
 
 ## Consequences
