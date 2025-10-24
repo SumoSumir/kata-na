@@ -65,7 +65,7 @@ This diagram details the hybrid edge-cloud architecture for processing vehicle t
 ├─────────────────────────────────────────────────────────────────────┤
 │                                                                     │
 │  ┌────────────────────────────────────────────────────┐            │
-│  │  IoT Gateway (AWS IoT Core / Azure IoT Hub)        │            │
+│  │  IoT Gateway (AWS IoT Core).                       │            │
 │  │  • Device authentication (mTLS)                    │            │
 │  │  • Message validation and routing                  │            │
 │  │  • Protocol translation (MQTT → Kafka)             │            │

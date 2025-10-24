@@ -8,7 +8,7 @@ MobilityCorp’s AI services operate across multiple countries in Europe (e.g., 
 
 Challenges include:
 - **Latency:** Centralized inference increases response time for distant regions.
-- **Compliance:** Data privacy laws (GDPR, DPDP Act) require local data residency.
+- **Compliance:** Data privacy laws (GDPR, FDPA Act) require local data residency.
 - **Availability:** Outages or throttling in one region should not impact global operations.
 - **Model Variability:** Certain AI models or providers may perform better or be allowed only in specific regions.
 - **Cost Optimization:** Different regions have varying compute and provider costs.
@@ -19,17 +19,16 @@ To ensure compliance, performance, and resilience, the AI platform needs a multi
 Adopt a **multi-region deployment architecture** combined with **region-aware model selection**.
 
 Key components:
-- **Regional AI Hubs:** Deploy inference services in key regions (e.g., `ap-south-1`, `eu-west-1`, `us-east-1`).
+- **Regional AI Hubs:** Deploy inference services in key regions (e.g., `eu-west-3`, `eu-west-1`).
 - **Data Residency Control:** Ensure user data is processed and stored within its originating region.
 - **Model Registry per Region:** Maintain separate model configurations, versions, and providers per region.
 - **Routing Layer:** A global gateway or service mesh directs traffic to the nearest compliant region.
-- **Provider Selection:** Use preferred providers or models available in each region (e.g., OpenAI for US, Azure OpenAI for EU, local provider for India).
+- **Provider Selection:** Use preferred providers or models available in each region (e.g., OpenAI for US, OpenAI for EU).
 - **Failover Policy:** If a region’s models are unavailable, traffic is rerouted to a secondary region with compliance exceptions logged.
 
 Example:
-- India region → Uses Azure OpenAI (data stored in India)
 - EU region → Uses Anthropic (GDPR compliant)
-- US region → Uses OpenAI or Gemini depending on cost and latency
+- US region (possible future)→ Uses OpenAI or Gemini depending on cost and latency
 
 ## Consequences
 

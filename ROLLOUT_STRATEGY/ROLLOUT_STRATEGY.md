@@ -4,19 +4,7 @@ This document outlines the phased rollout strategy for the new MobilityCorp plat
 
 ---
 
-### Phase 1: Core Platform & MVP Launch
-
--   **Goal:** Establish the foundational infrastructure and launch a Minimum Viable Product (MVP) in a single, controlled region to validate the core business loop.
--   **Key Features & Services:**
-    -   **Core Microservices:** Deploy essential services for User Management, Booking, Payments, and basic Fleet Operations.
-    -   **Customer App (MVP):** A functional mobile app allowing users to find, book, unlock, and pay for vehicles.
-    -   **Staff Dashboard (MVP):** A simple web interface for staff to view real-time vehicle locations and battery status.
-    -   **Infrastructure:** Set up the core infrastructure, including Kubernetes, API Gateway, Kafka for essential events, and PostgreSQL for transactional data.
--   **Outcome:** A stable, operational platform is live in one city. The focus is on core functionality and reliability, not yet on AI-driven optimization. This phase gathers initial user feedback and baseline operational data.
-
----
-
-### Phase 2: Analytics & Foundational AI
+### Phase 1: Analytics & Foundational AI
 
 -   **Goal:** Build out the data and analytics capabilities to gather insights and prepare for AI-driven optimization.
 -   **Key Features & Services:**
@@ -28,7 +16,7 @@ This document outlines the phased rollout strategy for the new MobilityCorp plat
 
 ---
 
-### Phase 3: AI-Driven Operations & Customer Experience
+### Phase 2: AI-Driven Operations & Customer Experience
 
 -   **Goal:** Activate the AI and machine learning features to drive operational efficiency and enhance the customer experience.
 -   **Key Features & Services:**
@@ -42,7 +30,7 @@ This document outlines the phased rollout strategy for the new MobilityCorp plat
 
 ---
 
-### Phase 4: Geographic Expansion
+### Phase 3: Geographic Expansion
 
 -   **Goal:** Systematically and efficiently expand the service to new cities and regions.
 -   **Process:**
@@ -54,7 +42,7 @@ This document outlines the phased rollout strategy for the new MobilityCorp plat
 
 ---
 
-### Phase 5: Continuous Improvement & Innovation
+### Phase 4: Continuous Improvement & Innovation
 
 -   **Goal:** Foster a culture of ongoing optimization and maintain a competitive advantage.
 -   **Activities:**

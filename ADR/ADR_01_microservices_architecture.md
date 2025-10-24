@@ -12,7 +12,6 @@ Business requirements include high testability for minimal bug and rapid feature
 
 **1. Service-Based Architecture**
 - Coarse-grained services (e.g., "Fleet Operations", "User Management")
-- Coarse-grained services (e.g., "Fleet Operations", "User Management")
 - ✅ **Pros:** Some independent scaling, simpler than microservices, reduced operational overhead
 - ❌ **Cons:** Still couples dissimilar scaling profiles (telemetry + booking in same service), limited fault isolation, coordinated deployment needed for related features
 - **Rejected:** Insufficient scaling flexibility and fault isolation
