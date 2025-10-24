@@ -59,16 +59,6 @@ Adopt a **hybrid edge-cloud vehicle telemetry architecture** with intelligent wo
 - **Output:** Immediate safety actions (emergency alerts, automatic braking assist if applicable), incident metadata logged locally and synced to cloud
 - **Model specs:** Quantized neural network (<5MB), optimized for ARM processors, trained on labeled collision scenarios
 
-**2. Visual Pickup/Dropoff Verification (Privacy-Preserving Edge Inference)**
-
-- **Privacy-first uploads:** Only upload privacy-preserving artifacts:
-  - Metadata: timestamp, GPS, verification score, damage classification
-- **Selective full-image upload:** Raw images retained locally for 7 days, uploaded only for:
-  - Disputes requiring manual review (with user consent)
-  - Model improvement (after anonymization and user opt-in)
-  - Regulatory compliance (insurance claims, legal requirements)
-- **Model specs:** MobileNetV3-based damage classifier, YOLOv8-nano for object detection, encrypted local storage
-
 **2. Visual Pickup/Dropoff Verification (Cloud-Based)**
 
 - **How it Works**
@@ -77,8 +67,8 @@ Adopt a **hybrid edge-cloud vehicle telemetry architecture** with intelligent wo
   - Returns: verification score, damage classification, blurred thumbnails
 
 - **Privacy & Security**
+  - Metadata: timestamp, GPS, verification score, damage classification
   - Raw images stored encrypted for 7 days, then deleted
-  - Blurred thumbnails kept for disputes
   - Full images retained only for: disputes, user opt-in (training), legal requirements
   - Device attestation prevents tampering; all access audited
 
