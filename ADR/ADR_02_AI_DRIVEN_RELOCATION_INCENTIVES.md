@@ -113,119 +113,35 @@ Implement an **AI-driven dynamic pricing and relocation incentive system** that 
 
 ### ✅ Positive Impacts
 
-**Cost Reduction**
-- **30-50% reduction in manual relocation costs:** Self-relocations replace expensive staff-driven moves
-- **Improved fleet utilization:** Vehicles spend more time rented vs. idle or in transit for rebalancing
-- **Reduced idle inventory:** Better distribution reduces need for oversized fleet to compensate for imbalances
-
-**Revenue Optimization**
-- **10-20% revenue increase:** Dynamic pricing captures willingness-to-pay during high-demand periods
-- **Reduced lost sales:** Improved availability increases successful bookings in high-demand areas
-- **Premium pricing justified:** Customers accept higher prices when supply is constrained and explained transparently
+**Financial**
+- 30-50% reduction in manual relocation costs (€10-15/vehicle → customer self-relocations)
+- 10-20% revenue increase from dynamic pricing capturing willingness-to-pay during peak demand
+- Improved fleet utilization and reduced idle inventory from better vehicle distribution
 
 **Customer Experience**
-- **Higher availability:** Better vehicle distribution reduces "no vehicles available" scenarios
-- **Fair pricing:** Transparent dynamic pricing builds trust vs. opaque or unfair surge pricing
-- **Gamification:** Relocation incentives engage customers and create positive interactions
+- Higher availability reduces "no vehicles available" scenarios by 20%+
+- Transparent dynamic pricing builds trust when supply/demand explained clearly
+- Gamification of relocation incentives creates positive engagement
 
-**Operational Efficiency**
-- **Automated decision-making:** Reduces operational team workload for manual relocation planning
-- **Predictive planning:** Demand forecasts enable proactive positioning for events and patterns
-- **Data-driven insights:** Continuous learning improves understanding of customer behavior and demand drivers
+**Operational**
+- Automated AI-driven pricing decisions reduce manual planning workload
+- Predictive demand forecasts enable proactive vehicle positioning for events
+- Data-driven insights continuously improve demand understanding
 
 ### ❌ Negative Impacts and Trade-offs
 
-**Customer Perception Risks**
-- **Surge pricing backlash:** Dynamic pricing may be perceived as unfair or exploitative (like ride-sharing surge)
-- **Complexity:** Customers may be confused by fluctuating prices or relocation incentives
-- **Equity concerns:** Lower-income customers may be priced out during high-demand periods
+**Customer Risks**
+- Surge pricing may be perceived as unfair (ride-sharing surge backlash)
+- Price fluctuations and relocation incentives add complexity
+- Lower-income customers may be priced out during high-demand periods
 
-**Technical and Operational Complexity**
-- **Model accuracy risk:** Inaccurate demand forecasts lead to suboptimal pricing (too high = lost sales, too low = lost revenue)
-- **System failures:** Pricing engine downtime forces fallback to static pricing, losing optimization benefits
-- **Data dependencies:** Requires high-quality real-time data from telemetry, weather APIs, and booking systems
+**Technical Risks**
+- Inaccurate demand forecasts cause suboptimal pricing (too high = lost sales, too low = lost revenue)
+- Pricing engine downtime forces fallback to static pricing
+- Depends on high-quality real-time data from telemetry, weather APIs, and booking systems
 
-**Revenue Cannibalization**
-- **Over-discounting:** Excessive relocation incentives may reduce revenue more than saved relocation costs
-- **Incentive gaming:** Customers may exploit incentives (e.g., fake relocations, gaming rules)
-
-**Regulatory and Legal Risks**
-- **Price discrimination:** Dynamic pricing must comply with EU consumer protection and non-discrimination laws
-- **Transparency requirements:** GDPR and consumer rights laws require clear pricing explanations
-- **Caps and restrictions:** Some cities may impose pricing regulations (e.g., maximum surge multipliers)
-
-### Mitigation Strategies
-
-**Customer Trust and Communication**
-- **Transparent pricing:** Always display base price vs. dynamic price with clear explanations
-- **Price caps:** Limit maximum surge to 2-2.5x base price to maintain affordability
-- **Fair warning:** Notify customers of price increases before confirming bookings
-- **Loyalty protections:** Offer price guarantees or caps for frequent users
-
-**Model Quality and Monitoring**
-- **Continuous monitoring:** Track forecast accuracy, pricing elasticity, and customer satisfaction metrics
-- **A/B testing:** Gradually roll out pricing changes and measure impact before full deployment
-- **Fallback mechanisms:** Revert to static pricing if models show degraded performance or anomalies
-- **Human oversight:** Operations team reviews and approves significant pricing changes or anomalies
-
-**Incentive Controls**
-- **Fraud detection:** Monitor for suspicious patterns (repeated short trips, location spoofing)
-- **Incentive caps:** Limit maximum discount/bonus per relocation to prevent excessive costs
-- **Adaptive incentives:** Adjust incentive levels based on observed acceptance rates and costs
-
-**Regulatory Compliance**
-- **Legal review:** Ensure dynamic pricing complies with EU consumer protection and competition laws
-- **Data privacy:** Anonymize customer data in pricing models; GDPR-compliant data handling
-- **City coordination:** Collaborate with city regulators to ensure pricing aligns with local policies
-
-### Metrics and Acceptance Criteria
-
-**Operational Efficiency**
-- **Manual relocation reduction:** ≥40% decrease in staff-driven relocation trips within 6 months
-- **Fleet utilization:** ≥15% increase in average vehicle rental hours per day
-- **Availability improvement:** ≥20% reduction in "no vehicles available" customer searches
-
-**Financial Performance**
-- **Revenue increase:** ≥10% revenue growth from dynamic pricing and improved availability
-- **Cost savings:** ≥€50,000 per city per year in reduced relocation costs
-- **ROI:** Positive return on investment within 12 months (AI development + infrastructure costs)
-
-**Customer Experience**
-- **Satisfaction scores:** Maintain or improve Net Promoter Score (NPS) ≥60
-- **Incentive acceptance:** ≥25% of relocation incentive offers accepted by customers
-- **Price perception:** ≤10% of customer complaints related to dynamic pricing
-
-**Model Performance**
-- **Forecast accuracy:** ≥80% accuracy for demand predictions within ±20% error margin
-- **Pricing elasticity:** Observed demand response aligns with predicted elasticity within ±15%
-
-### Open Questions and Next Steps
-
-**Technical**
-- Finalize grid cell size (500m vs. 1km) and update frequency (5 min vs. 15 min) based on performance testing
-- Prototype demand forecasting model with historical data and validate accuracy
-- Define fallback pricing strategy for model failures or data outages
-
-**Business**
-- Establish surge pricing caps and discount limits with legal and operations teams
-- Define customer communication templates and in-app messaging for dynamic pricing
-- Calculate expected ROI per city and prioritize rollout order
-
-**Operational**
-- Design operations dashboard for monitoring pricing, incentives, and fleet distribution
-- Create runbooks for manual overrides during special events or system issues
-- Train customer support team on dynamic pricing explanations and dispute resolution
-
-**Regulatory**
-- Conduct legal review of dynamic pricing for GDPR and EU consumer protection compliance
-- Engage with city regulators to ensure pricing aligns with local transportation policies
-- Prepare transparency reports for pricing and incentive decision-making
-
----
-
-**Decision Owner:** AI/ML and Product Teams  
-**Stakeholders:** Operations, Finance, Legal, Customer Experience  
-**Review Cadence:**  
-- **Model performance:** Monthly for first 6 months, then quarterly  
-- **Business impact:** Quarterly revenue and cost analysis  
-- **Customer feedback:** Continuous monitoring with monthly reviews
+**Business Risks**
+- Over-discounting via excessive relocation incentives may exceed saved relocation costs
+- Customers may game incentives (fake relocations, exploiting rules)
+- Dynamic pricing must comply with EU consumer protection and non-discrimination laws
+- Some cities may impose pricing caps or restrictions

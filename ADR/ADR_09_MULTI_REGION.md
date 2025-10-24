@@ -4,7 +4,7 @@
 Accepted
 
 ## Context
-MobilityCorp’s AI services operate across multiple geographies (e.g., India, EU, North America). Regional deployment of AI workloads is essential to meet latency, data compliance, and availability requirements.  
+MobilityCorp’s AI services operate across multiple countries in Europe (e.g., EU). Regional deployment of AI workloads is essential to meet latency, data compliance, and availability requirements.
 
 Challenges include:
 - **Latency:** Centralized inference increases response time for distant regions.

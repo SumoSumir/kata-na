@@ -36,7 +36,7 @@ This document outlines the phased rollout strategy for the new MobilityCorp plat
     -   **Activate Predictive Maintenance:** Integrate predictive maintenance alerts into the staff workflow, moving from reactive to proactive maintenance.
     -   **AI-Powered Staff Tasks:** The Operations Dashboard will now feature AI-prioritized task lists and optimized routes for rebalancing and battery swaps.
     -   **Launch Relocation Incentives:** Introduce the AI-driven incentive engine to encourage customers to participate in vehicle rebalancing.
-    -   **Deploy Conversational AI:** Launch the in-app AI assistant to handle customer support queries.
+    -   **Deploy Conversational AI:** Launch the in-app AI assistant to handle customer support queries and bookings.
     -   **Enable Automated Damage Detection:** Activate the computer vision model to automatically verify vehicle condition from user photos.
 -   **Outcome:** A fully intelligent platform that demonstrates measurable improvements in key business metrics: reduced operational costs, increased revenue per vehicle, and higher customer satisfaction.
 

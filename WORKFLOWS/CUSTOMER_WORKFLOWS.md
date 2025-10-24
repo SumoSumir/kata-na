@@ -16,17 +16,17 @@
 │ 2. BOOKING                                                      │
 ├─────────────────────────────────────────────────────────────────┤
 │ Bikes/Scooters:                                                 │
-│ • Book up to 30 min advance, open-ended duration (max 12h)     │
+│ • Book up to 30 min advance, open-ended duration (max 12h)      │
 │                                                                 │
 │ Cars/Vans:                                                      │
-│ • Book up to 7 days advance, fixed duration                    │
-│ • Select pickup location and estimated return time             │
+│ • Book up to 7 days advance, fixed duration                     │
+│ • Select pickup location and estimated return time              │
 │                                                                 │
-│ • System reserves vehicle, locks inventory                     │
-│ • Payment method pre-authorized (not charged yet)              │
-│ • Booking confirmation sent via push + email                   │
-└─────────────────────────────────────────────────────────────────┘
-                            ↓
+│ • System reserves vehicle, locks inventory                      │
+│ • Payment method pre-authorized (not charged yet)               │
+│ • Booking confirmation sent via push + email                    │
+│ • Optional: allow bookings via a short conversational chat      │
+│   with the in‑app AI assistant                                  │
 ┌─────────────────────────────────────────────────────────────────┐
 │ 3. UNLOCK & START RENTAL                                        │
 ├─────────────────────────────────────────────────────────────────┤
@@ -49,6 +49,7 @@
 │ • Collision detection (edge processing, immediate alerts)       │
 │ • Dynamic pricing updates if rental extended                    │
 │ • In-app navigation and assistance available                    │
+│ • Optional vehicle relocation incentive offered                 │
 └─────────────────────────────────────────────────────────────────┘
                             ↓
 ┌─────────────────────────────────────────────────────────────────┐
@@ -59,7 +60,7 @@
 │ • User takes return photo via app                               │
 │ • AI verifies:                                                  │
 │   - Correct parking location (GPS + photo)                      │
-│   - Vehicle plugged in (for EVs)                                │
+│   - Vehicle plugged in (for Cars and vans)                      │
 │   - New damage detected (compared to pickup photo)              │
 │ • NFC tap to lock vehicle                                       │
 │ • Rental timer stops                                            │
