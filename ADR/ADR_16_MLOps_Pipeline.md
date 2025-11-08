@@ -151,7 +151,8 @@ Without a robust MLOps pipeline, we risk:
    - Outputs evaluation report as JSON
 
 4. **Conditional Model Registration:**
-   - Registers model only if MAPE < 15% threshold
+      - Model Evaluation
+   - Registers model if quality threshold met
    - Assigns "PendingManualApproval" status
    - Adds model to Model Registry
 
@@ -164,7 +165,7 @@ Without a robust MLOps pipeline, we risk:
 ✅ **Integrated:** Native integration with AWS services
 ✅ **Feature Store:** Built-in online/offline feature serving
 ✅ **Model Monitor:** Automatic drift detection
-✅ **Cost-Effective:** Spot instances for training (70% savings)
+✅ **Cost-Effective:** Spot instances for training with significant savings
 ✅ **Auto-Scaling:** Endpoints scale based on traffic
 ✅ **Multi-Model:** Host multiple models on one endpoint
 ✅ **Proven:** Used by Intuit, Lyft, Vanguard at scale
@@ -228,7 +229,7 @@ Kubernetes Cluster (EKS)
 
 #### Weaknesses
 ❌ **Operational Overhead:** Must manage all infrastructure
-❌ **Engineering Time:** 3-6 months to build production-ready
+❌ **Engineering Time:** Significant time to build production-ready
 ❌ **Expertise Required:** Need Kubernetes + MLOps expertise
 ❌ **Maintenance:** Ongoing patches, upgrades, debugging
 ❌ **No Auto-Scaling:** Must implement yourself
@@ -236,21 +237,20 @@ Kubernetes Cluster (EKS)
 
 #### Cost (Monthly, Production)
 ```
-EKS Cluster (Control Plane):          $2,160
-**Infrastructure Components:**
+Infrastructure Components:
 - EKS Cluster: Control plane management
-- EC2 Instances: Worker nodes with appropriate instance types
-- EBS Storage: Persistent volumes for artifacts and models
+- EC2 Instances: Worker nodes
+- Storage: Persistent volumes for artifacts and models
 - Load Balancers: Traffic distribution
-- S3 Storage: Model artifacts and experiment tracking
 - Engineering resources for setup and maintenance
+```
 
-#### Scoring (out of 10)
-- Ease of Use: 4/10
-- Feature Completeness: 7/10
-- Cost: 6/10 (includes engineering overhead)
-- Flexibility: 10/10
-- **Overall: 6.8/10**
+#### Scoring
+- Ease of Use: Moderate
+- Feature Completeness: Good
+- Cost: Moderate (includes engineering overhead)
+- Flexibility: Excellent
+- **Overall: Viable but requires significant effort**
 
 ---
 
@@ -297,15 +297,15 @@ Databricks Workspace
 
 ## Decision Matrix
 
-| Criteria | Weight | SageMaker | MLflow+K8s | Databricks |
-|----------|--------|-----------|------------|------------|
-| **Ease of Use** | 20% | 8 | 4 | 9 |
-| **Feature Completeness** | 25% | 10 | 7 | 8 |
-| **Cost** | 20% | 8 | 6 | 5 |
-| **AWS Integration** | 15% | 10 | 6 | 7 |
-| **Time to Production** | 10% | 9 | 4 | 8 |
-| **Flexibility** | 10% | 7 | 10 | 7 |
-| **Weighted Score** | | **8.8** | **6.5** | **7.3** |
+| Criteria | SageMaker | MLflow+K8s | Databricks |
+|----------|-----------|------------|------------|
+| **Ease of Use** | Good | Moderate | Excellent |
+| **Feature Completeness** | Excellent | Good | Good |
+| **Cost** | Good | Moderate | Higher |
+| **AWS Integration** | Excellent | Moderate | Good |
+| **Time to Production** | Fast | Slow | Fast |
+| **Flexibility** | Good | Excellent | Good |
+| **Overall** | **Best fit** | **Complex** | **Costly** |
 
 ## Decision
 
@@ -421,13 +421,13 @@ Trigger: Daily at 2 AM UTC
 
 ### Pipeline Architecture per Model
 
-#### 1. Demand Forecasting Pipeline (Daily)
+#### 1. Demand Forecasting Pipeline
 
 ```
-Trigger: Daily at 2 AM UTC
-├─ Extract: Last 90 days booking data (Redshift → S3)
+Trigger: Scheduled daily run
+├─ Extract: Historical booking data (Redshift → S3)
 ├─ Feature Engineering:
-│  ├─ Time features (hour, day_of_week, month)
+│  ├─ Time features
 │  ├─ Weather data (OpenWeatherMap API)
 │  ├─ Events data (PredictHQ API)
 │  ├─ Historical features (rolling averages, lag features)
@@ -436,17 +436,14 @@ Trigger: Daily at 2 AM UTC
 │  ├─ Schema validation
 │  ├─ Range checks
 │  └─ Null checks
-├─ Train/Validation Split: 80/20 time-based
-├─ Hyperparameter Tuning (Bayesian Optimization):
-│  ├─ num_leaves: [20, 100]
-│  ├─ learning_rate: [0.01, 0.3]
-│  ├─ n_estimators: [50, 500]
-├─ Model Training (LightGBM on ml.p3.2xlarge Spot)
+├─ Train/Validation Split: Time-based
+├─ Hyperparameter Tuning (Bayesian Optimization)
+├─ Model Training (LightGBM on Spot instances)
 ├─ Model Evaluation:
-│  ├─ MAPE target: < 15%
+│  ├─ MAPE target threshold
 │  ├─ RMSE calculation
 │  └─ Residual analysis
-├─ Conditional Registration (if MAPE < 15%):
+├─ Conditional Registration (if quality threshold met):
 │  ├─ Register in Model Registry
 │  ├─ Approval Status: PendingManualApproval
 │  └─ Notify ML team via Slack
@@ -455,28 +452,27 @@ Trigger: Daily at 2 AM UTC
 │  ├─ A/B test plan
 │  └─ Approve for deployment
 └─ Deployment:
-   ├─ Canary: 5% traffic for 1 hour
-   ├─ Monitor: Error rate, latency, MAPE
-   ├─ If OK: Blue-green swap to 100%
+   ├─ Canary: Small traffic for validation period
+   ├─ Monitor: Error rate, latency, accuracy metrics
+   ├─ If OK: Blue-green swap to full traffic
    └─ If NOT OK: Rollback to previous version
 ```
 
-#### 2. Damage Detection Pipeline (Monthly)
+#### 2. Damage Detection Pipeline
 
 ```
-Trigger: Monthly + on-demand for new labeled data
+Trigger: Scheduled monthly + on-demand for new labeled data
 ├─ Extract: New damage photos (S3 + Ground Truth labels)
-├─ Data Augmentation:
-│  ├─ Random rotation, flips, crops
+├─ Data Augmentation
 │  ├─ Color jittering
 │  └─ Synthetic data generation
 ├─ Transfer Learning (ResNet-50 pre-trained on ImageNet)
-├─ Fine-Tuning (on ml.p3.8xlarge Spot):
-│  ├─ Freeze first N layers
+├─ Fine-Tuning (on Spot instances):
+│  ├─ Freeze initial layers
 │  ├─ Train final layers on damage classes
-│  └─ Learning rate: 0.001 → 0.00001
+│  └─ Learning rate schedule
 ├─ Model Evaluation:
-│  ├─ Accuracy target: > 95%
+│  ├─ Accuracy target threshold
 │  ├─ Precision/Recall per class
 │  ├─ Confusion matrix
 │  └─ F1 score
@@ -486,9 +482,9 @@ Trigger: Monthly + on-demand for new labeled data
 │  └─ Mitigation strategies if needed
 ├─ Registration + Approval
 └─ Deployment (Multi-Model Endpoint):
-   ├─ 4 models on 1 endpoint (cost savings)
-   ├─ A/B test: 90/10 split
-   └─ Monitor: Inference latency < 500ms
+   ├─ Multiple models on shared endpoint (cost savings)
+   ├─ A/B testing capability
+   └─ Monitor: Inference latency
 ```
 
 ### Feature Store Architecture
@@ -546,15 +542,15 @@ Trigger: Monthly + on-demand for new labeled data
 │     └─ Feature importance shifts                     │
 │                                                       │
 │  CloudWatch Metrics:                                  │
-│  ├─ Endpoint latency (P50, P95, P99)                 │
+│  ├─ Endpoint latency (percentiles)                   │
 │  ├─ Error rate (4xx, 5xx)                            │
 │  ├─ Invocations per minute                           │
 │  └─ Model loading time                               │
 │                                                       │
 │  Alerting (SNS → PagerDuty):                         │
-│  ├─ Critical: MAPE > 20% (page on-call)              │
+│  ├─ Critical: Accuracy below threshold (page on-call)│
 │  ├─ High: Data drift detected (Slack alert)          │
-│  ├─ Medium: Latency P95 > 1s (email)                 │
+│  ├─ Medium: Latency threshold exceeded (email)       │
 │  └─ Low: Training job failed (Slack)                 │
 │                                                       │
 └──────────────────────────────────────────────────────┘
@@ -568,18 +564,18 @@ Strategy: Canary → Blue-Green
 
 1. Canary Deployment:
    - Deploy new model as Variant 2
-   - Route 5% traffic to new model
-   - Monitor for 1 hour:
-     ✓ Latency < 200ms
-     ✓ Error rate < 0.1%
-     ✓ MAPE within 2% of current model
+   - Route small percentage of traffic to new model
+   - Monitor for validation period:
+     ✓ Latency within acceptable range
+     ✓ Error rate within threshold
+     ✓ Accuracy metrics within tolerance
    
 2. If Canary Success:
-   - Gradually increase traffic: 10% → 25% → 50% → 100%
-   - Monitor at each step (30 min intervals)
+   - Gradually increase traffic percentage
+   - Monitor at each step
    
 3. If Canary Failure:
-   - Instant rollback to 100% Variant 1
+   - Instant rollback to previous variant
    - Investigate issues
    - Re-deploy after fixes
 

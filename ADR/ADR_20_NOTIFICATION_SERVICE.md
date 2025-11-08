@@ -32,17 +32,10 @@ Implement an **AI-powered, event-driven Notification Service** that delivers per
 - **API endpoints:** Direct triggers for feedback follow-ups and nearest station queries
 
 **2. Notification Orchestrator**
-- **Event router:** AWS Lambda triggered by Kafka (MSK) events, maps to notification types with priority (Critical/High/Medium/Low)
-  - Lambda: Node.js 20.x, 512 MB RAM, 5s timeout (avg 300ms execution)
-  - DLQ (Dead Letter Queue) for failed routing to SQS
-- **User preferences:** DynamoDB table `user_notification_preferences` (on-demand, single-digit ms latency)
-  - Attributes: `user_id`, `quiet_hours`, `channel_preferences`, `opt_outs`, `notification_limits`
-  - GSI on `notification_type` for bulk operations
-- **Rate limiter:** ElastiCache Redis with sliding window algorithm
-  - Prevents notification fatigue (max 10/hour, 50/day per user, critical notifications bypass)
-  - TTL-based key expiry: `user:{user_id}:limit:{window}`
-- **Deduplication:** ElastiCache Redis with 15-min TTL for event hash
-  - Prevents redundant notifications for same event (e.g., multiple `battery_low` events)
+- **Event router:** Maps events to notification types with priority (Critical/High/Medium/Low)
+- **User preferences:** Manages quiet hours, channel preferences (push, SMS, email), and opt-outs
+- **Rate limiter:** Prevents notification fatigue (critical notifications bypass)
+- **Deduplication:** Prevents redundant notifications for same event
 
 **3. AI-Driven Personalization (ADR-05, ADR-13)**
 
@@ -55,7 +48,7 @@ a) **Proactive Commute Recommendations**
 b) **Relocation Incentive Offers (ADR-02)**
 - Listens to `incentives.relocation_opportunity` events
 - AI identifies beneficial relocations based on supply/demand and user's next likely trip
-- Example: *"Park near Zone C instead of Zone B and get 20% off your next ride! Help us balance the fleet."*
+- Example: *"Park near Zone C instead of Zone B and get a discount on your next ride! Help us balance the fleet."*
 - Gamification: Track relocations, monthly badges, credits
 
 c) **Smart Alternative Mode Suggestions**
@@ -74,24 +67,15 @@ e) **Feedback Follow-Up**
 **4. Staff-Facing Notifications**
 - **Predictive maintenance:** *"Vehicle #1234 flagged: Likely battery failure in 5-7 days. Schedule maintenance."*
 - **Collision alerts:** *"COLLISION DETECTED: Vehicle #5678 at [Location]. User check-in pending. Dispatch support."*
-- **Battery cluster alerts:** *"Zone: Shoreditch - 8 vehicles < 20% battery. Priority area for swaps."*
+- **Battery cluster alerts:** *"Zone: Shoreditch - Multiple vehicles with low battery. Priority area for swaps."*
 - **Task assignments:** Optimized route updates pushed to staff dashboard
 
 **5. Delivery Channels**
-- **Push notifications:** Amazon SNS mobile push (iOS/Android) with FCM/APNs endpoints
-  - SNS topic per notification type: `sns:mobility:notification:critical`, `sns:mobility:notification:promo`
-  - Lambda fanout to 50K+ devices/sec
-- **SMS:** Amazon SNS SMS (critical alerts) via AWS SMS routes (0.0047 USD/message in EU)
-  - Delivery receipts via CloudWatch Events
-  - Fallback to Twilio for non-AWS-covered regions
-- **Email:** Amazon SES (Simple Email Service) for transactional emails
-  - Sender reputation > 95% with DKIM/SPF/DMARC
-  - Bounce and complaint handling via SNS topics
-  - Cost: $0.10 per 1,000 emails
-- **In-app messages:** Real-time via WebSocket (API Gateway + Lambda + ElastiCache Redis pub/sub)
-  - WebSocket connections persist for instant delivery
-  - Fallback to polling for low-battery devices
-- **Voice notifications (future):** Amazon Polly text-to-speech for accessibility
+- Push notifications (FCM/APNs) for mobile app
+- SMS (Twilio) for critical alerts
+- Email (SendGrid) for receipts and compliance
+- In-app messages for contextual prompts
+- Voice notifications (future) for accessibility
 
 **6. Analytics & Feedback Loop**
 - Track delivery metrics (sent, opened, clicked, dismissed)
@@ -118,32 +102,32 @@ e) **Feedback Follow-Up**
 
 **Customer Engagement**
 - AI-powered personalization makes platform habitual vs. ad-hoc
-- Relocation incentive uptake >25% reduces manual rebalancing costs (£10-15/vehicle)
+- Relocation incentive uptake reduces manual rebalancing costs significantly
 - Usage milestones and gamification increase customer lifetime value
 - Smart alternatives retain users when preferred vehicle unavailable
 
 **Operational Efficiency**
-- Predictive maintenance alerts reduce unplanned downtime by 30-40%
+- Predictive maintenance alerts reduce unplanned downtime significantly
 - Battery cluster alerts prioritize staff routes, reducing wasted trips
 - Collision alerts enable immediate safety response (<1 min)
 - Task assignments optimize field operations
 
 **Revenue & Cost Optimization**
-- Proactive recommendations increase booking frequency by 20%+
-- Relocation incentives reduce manual fleet redistribution costs by 30-50%
-- Improved availability from balanced fleet increases revenue by 10-15%
+- Proactive recommendations increase booking frequency
+- Relocation incentives reduce manual fleet redistribution costs
+- Improved availability from balanced fleet increases revenue
 
 **Scalability**
 - Horizontally scalable with Kafka consumers
 - Multi-region deployment ready (ADR-09)
-- 10,000+ notifications/sec throughput during peak
+- High throughput during peak
 
 ### ❌ Negative
 
 **Complexity**
 - Event-driven architecture adds debugging complexity
 - Multi-channel delivery requires vendor management (FCM, Twilio, SendGrid)
-- GenAI integration adds latency (<2s for message generation)
+- GenAI integration adds latency for message generation
 
 **Privacy Risks**
 - Personalization requires behavioral data collection (requires explicit consent)
@@ -158,7 +142,7 @@ e) **Feedback Follow-Up**
 **Operational Costs**
 - Multi-provider AI costs for message generation
 - SMS costs for critical alerts at scale
-- Storage costs for 90-day notification history
+- Storage costs for notification history
 
 ### Mitigation Strategies
 
@@ -166,7 +150,7 @@ e) **Feedback Follow-Up**
 - Transparent opt-in/opt-out for personalization
 - Anonymous pattern detection where possible
 - Quarterly privacy impact assessments
-- Automated deletion workflows (90-day TTL)
+- Automated deletion workflows
 
 **Quality Assurance**
 - A/B testing for message variants before full rollout
@@ -175,9 +159,9 @@ e) **Feedback Follow-Up**
 - Fallback to template-based messages if GenAI fails
 
 **Notification Fatigue Prevention**
-- Strict rate limiting (max N per hour/day)
+- Strict rate limiting per user
 - User-controlled quiet hours
-- Engagement metrics monitoring (dismiss rate >30% = reduce frequency)
+- Engagement metrics monitoring (excessive dismiss rate = reduce frequency)
 - Priority-based routing (critical notifications always delivered)
 
 ## Alternatives Considered

@@ -21,9 +21,9 @@ This data must support:
 ## Requirements
 
 ### Data Types & Volumes
-- **Hot Data:** Last 7 days, sub-second query latency
-- **Warm Data:** Last 90 days, query latency < 5 seconds
-- **Cold Data:** 90+ days, query latency < 30 seconds
+- **Hot Data:** Recent data, sub-second query latency
+- **Warm Data:** Recent historical data, fast query latency
+- **Cold Data:** Historical archive, acceptable query latency
 - **Total Volume:** ~5TB/month new data, 60TB total after 1 year
 
 ### Access Patterns
@@ -57,7 +57,7 @@ This data must support:
 │  │ Format: Parquet (compressed with Snappy)                     │  │
 │  │ Schema: Schema-on-read, minimal transformations              │  │
 │  │ Partitioning: /year/month/day/hour/                          │  │
-│  │ Retention: 90 days, then archive to Glacier                  │  │
+│  │ Retention: Configurable period, then archive to Glacier       │  │
 │  ├──────────────────────────────────────────────────────────────┤  │
 │  │ Sources:                                                      │  │
 │  │  ├─ MSK (Kafka) → Kinesis Firehose → S3                     │  │
@@ -116,7 +116,7 @@ This data must support:
 
 #### 1. Storage: Amazon S3
 **Why S3:**
-- ✅ Durability: 99.999999999% (11 nines)
+- ✅ Durability: 11 nines (S3 standard)
 - ✅ Cost-effective tiered storage with lifecycle policies
 - ✅ Scalability: Unlimited storage capacity
 - ✅ Integration: Native with all AWS services
@@ -183,7 +183,7 @@ This data must support:
 #### Bronze Layer: Raw Data Ingestion
 
 **Kafka to S3 Pipeline:**
-- Kinesis Firehose buffers streaming data (128 MB or 60 seconds)
+- Kinesis Firehose buffers streaming data with configurable size and time thresholds
 - Automatic conversion to Snappy-compressed Parquet format
 - Partitioned by timestamp (year/month/day/hour) for efficient querying
 
@@ -203,7 +203,7 @@ s3://mobilitycorp-datalake-bronze/
 - Runs Great Expectations validation suite:
   - Null checks on critical fields (vehicle_id required)
   - Set validation (vehicle_type must be: scooter/ebike/car/van)
-  - Range validation (battery 0-100%)
+  - Range validation (battery percentage)
   - Format validation (vehicle ID regex pattern)
 - Failed records quarantined for investigation
 - Valid records transformed:
@@ -253,91 +253,54 @@ AWS-based lakehouse provides cost advantages over managed platforms like Databri
 
 ### Data Governance
 
-```
-
 #### Access Control (Lake Formation)
 
 ```
-Permissions Matrix:
+Role-Based Permissions:
+- Data Scientists: Access to Silver and Gold layers
+- ML Engineers: Access to Silver, Gold, and Feature Store
+- Analysts: Access to Gold layer via Redshift
+- Operations: Access to operational data in Silver/Gold
+- Admins: Full access with audit logging
 
-Role: data_scientists
-  - Silver layer: SELECT (all tables)
-  - Gold layer: SELECT (all tables)
-  - Bronze layer: DENIED (raw PII)
-
-Role: ml_engineers
-  - Silver layer: SELECT, DESCRIBE
-  - Gold layer: SELECT, DESCRIBE
-  - Feature Store: SELECT, INSERT
-
-Role: analysts
-  - Gold layer: SELECT (via Redshift)
-  - Silver layer: DENIED
-
-Role: operations
-  - Silver layer: SELECT (telemetry, bookings)
-  - Gold layer: SELECT
-  
-Role: admins
-  - All layers: ALL permissions
-  - Audit logs: SELECT
-
-Column-Level Security:
-  - PII columns (email, phone): Masked for non-admins
-  - Payment info: Encrypted, access logged
+Security Features:
+- Column-level security for PII (masked for non-admins)
+- Encrypted payment information with access logging
+- Row-level security based on data classification
 ```
 
 #### Data Lineage (AWS Glue Data Catalog + Lake Formation)
 
 ```
-Tracking:
-  - Source → Bronze: Kafka topic, ingestion timestamp
-  - Bronze → Silver: Glue job ID, transformation logic
-  - Silver → Gold: Aggregation logic, dependencies
-  - Gold → Consumption: Query ID, user, timestamp
+Automatic Tracking:
+- Source systems to Bronze layer ingestion
+- Bronze to Silver transformations (Glue job IDs)
+- Silver to Gold aggregations with dependencies
+- Gold to consumption with query and user tracking
 
-Example Lineage Query:
-"Where did this demand_by_zone_hour record come from?"
-
-Answer:
-  demand_by_zone_hour (Gold)
-    ← bookings (Silver) 
-      ← booking_events (Bronze)
-        ← kafka.bookings-topic
-          ← Booking Service (DynamoDB Stream)
-    ← telemetry (Silver)
-      ← telemetry_events (Bronze)
-        ← kafka.telemetry-topic
-          ← IoT Core (MQTT)
+Enables traceability from final reports back to source systems
 ```
 
 #### GDPR Compliance
 
 ```
 Right to Erasure:
-1. User requests deletion
-2. Lambda triggers deletion workflow:
-   - Mark records in Silver/Gold with tombstone
-   - Overwrite PII with NULL/anonymized values
-   - Log deletion event
-3. Next vacuum job removes physical files
+- Automated deletion workflow via Lambda
+- Tombstone marking and data anonymization
+- Physical file cleanup via vacuum jobs
 
-Data Minimization:
-  - Collect only necessary telemetry fields
-  - Drop unused columns in Silver layer
-  - Aggregate/anonymize in Gold layer
-
-Data Retention:
-  - Bronze: 90 days → Glacier
-  - Silver: 2 years → Delete
-  - Gold: 5 years (aggregated, anonymized)
-  - Audit logs: 7 years
+Data Minimization & Retention:
+- Collect only necessary telemetry fields
+- Bronze: Configurable retention period → Glacier
+- Silver: Moderate retention → Delete
+- Gold: Long-term retention (aggregated, anonymized)
+- Audit logs: Extended retention for compliance
 ```
 
 ## Consequences
 
 ### Positive
-✅ **Cost-Effective:** 60-70% cheaper than Databricks/Snowflake
+✅ **Cost-Effective:** Significantly cheaper than Databricks/Snowflake
 ✅ **Scalable:** Handles 5TB/month growth effortlessly
 ✅ **Flexible:** Batch, streaming, ad-hoc queries all supported
 ✅ **Governed:** Lake Formation provides fine-grained access control

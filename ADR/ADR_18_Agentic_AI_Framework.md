@@ -29,11 +29,11 @@ These AI agents must:
 - Support for multiple LLM providers (avoid lock-in)
 
 ### Non-Functional
-- **Latency:** P95 response time < 2 seconds
-- **Accuracy:** > 90% intent classification accuracy
+- **Latency:** Fast response time
+- **Accuracy:** High intent classification accuracy
 - **Cost:** Cost-effective per-conversation economics
-- **Scalability:** Handle 10K concurrent conversations
-- **Reliability:** 99.9% uptime for AI services
+- **Scalability:** Handle high concurrent conversations
+- **Reliability:** High uptime for AI services
 
 ### Use Cases
 
@@ -54,7 +54,7 @@ Agent:
 Staff: "Which vehicles need battery swaps most urgently?"
 Agent:
   1. Query predictive maintenance model (SageMaker)
-  2. Get demand forecast for next 4 hours (Redshift)
+  2. Get demand forecast for upcoming period (Redshift)
   3. Check current vehicle locations (DynamoDB)
   4. Calculate optimal route (OR-Tools API)
   5. Respond: "Top 5 priority vehicles: [list with reasons]"
@@ -278,21 +278,18 @@ print(response["output"])
 #### Weaknesses
 ❌ **Data Privacy:** Conversations sent to OpenAI servers
 ❌ **EU Compliance Risk:** Data leaves AWS, GDPR concerns
-❌ **Cost:** More expensive ($10/$30 per 1M tokens)
+❌ **Cost:** More expensive per token
 ❌ **Rate Limits:** Can hit limits at scale
 ❌ **No Guardrails:** Must build own content filtering
 
-#### Cost (Monthly, 100K users)
+#### Cost (Monthly, Production)
 ```
-GPT-4 Turbo:
-  - Input: 1.5B × $10/1M = $15,000
-  - Output: 500M × $30/1M = $15,000
-  - Total: $30,000 ⚠️ 2.3x more expensive
+Higher token costs compared to AWS Bedrock
 ```
 
-#### Scoring (out of 10)
-- Ease of Use: 9/10
-- Feature Completeness: 10/10
+#### Scoring
+- Ease of Use: Excellent
+- Feature Completeness: Excellent
 - Cost: 4/10 ⚠️
 - Performance: 10/10
 - EU Compliance: 5/10 ⚠️
@@ -311,41 +308,40 @@ GPT-4 Turbo:
 #### Weaknesses
 ❌ **High Fixed Cost:** GPU instances ($5K-10K/month)
 ❌ **Operational Overhead:** Must manage infrastructure
-❌ **Inferior Quality:** Llama 3.1 70B < Claude 3.5
-❌ **Engineering Time:** 3-6 months to production
+❌ **Inferior Quality:** Llama quality lower than Claude
+❌ **Engineering Time:** Significant time to production
 
 #### Cost (Monthly)
 ```
 SageMaker Endpoint:
-  - ml.g5.12xlarge (4 GPUs): $8/hour × 24 × 30 = $5,760
-  - Multi-instance (HA): $5,760 × 3 = $17,280
-
-Fine-Tuning (one-time):
-  - Training: ml.p4d.24xlarge × 48 hours = $10,000
+  - GPU instances for high availability
   
-Total: $17,280/month (ongoing) + $10K (one-time)
+Fine-Tuning (one-time):
+  - Training infrastructure costs
+  
+Total: Higher ongoing costs and one-time setup
 ```
 
-#### Scoring (out of 10)
-- Ease of Use: 4/10
-- Feature Completeness: 7/10
-- Cost: 5/10
-- Performance: 7/10
-- **Overall: 5.8/10**
+#### Scoring
+- Ease of Use: Poor
+- Feature Completeness: Good
+- Cost: Moderate
+- Performance: Good
+- **Overall: Viable for specific needs**
 
 ---
 
 ## Decision Matrix
 
-| Criteria | Weight | LangChain+Bedrock | OpenAI+LangChain | Custom Llama |
-|----------|--------|-------------------|------------------|--------------|
-| **LLM Quality** | 25% | 9 | 10 | 7 |
-| **Cost** | 20% | 7 | 4 | 5 |
-| **EU Compliance** | 20% | 10 | 5 | 10 |
-| **Time to Market** | 15% | 9 | 10 | 3 |
-| **Scalability** | 10% | 10 | 8 | 6 |
-| **Operational Overhead** | 10% | 10 | 9 | 4 |
-| **Weighted Score** | | **8.9** | **7.2** | **6.1** |
+| Criteria | LangChain+Bedrock | OpenAI+LangChain | Custom Llama |
+|----------|-------------------|------------------|--------------|
+| **LLM Quality** | Excellent | Excellent | Good |
+| **Cost** | Good | Higher | Moderate |
+| **EU Compliance** | Excellent | Lower | Excellent |
+| **Time to Market** | Fast | Fast | Slow |
+| **Scalability** | Excellent | Good | Moderate |
+| **Operational Overhead** | Low | Low | High |
+| **Overall** | **Best fit** | **Compliance risk** | **Complex** |
 
 ## Decision
 

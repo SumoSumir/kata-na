@@ -145,7 +145,7 @@ Compute Module: Raspberry Pi 4 Model B (4GB RAM) or equivalent
   - CPU: ARM Cortex-A72 (Quad-core @ 1.5GHz)
   - RAM: 4GB LPDDR4
   - Storage: 32GB microSD (industrial-grade)
-  - Cost: $65 per unit
+  - Cost: Affordable per unit
   - Power: 3W typical (from vehicle battery)
   
 OS: Ubuntu 22.04 ARM64
@@ -170,7 +170,7 @@ Compute Module: NVIDIA Jetson Nano (4GB) or Jetson Xavier NX
   - CPU: Quad-core ARM A57 @ 1.43GHz
   - RAM: 4GB-8GB
   - Storage: 64GB eMMC + 128GB SSD
-  - Cost: $149 (Nano) or $399 (Xavier)
+  - Cost: Moderate per unit
   - Power: 5-15W (from 12V vehicle system)
   
 OS: JetPack 5.1 (Ubuntu 20.04)
@@ -204,7 +204,7 @@ Connectivity:
 │  2. Model Optimization for Edge                                 │
 │     ├─ SageMaker Neo compilation for ARM/GPU                    │
 │     ├─ Quantization: FP32 → INT8 (4x smaller, faster)          │
-│     ├─ Pruning: Remove 30% of weights                           │
+│     ├─ Pruning: Remove significant portion of weights           │
 │     └─ Result: 50MB → 5MB model                                 │
 │                                                                  │
 │  3. Testing                                                      │
@@ -213,10 +213,10 @@ Connectivity:
 │     └─ If OK, proceed; else rollback                            │
 │                                                                  │
 │  4. Staged Rollout                                               │
-│     ├─ Week 1: 1% of fleet (500 vehicles)                       │
-│     ├─ Week 2: 10% (5,000 vehicles)                             │
-│     ├─ Week 3: 50% (25,000 vehicles)                            │
-│     └─ Week 4: 100% (all vehicles)                              │
+│     ├─ Phase 1: Small fleet subset                              │
+│     ├─ Phase 2: Expanded rollout                                │
+│     ├─ Phase 3: Majority rollout                                │
+│     └─ Phase 4: Full fleet                                      │
 │                                                                  │
 │  5. OTA Update Mechanism (IoT Greengrass)                       │
 │     ├─ Vehicle connects to WiFi/4G                              │
@@ -230,7 +230,7 @@ Connectivity:
 │                                                                  │
 │  6. Monitoring                                                   │
 │     ├─ CloudWatch metrics per vehicle                           │
-│     ├─ Alerts if error rate > 1%                                │
+│     ├─ Alerts if error rate exceeds threshold                   │
 │     └─ Rollback command if critical issues                      │
 │                                                                  │
 └─────────────────────────────────────────────────────────────────┘
@@ -241,32 +241,29 @@ Connectivity:
 **Edge Compute Costs:**
 ```
 Hardware (One-time):
-  - Scooters/eBikes (40K × $65):        $2,600,000
-  - Cars/Vans (10K × $149):             $1,490,000
-  - Total (amortized over 5 years):     $68,333/month
+  - Scooters/eBikes: Substantial initial investment
+  - Cars/Vans: Higher per-unit cost
+  - Total (amortized over equipment lifetime)
 
 Cellular Data (Ongoing):
-  - 50K vehicles × 500MB/month = 25TB
-  - Cost: $0.10/GB = $2,500/month
+  - Fleet connectivity costs for data transmission
 
 OTA Updates (Model updates):
-  - 50K vehicles × 10MB/update × 2 updates/month = 1TB
-  - Cost: $100/month
+  - Periodic model update distribution costs
 
 Edge Compute Power:
-  - Negligible (powered by vehicle battery)
+  - Powered by vehicle battery
 
-Total Edge: $70,933/month (including amortized hardware)
+Total Edge: Within acceptable operational costs
 ```
 
 **Cloud Compute Costs:**
 ```
 IoT Core (MQTT messages):
-  - 50K vehicles × 1 msg/sec × 2.6M sec/month = 130B messages
-  - Cost: $1/1M messages = $130,000
+  - Large fleet message volume
 
 SageMaker Endpoints (real-time):
-  - Pricing, Route, Damage: 3 endpoints × $5K = $15,000
+  - Multiple model endpoints for cloud-based inference
 
 SageMaker Batch (weekly/monthly):
   - Demand, Battery, Segmentation: $5,000
