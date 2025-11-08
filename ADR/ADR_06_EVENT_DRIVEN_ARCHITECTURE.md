@@ -34,23 +34,22 @@ Key requirements include:
 Implement an **event-driven architecture** using **Apache Kafka on AWS MSK (Managed Streaming for Kafka)** as the central event bus.
 
 **Kafka Configuration:**
-- **Cluster:** 3 brokers (kafka.m5.2xlarge) in eu-central-1
-- **Partitions:** 50 partitions per topic (1K vehicles/partition)
-- **Replication Factor:** 3 (high availability)
-- **Retention:** 7 days (balance cost vs. replay capability)
-- **Compression:** LZ4 (4× compression ratio)
-- **Storage:** 2 TB EBS (gp3) per broker
+- **Cluster:** Multi-broker MSK cluster for high availability
+- **Partitioning:** Topic partitioning strategy for parallel processing
+- **Replication:** Multi-replica configuration for durability
+- **Retention:** Event retention policy balancing cost and replay capability
+- **Compression:** LZ4 compression for efficient storage and transfer
 
 **Schema Management:**
-- **AWS Glue Schema Registry** for Avro schemas (free, AWS-native alternative to Confluent Schema Registry)
+- **AWS Glue Schema Registry** for Avro schemas (AWS-native alternative to Confluent)
 - Schema evolution with backward compatibility
 - Automatic schema validation on publish
 
 ### Core Event Topics
 - `bookings.created` – New booking initiated  
 - `bookings.completed` – Rental ended  
-- `vehicles.telemetry` – GPS location updates (30s interval)  
-- `vehicles.battery_status` – Battery level updates (60s interval)  
+- `vehicles.telemetry` – GPS location updates  
+- `vehicles.battery_status` – Battery level updates  
 - `customers.app_events` – User interactions  
 - `photos.uploaded` – Return validation photos  
 - `predictions.generated` – AI prediction results  
@@ -63,23 +62,21 @@ Implement an **event-driven architecture** using **Apache Kafka on AWS MSK (Mana
 
 ### Processing Patterns
 - Real-time stream processing using **AWS Lambda** (event-driven, serverless)
-- **Kafka Streams** for stateful processing (when Lambda insufficient)
+- **Kafka Streams** for stateful processing when Lambda is insufficient
 - **Event sourcing** for audit trail (Aurora PostgreSQL event store)
-- **CQRS** pattern for read-optimized views (Aurora write, Redis/DynamoDB read)
+- **CQRS** pattern for read-optimized views (Aurora for writes, Redis/DynamoDB for reads)
 
 ### Event Flow
 ```
 Producer (Microservice) 
-  → AWS MSK (Kafka Topic, 50 partitions) 
+  → AWS MSK (Kafka Topics with partitioning) 
   → Multiple Consumers:
       ├─ Lambda (real-time processing, anomaly detection)
-      ├─ Kinesis Firehose (S3 archival, Bronze layer)
+      ├─ Kinesis Firehose (S3 archival, Data Lakehouse Bronze layer)
       ├─ SageMaker (ML model retraining)
       └─ Microservices (async updates)
 ```
 (asynchronous, parallel processing)
-
-**Cost:** ~$5,000/month (MSK cluster + data transfer)
 
 ## Consequences
 

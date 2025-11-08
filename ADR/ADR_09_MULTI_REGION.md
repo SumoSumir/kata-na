@@ -28,18 +28,15 @@ Adopt a **multi-region active-active deployment architecture** with **region-awa
 
 2. **Data Layer (Regional Isolation)**
    - **Aurora PostgreSQL Global Database**
-     - Primary cluster in each region (eu-central-1, eu-west-1)
-     - Cross-region replication RPO < 1s, RTO < 1 min
+     - Primary cluster in each region with cross-region replication
      - Regional read replicas for low-latency queries
-     - Failover: Automatic promotion of secondary to primary
+     - Automatic failover with promotion of secondary to primary
    - **DynamoDB Global Tables**
      - Multi-region replication for session data, user preferences
      - Last-writer-wins conflict resolution
-     - Replication latency < 1s
    - **S3 Cross-Region Replication (CRR)**
      - Vehicle images, ML artifacts replicated to secondary region
      - Versioning enabled for compliance audit trails
-     - Replication time control (RTC) for 99.99% replication within 15 mins
 
 3. **Compute Layer (Regional Isolation)**
    - **ECS Fargate clusters** in each region
@@ -47,59 +44,45 @@ Adopt a **multi-region active-active deployment architecture** with **region-awa
      - Auto-scaling based on regional traffic patterns
    - **Lambda functions** with regional endpoints
      - Real-time processing stays within region boundaries
-   - **SageMaker endpoints** per region for AI inference (see Model Registry below)
+   - **SageMaker endpoints** per region for AI inference
 
 4. **Traffic Routing**
    - **Amazon Route 53 Geolocation Routing**
-     - EU users → eu-central-1 or eu-west-1 based on latency
-     - Failover: Health checks promote secondary region within 30s
-     - Example: `api.mobilitycorp.eu` resolves to nearest healthy region
+     - Routes users to nearest region based on latency
+     - Health checks enable automatic failover to secondary region
    - **AWS Global Accelerator (optional)**
-     - Anycast IPs for faster failover (< 1 min RTO)
+     - Anycast IPs for faster failover
      - TCP/UDP performance optimization
    - **Application Load Balancer (ALB)** in each region
-     - Regional endpoint with health checks on microservices
-     - Sticky sessions for booking flows
+     - Regional endpoints with health checks on microservices
+     - Sticky sessions for stateful workflows
 
 5. **AI Model Registry per Region**
    - **SageMaker Model Registry** in each region
-     - Regional model versions: `eu-central-1/booking-demand-forecast:v1.2.3`
-     - Provider selection: Bedrock (Claude 3.5) in eu-central-1, eu-west-1
-     - Fallback: If Bedrock throttles, route to OpenAI (with compliance logging)
+     - Regional model versions for data residency compliance
+     - Provider selection: AWS Bedrock (Claude) in EU regions
+     - Fallback: OpenAI with compliance logging
    - **Model synchronization:** AWS CodePipeline with cross-region deployment
-     - Canary deployment: 10% traffic → 50% → 100% (per region)
-     - Blue-green model rollback within 5 mins
+     - Canary deployment strategy per region
+     - Blue-green rollback capability
    - **Regional training:** SageMaker training jobs use regional S3 buckets for data residency
 
 6. **Compliance & Data Residency**
    - **GDPR enforcement:** User data never leaves EU regions
    - **Encryption:** AES-256 in-transit (TLS 1.3) and at-rest (KMS regional keys)
-   - **KMS keys per region:** `eu-central-1-kms-key`, `eu-west-1-kms-key`
-   - **CloudTrail regional logs:** Audit trail stored in regional S3 buckets (7-year retention)
+   - **KMS keys per region** for encryption sovereignty
+   - **CloudTrail regional logs:** Audit trail stored in regional S3 buckets
    - **Bedrock data residency:** All inference requests processed within selected region
 
 7. **Failover Policy**
-   - **Automated failover:** Route 53 health checks → promote secondary region
-   - **Manual failover:** For planned maintenance (< 30s downtime)
-   - **Compliance exceptions:** If primary region unavailable, secondary region logs compliance override
-   - **Data consistency:** Aurora cross-region replication ensures < 1s lag
-
-**Cost Considerations (Multi-Region):**
-- Cross-region data transfer incurs additional costs
-- Aurora Global Database adds overhead compared to single-region deployment
-- DynamoDB Global Tables increase write capacity costs
-- S3 Cross-Region Replication charges apply per GB replicated
-- Route 53 geolocation routing adds query costs
-- Multi-region architecture adds operational overhead
-
-**Trade-offs:**
-- Higher infrastructure costs vs. improved compliance and performance
-- Operational complexity vs. fault tolerance benefits
-- Cost increase justified by regulatory requirements and user experience improvements
+   - **Automated failover:** Route 53 health checks promote secondary region
+   - **Manual failover:** For planned maintenance
+   - **Compliance exceptions:** Logged when primary region unavailable
+   - **Data consistency:** Aurora cross-region replication for synchronization
 
 **Model Provider Strategy:**
-- **EU regions (eu-central-1, eu-west-1):** AWS Bedrock (Claude 3.5 Sonnet) - GDPR compliant, data stays in EU
-- **Fallback:** OpenAI GPT-4o (with explicit user consent for US data processing)
+- **EU regions:** AWS Bedrock (Claude) - GDPR compliant, data stays in EU
+- **Fallback:** OpenAI (with explicit user consent for US data processing)
 - **Future US region:** OpenAI primary, Bedrock secondary
 - **Provider selection logic:** Region-based routing with compliance rules in DynamoDB
 

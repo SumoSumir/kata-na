@@ -41,54 +41,51 @@ Adopt **AWS Step Functions** as the primary orchestration framework, with **Even
   - **Monitoring:** CloudWatch metrics, X-Ray distributed tracing
 - **ML Model Retraining Pipeline Workflow:**
   1. **PrepareTrainingData:** AWS Glue job for data preparation with retry logic
-  2. **TrainModel:** SageMaker training job with XGBoost on ml.m5.4xlarge
+  2. **TrainModel:** SageMaker training job
   3. **EvaluateModel:** Lambda function evaluates model metrics
-  4. **CheckMetrics:** Conditional logic checks if MAPE < threshold
+  4. **CheckMetrics:** Conditional logic validates performance thresholds
   5. **DeployModel:** SageMaker endpoint creation if metrics pass
-  6. **NotifySuccess/NotifyFailure:** SNS notifications to ml-ops channels
+  6. **NotifySuccess/NotifyFailure:** SNS notifications to operations channels
   - Error handling includes automatic retries, catch blocks, and fallback states
   - All steps include CloudWatch logging and X-Ray tracing
 - **Triggers:**
-  - **EventBridge schedule:** Weekly retraining (Sundays 2 AM)
+  - **EventBridge schedule:** Periodic retraining on defined schedule
   - **EventBridge rule:** Model drift detected → trigger retraining
-  - **Kafka event:** `model.drift_detected` → Lambda → Start Step Functions execution
-- **Cost:** $25 per 1M state transitions (avg $200/month for all workflows)
+  - **Kafka event:** Drift events → Lambda → Start Step Functions execution
 
 **2. Amazon EventBridge Scheduler (Simple Cron Jobs)**
 - **Use cases:**
   - Daily cache warmup (Lambda invocation)
-  - Hourly data quality checks (Lambda → Athena query)
+  - Periodic data quality checks (Lambda → Athena query)
   - Cleanup jobs (S3 lifecycle policies, DynamoDB TTL)
 - **Features:**
   - **Flexible schedules:** Cron expressions, rate expressions, one-time executions
   - **Target integrations:** Lambda, Step Functions, SageMaker, ECS tasks, API Gateway
   - **Retry policies:** Configurable retry attempts with exponential backoff
 - **Daily Demand Forecast Batch Inference Schedule:**
-  - Cron expression for daily execution (morning hours)
+  - Scheduled daily execution via cron expression
   - Invokes Step Functions state machine for batch processing
-  - FlexibleTimeWindow disabled for precise scheduling
-  - Retry policy with maximum retry attempts and event age limits
+  - Configurable retry policy for resilience
   - IAM role for EventBridge Scheduler execution
-- **Cost:** Minimal (per-invocation pricing)
 
 **3. AWS MWAA (Managed Airflow) - Optional for Complex DAGs**
-- **Use cases:** Complex data pipelines with 20+ interdependent tasks
-  - Example: End-to-end data lakehouse pipeline (Bronze → Silver → Gold with 30+ tables)
-- **When to use:** If Step Functions becomes unwieldy (50+ states), use MWAA for better DAG visualization
-- **Deployment:** Small environment (1 worker, 1 scheduler), $0.49/hour = ~$350/month
+- **Use cases:** Complex data pipelines with many interdependent tasks
+  - Example: End-to-end data lakehouse pipeline (Bronze → Silver → Gold transformations)
+- **When to use:** When Step Functions becomes unwieldy, use MWAA for better DAG visualization
+- **Deployment:** Right-sized environment based on pipeline complexity
 - **Trade-off:** Higher cost but richer UI and Python-based DAG definitions
 - **Decision:** Start with Step Functions, migrate specific workflows to MWAA if needed
 
 **Monitoring & Alerting:**
 - **CloudWatch Logs:** All workflow executions logged with X-Ray trace IDs
-- **CloudWatch Alarms:** Alert on workflow failures, timeout exceeded, high execution duration
+- **CloudWatch Alarms:** Alert on workflow failures, timeouts, high execution duration
 - **SNS Topics:**
-  - `ml-ops-notifications` (Slack integration for routine updates)
-  - `ml-ops-critical` (PagerDuty integration for failures requiring immediate attention)
+  - Routine notifications (Slack integration)
+  - Critical alerts (PagerDuty integration for immediate response)
 - **CloudWatch Dashboard:** Visual overview of all scheduled jobs
-  - Success/failure rates (last 7 days)
+  - Success/failure rates
   - Average execution duration per workflow
-  - Cost per workflow (tracked via CloudWatch Logs Insights)
+  - Cost tracking per workflow
 
 ## Consequences
 ✅ **Positive:**

@@ -26,59 +26,51 @@ We have accepted the idea of building an **independent orchestrator module** for
 **AWS Implementation:**
 
 **1. AI/LLM Model Orchestrator**
-- **LangChain + AWS Bedrock** (see ADR-18 for agentic AI details)
-  - **Primary:** AWS Bedrock (Claude 3.5 Sonnet) for conversational AI
-  - **Fallback:** OpenAI GPT-4o (via API Gateway → Lambda integration)
-  - **Circuit breaker:** AWS Lambda with exponential backoff and DLQ (SQS)
-  - **Cost tracking:** CloudWatch Logs + Lambda extension records tokens used per provider
-  - **Routing logic:** Python Lambda function (512 MB RAM, 30s timeout)
-    - Checks Bedrock availability and cost threshold
-    - Falls back to OpenAI if Bedrock unavailable or over budget
-    - Raises ServiceUnavailableError if both providers fail
-- **Deployment:** ECS Fargate service (2 vCPU, 4GB RAM, 2 tasks min)
-- **Monitoring:** CloudWatch alarms on error rate, latency, token cost
+- **LangChain + AWS Bedrock** (see [ADR-18](ADR_18_Agentic_AI_Framework.md) for agentic AI details)
+  - **Primary:** AWS Bedrock (Claude models) for conversational AI
+  - **Fallback:** OpenAI (via API Gateway → Lambda integration)
+  - **Circuit breaker:** AWS Lambda with exponential backoff and Dead Letter Queue (SQS)
+  - **Cost tracking:** CloudWatch Logs monitors token usage per provider
+  - **Routing logic:** Lambda function checks availability and cost thresholds
+- **Deployment:** ECS Fargate service for high-availability
+- **Monitoring:** CloudWatch alarms on error rate, latency, and token cost
 
 **2. Payment Gateway Orchestrator**
-- **Primary:** Stripe (EU payments, strong 3DS support)
-- **Fallback:** Adyen (backup for Stripe outages or EU compliance)
+- **Primary:** Stripe (EU payments with strong 3DS support)
+- **Fallback:** Adyen (backup for Stripe outages or compliance requirements)
 - **Architecture:** Lambda function + Step Functions workflow
-  - Step 1: Attempt Stripe payment
-  - Step 2: If Stripe fails (5xx, timeout), retry with Adyen
-  - Step 3: Send result to Kafka `payments.completed` topic
-- **Circuit breaker:** DynamoDB tracks failure rate per provider (5-min windows)
-  - If Stripe error rate > 10% for 5 mins → auto-switch to Adyen
-- **Cost:** ~$200/month (Lambda + Step Functions)
+  - Attempts primary provider payment
+  - Retries with fallback on failure
+  - Publishes result to Kafka for event-driven processing
+- **Circuit breaker:** DynamoDB tracks failure rate per provider for automatic switching
 
 **3. Mapping API Orchestrator**
 - **Primary:** Google Maps Platform (routing, geocoding, places)
-- **Fallback:** Mapbox (backup for cost optimization on simpler queries)
+- **Fallback:** Mapbox (backup and cost optimization for simpler queries)
 - **Use case routing:**
-  - **Route optimization:** Always use Google Maps (superior traffic data)
-  - **Geocoding:** Use Mapbox first (cheaper), fallback to Google if quality low
-  - **Static maps:** Always use Mapbox (50% cheaper)
+  - Route optimization: Google Maps (superior traffic data)
+  - Geocoding: Mapbox first (cost-effective), Google fallback
+  - Static maps: Mapbox (cost optimization)
 - **Architecture:** API Gateway → Lambda (provider selection logic) → External API
-  - **API Gateway:** REST API with usage plans and API keys
-  - **Lambda:** Node.js 20.x, 1GB RAM, intelligent routing based on request type
-  - **Caching:** ElastiCache Redis caches geocoding results (TTL = 7 days)
-- **Cost optimization:** $8K/month (Google Maps) + $2K/month (Mapbox) vs. $15K/month (Google only)
+- **Caching:** ElastiCache Redis for frequently accessed data
 
-**4. Weather/Events API Orchestrator** (ADR-04)
+**4. Weather/Events API Orchestrator** (see [ADR-04](ADR_04_EXTERNAL_APIS.md))
 - **Weather:** OpenWeatherMap primary, WeatherAPI.com fallback
 - **Events:** PredictHQ primary, Ticketmaster fallback
-- **Architecture:** Similar to Mapping API (API Gateway → Lambda → External)
-- **Caching:** Aggressive caching (weather: 30 mins, events: 24 hours)
+- **Architecture:** API Gateway → Lambda with intelligent routing
+- **Caching:** Aggressive caching strategy for static/semi-static data
 
 **Cross-Cutting Orchestrator Patterns:**
 - **Circuit breaker state machine (DynamoDB):**
   - `CLOSED` → Normal operation
   - `OPEN` → Provider unavailable, use fallback immediately
-  - `HALF_OPEN` → Test if provider recovered (every 5 mins)
-- **Health checks:** Lambda functions ping providers every 1 min via EventBridge
+  - `HALF_OPEN` → Test provider recovery periodically
+- **Health checks:** Lambda functions ping providers regularly via EventBridge
 - **Centralized monitoring:** CloudWatch dashboard showing:
-  - Provider availability (% uptime per 5-min window)
-  - Request distribution (% traffic to primary vs. fallback)
-  - Cost per provider (tracked via CloudWatch Logs Insights)
-  - Latency percentiles (p50, p95, p99)
+  - Provider availability and uptime metrics
+  - Request distribution (primary vs. fallback traffic)
+  - Cost tracking per provider
+  - Latency percentiles and performance metrics
 
 ### Consequences
 Trade-offs and Impacts:

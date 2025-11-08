@@ -38,7 +38,7 @@ Traditional approaches include:
 **1. Manual Relocation Only**  
 - Operations staff physically relocate vehicles based on daily patterns  
 - ✅ Pros: Simple, predictable, no customer friction  
-- ❌ Cons: Expensive (~€10-15 per relocation), slow response to demand spikes, doesn't scale  
+- ❌ Cons: Expensive, slow response to demand spikes, doesn't scale  
 - **Rejected:** Cannot keep pace with rapid demand changes or fleet growth  
 
 **2. Fixed-Price Relocation Incentives**  

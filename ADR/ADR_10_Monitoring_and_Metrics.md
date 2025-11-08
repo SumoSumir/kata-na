@@ -24,49 +24,42 @@ We will use **Amazon CloudWatch** as the primary metrics and monitoring platform
 1. **Amazon CloudWatch (Primary Metrics Store)**
    - **Native AWS service integration:** Automatic metrics from ECS, Lambda, Aurora, DynamoDB, MSK, etc.
    - **Custom application metrics:** OpenTelemetry → CloudWatch EMF (Embedded Metric Format)
-     - Example metrics: `booking_latency_p99`, `vehicle_availability_ratio`, `payment_success_rate`
-   - **High-resolution metrics:** 1-second granularity for critical SLIs (vs. 1-min standard)
-   - **Metric retention:** 15 months by default
-   - **Pricing:** Per custom metric, per alarm, and per API request
+   - **High-resolution metrics:** Sub-minute granularity for critical SLIs
+   - **Configurable metric retention**
 
 2. **CloudWatch Alarms & Anomaly Detection**
-   - **Static alarms:** SLO violations (e.g., `booking_latency_p99 > 500ms` for 2 consecutive minutes)
-   - **Anomaly detection:** ML-based anomaly detection for metrics (automatically adjusts to patterns)
-   - **Composite alarms:** Logical combinations (e.g., "High latency AND high error rate")
+   - **Static alarms:** SLO violations with threshold-based alerting
+   - **Anomaly detection:** ML-based anomaly detection for metrics
+   - **Composite alarms:** Logical combinations for complex conditions
    - **SNS integration:** Alarms → SNS topics → Lambda → PagerDuty/Slack/Email
-   - **Example:** Critical alarms → PagerDuty (on-call), warning alarms → Slack #engineering
 
 3. **VictoriaMetrics (Long-Term Storage, Optional)**
-   - **Use case:** Store 2+ years of metrics for capacity planning and compliance
+   - **Use case:** Store extended metric history for capacity planning and compliance
    - **Data flow:** CloudWatch → Lambda → VictoriaMetrics remote write API
-   - **Deployment:** ECS Fargate, 4 vCPU, 16 GB RAM, gp3 SSD storage
-   - **Storage optimization:** 10x compression vs. Prometheus
-   - **PromQL queries:** Grafana can query VictoriaMetrics for historical analysis
+   - **Deployment:** ECS Fargate with appropriate resource allocation
+   - **Storage optimization:** Superior compression compared to Prometheus
+   - **PromQL queries:** Grafana queries VictoriaMetrics for historical analysis
    - **Cost advantage:** Significant savings vs extended CloudWatch retention
-   - **Justification:** Reduces long-term storage costs dramatically
 
 4. **Amazon Managed Grafana (Visualization)**
    - **Grafana workspace** with CloudWatch and VictoriaMetrics data sources
    - **Pre-built dashboards:**
      - Service health: Request rate, latency, error rate (RED metrics)
      - Infrastructure: ECS CPU/memory, Aurora connections, MSK lag
-     - Business KPIs: Active bookings, revenue/hour, vehicle utilization
+     - Business KPIs: Active bookings, revenue, vehicle utilization
      - AI model performance: Inference latency, prediction accuracy, cost per request
    - **Alerting:** Grafana alerts → SNS → PagerDuty (alternative to CloudWatch Alarms)
-   - **Pricing:** Workspace and per-editor user pricing
 
 5. **Amazon Timestream (Optional for IoT Telemetry Metrics)**
    - **Use case:** Store high-frequency vehicle telemetry metrics (battery, GPS, speed)
-   - **Time-series optimized:** 1/10 cost of relational DB for time-series data
-   - **Retention:** 7 days in memory, 90 days in magnetic storage
+   - **Time-series optimized:** Cost-effective for time-series data
+   - **Tiered retention:** Hot and cold storage tiers
    - **Query:** SQL-like syntax for time-series analysis
-   - **Pricing:** Based on data scanned and writes
 
 6. **PagerDuty Integration (Incident Management)**
    - **On-call rotation:** Primary/secondary engineers for critical alerts
-   - **Escalation policy:** Critical → Page immediately, High → Slack + Page after 5 min
-   - **Incident timeline:** All alerts, CloudWatch graphs, and X-Ray traces linked
-   - **Pricing:** Per user subscription
+   - **Escalation policy:** Automated escalation based on severity
+   - **Incident timeline:** Integrates alerts, CloudWatch graphs, and X-Ray traces
 
 7. **Monitoring Agents & Instrumentation**
    - **OpenTelemetry Collector:** ECS Fargate sidecar exports metrics to CloudWatch EMF
@@ -76,37 +69,25 @@ We will use **Amazon CloudWatch** as the primary metrics and monitoring platform
 
 **Metrics Strategy:**
 - **Golden Signals (SRE best practices):**
-  - **Latency:** P50, P95, P99 for all API endpoints
+  - **Latency:** Percentiles (P50, P95, P99) for all API endpoints
   - **Traffic:** Requests/sec per microservice
-  - **Errors:** Error rate % (4xx, 5xx)
-  - **Saturation:** CPU, memory, database connections
+  - **Errors:** Error rate percentage
+  - **Saturation:** Resource utilization (CPU, memory, database connections)
 - **Business metrics:**
-  - Revenue per hour
+  - Revenue tracking
   - Active bookings
-  - Vehicle utilization %
-  - Customer satisfaction (NPS proxy: app rating)
+  - Vehicle utilization
+  - Customer satisfaction indicators
 - **AI-specific metrics:**
-  - Model inference latency (P99 < 200ms)
+  - Model inference latency
   - Prediction accuracy (monitored via A/B testing)
-  - Cost per inference optimization targets
-
-**Monitoring Infrastructure Costs:**
-- CloudWatch: Metrics, alarms, and logs (see ADR-07 for details)
-- Amazon Managed Grafana: Workspace and user licensing
-- VictoriaMetrics: Optional long-term storage with cost optimization
-- PagerDuty: Incident management platform
-
-**Cost Considerations:**
-- CloudWatch provides native AWS integration
-- VictoriaMetrics significantly reduces long-term storage costs vs CloudWatch alone
-- Grafana enables superior visualization and cross-source querying
+  - Cost per inference
 
 **Justification:**
-- **CloudWatch** provides zero-config integration with all AWS services (ECS, Aurora, MSK, Lambda)
+- **CloudWatch** provides zero-config integration with all AWS services
 - **VictoriaMetrics** reduces long-term storage costs significantly
-- **Grafana** offers superior visualization and cross-source querying (CloudWatch + VictoriaMetrics)
-```
-- **PagerDuty** ensures < 5 min response time for critical incidents (99.9% uptime SLA)
+- **Grafana** offers superior visualization and cross-source querying
+- **PagerDuty** ensures rapid incident response with escalation policies
 
 ## Consequences
 

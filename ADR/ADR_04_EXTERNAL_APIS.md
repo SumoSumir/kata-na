@@ -24,90 +24,68 @@ Alternatives considered:
 4. **Orchestrator-based integration:** As detailed in [ADR-05](./ADR_05_Orchestrator.md), an orchestrator could manage API calls, but this might centralize failure points.
 
 ## Decision
-Implement **API Gateway + Lambda orchestrators** (see ADR-05 for orchestrator pattern) which integrate with external APIs and provide normalized data to our services.
+Implement **API Gateway + Lambda orchestrators** (see [ADR-05](ADR_05_Orchestrator.md) for orchestrator pattern) which integrate with external APIs and provide normalized data to our services.
 
 **AWS Implementation:**
 
 **1. Weather API Integration**
-- **Primary:** OpenWeatherMap API
-  - Endpoints: Current weather, 5-day forecast, historical
-  - Rate limit: 1,000 calls/day (free tier) or 60 calls/min (paid: $40/month)
-  - Data: Temperature, precipitation, wind speed, humidity, visibility
-- **Fallback:** WeatherAPI.com
-  - Endpoints: Real-time, forecast, historical
-  - Rate limit: 1M calls/month ($4/month per 10K calls)
+- **Primary Provider:** OpenWeatherMap API
+  - Data: Current weather, forecasts, temperature, precipitation, wind, humidity, visibility
+- **Fallback Provider:** WeatherAPI.com for redundancy
 - **Architecture:**
-  - API Gateway REST API → Lambda (Node.js 20.x, 512 MB RAM)
-  - Lambda function fetches weather, normalizes to common schema, returns JSON
-  - **Caching:** ElastiCache Redis (30-min TTL for current weather, 24-hour TTL for forecasts)
-  - **Circuit breaker:** DynamoDB tracks provider health (switch to fallback if error rate > 10%)
-  - **Historical storage:** Lambda → Kinesis Firehose → S3 (`s3://mobilit ycorp-external-data/weather/`)
-- **Cost:** $50/month (API subscriptions) + $50/month (AWS infrastructure) = $100/month
+  - API Gateway REST API → Lambda orchestrator
+  - Lambda fetches weather data and normalizes to common schema
+  - **Caching:** ElastiCache Redis for current weather and forecasts
+  - **Circuit breaker:** DynamoDB tracks provider health for automatic fallback
+  - **Historical storage:** Kinesis Firehose → S3 for ML training data
 
 **2. Public Holidays API Integration**
-- **Primary:** Calendarific API
-  - Endpoints: Holidays by country, year
-  - Rate limit: 1,000 calls/month (free), 100K calls/month (paid: $10/month)
+- **Primary Provider:** Calendarific API
   - Covers 230+ countries with local and national holidays
 - **Architecture:**
-  - Lambda function triggered monthly (EventBridge cron: `0 0 1 * ? *`)
-  - Fetches holidays for next 12 months, stores in DynamoDB `public_holidays` table
-  - **Caching:** DynamoDB with no TTL (static data, refreshed monthly)
+  - Lambda function triggered monthly via EventBridge
+  - Fetches holidays for upcoming months, stores in DynamoDB
+  - **Caching:** DynamoDB (static data, refreshed monthly)
   - **Fallback:** Manual CSV upload to S3 if API unavailable
-- **Cost:** $10/month (API) + $5/month (DynamoDB) = $15/month
 
 **3. Events API Integration**
-- **Primary:** PredictHQ API
-  - Endpoints: Events by location, category, date range
-  - Categories: Concerts, sports, festivals, conferences
-  - Rate limit: 5,000 calls/month (starter: $199/month), 50K calls/month (growth: $499/month)
-  - Provides: Event attendance estimates, category, venue coordinates
-- **Fallback:** Ticketmaster Discovery API
-  - Free tier: 5,000 calls/day
-  - Less rich metadata than PredictHQ but sufficient for basic demand signals
+- **Primary Provider:** PredictHQ API
+  - Event types: Concerts, sports, festivals, conferences
+  - Provides attendance estimates, venue coordinates, category
+- **Fallback Provider:** Ticketmaster Discovery API
 - **Architecture:**
-  - Lambda function triggered daily (EventBridge cron: `0 6 * * ? *`)
-  - Fetches events for next 30 days within 5 km of each operational zone
-  - Stores in DynamoDB `local_events` table with GSI on `zone_id` + `event_date`
-  - **Enrichment:** Lambda adds geofence mapping (zone_id) using H3 hexagonal grid
-  - **ML Feature Store:** Daily batch job syncs events to SageMaker Feature Store
-- **Cost:** $199/month (PredictHQ starter) + $50/month (AWS infrastructure) = $249/month
+  - Lambda function triggered daily via EventBridge
+  - Fetches upcoming events for operational zones
+  - Stores in DynamoDB with geofence mapping using H3 hexagonal grid
+  - **ML integration:** Syncs to SageMaker Feature Store for demand forecasting
 
-**4. Maps & Traffic API Integration** (see ADR-05 for orchestrator details)
-- **Primary:** Google Maps Platform
+**4. Maps & Traffic API Integration** (see [ADR-05](ADR_05_Orchestrator.md) for orchestrator details)
+- **Primary Provider:** Google Maps Platform
   - Distance Matrix API: ETA calculations for fleet rebalancing
   - Directions API: Optimal routes for relocation
   - Geocoding API: Address → coordinates conversion
   - Traffic API: Real-time traffic conditions
-  - Rate limit: 40K requests/month (free), then $5 per 1,000 requests
-- **Fallback:** Mapbox
-  - Directions API: $0.50 per 1,000 requests (50% cheaper than Google)
-  - Geocoding API: Free tier 100K requests/month
-  - Traffic: Real-time traffic tiles included
+- **Fallback Provider:** Mapbox
+  - Cost-effective alternative with comparable functionality
 - **Architecture:** 
-  - API Gateway → Lambda (intelligent routing based on request type - see ADR-05)
-  - **Caching:** ElastiCache Redis
-    - Geocoding: 7-day TTL (addresses rarely change)
-    - Traffic: 5-min TTL (real-time, but high query volume)
-    - Directions: 1-hour TTL (routes stable unless traffic changes)
-  - **Historical storage:** S3 for traffic patterns (used in demand forecasting)
+  - API Gateway → Lambda with intelligent routing based on request type
+  - **Caching:** ElastiCache Redis with tiered TTL strategy
+    - Geocoding: Long TTL (addresses rarely change)
+    - Traffic: Short TTL (real-time data)
+    - Directions: Medium TTL (routes stable unless traffic changes)
+  - **Historical storage:** S3 for traffic patterns used in demand forecasting
 
 **Unified Data Schema:**
-External data normalized into consistent format with fields for:
-- external_data_type (weather/events/traffic)
-- timestamp and location (H3 index, lat/lon)
-- weather details (temperature, precipitation, wind, conditions)
-- events array (event details, attendance, impact radius, timing)
-- holidays array (date, name, type)
-- traffic metrics (congestion level, speeds, duration multipliers)
-
-This schema enables consistent processing across all AI/ML models and services.
+External data normalized into consistent format:
+- Data type classification (weather/events/traffic/holidays)
+- Timestamp and location (H3 index, lat/lon)
+- Type-specific attributes (temperature, event details, traffic metrics)
+- Enables consistent processing across all AI/ML models and services
 
 **Monitoring & Alerting:**
-- **CloudWatch Metrics:** API response times, error rates, cost per provider
-- **CloudWatch Alarms:** Alert if provider error rate exceeds threshold
-- **Cost tracking:** CloudWatch Logs Insights queries aggregate API costs daily
-- **SNS notifications:** Alerts sent to #engineering-ops Slack channel
+- **CloudWatch Metrics:** API response times, error rates, cost tracking
+- **CloudWatch Alarms:** Alert on provider errors or degraded performance
+- **SNS notifications:** Operational alerts for engineering team
 
 ## Consequences
 ✅ **Positive:**
