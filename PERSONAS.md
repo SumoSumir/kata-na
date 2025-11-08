@@ -7,7 +7,7 @@ This document introduces the key people and personas that guide our architectura
 ## 🎯 Business Stakeholders
 
 ### Sarah Chen - Chief Product Officer (CPO)
-**Background:** Former Head of Growth at a leading ride-sharing company. Joined MobilityCorp to scale the platform across Europe.
+**Background:** Former Head of Growth at a leading ride-sharing company.
 
 **Goals:**
 - Increase customer retention from 20% to 55% within 18 months
@@ -27,143 +27,87 @@ This document introduces the key people and personas that guide our architectura
 **Quote:** *"I need data-driven insights to position vehicles where customers actually need them, not where we guess they'll be."*
 
 **How We Solve This:**
-- **[ADR-02: AI-Driven Demand Forecasting](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md)** - ML models predict demand 24 hours ahead using 150+ features (weather, events, holidays, transit disruptions)
-- **[ADR-15: MLOps Pipeline](./ADR/ADR_15_MLOps_Pipeline.md)** - Automated model training, validation, and deployment with A/B testing
-- **Analytics Dashboards** - Real-time KPI tracking showing retention improvements from 20% → 55%
-- **[PHASED_IMPLEMENTATION.md](PHASED_IMPLEMENTATION.md)** - €30.5M NPV business case with 8.7-month payback
+- **[ADR-02: AI-Driven Demand Forecasting](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md)** - ML models predict demand 24 hours ahead
+- **[ADR-16: MLOps Pipeline](./ADR/ADR_16_MLOps_Pipeline.md)** - Automated training, validation, A/B testing
+- **Analytics Dashboards** - Real-time KPI tracking
 
-**Real-World Impact:**
-> *"In Phase 1, demand forecasting reduced vehicle unavailability from 25% to 8% in Amsterdam pilot, directly increasing Sarah's DAU by 22%."*
+**Impact:**
+> *"In the Amsterdam pilot (Phase 2), demand forecasting reduced vehicle unavailability from 25% to 8%, increasing DAU by 22%."*
 
 ---
 
 ### Marcus Weber - VP of Fleet Operations
-**Background:** 15 years in fleet management, previously optimized delivery operations for a major logistics company. Rose from field coordinator managing 12-person teams to VP level, bringing hands-on operational expertise to strategic leadership.
+**Background:** 15 years in fleet management, rose from field coordinator to VP level.
 
 **Current Role:**
-- Age: 47, oversees fleet operations across all EU cities
-- Direct reports: 8 regional operations managers, 120+ field staff total
-- Manages: 50,000 vehicles across Amsterdam, Barcelona, Madrid, Copenhagen, Munich
+- Oversees 50,000 vehicles across 5 EU cities
+- Manages 8 regional operations managers, 120+ field staff
 
-**Strategic Goals:**
-- Reduce manual battery swap costs from €15/swap to under €6
+**Goals:**
+- Reduce manual battery swap costs from €15/swap to €6
 - Improve fleet utilization from 45% to 75%
 - Cut vehicle downtime by 40%
-- Scale operations to support 5 new cities by 2026
 
-**Daily Operational Challenges:**
-- "Staff spend 60% of their time driving between locations inefficiently"
-- "We're swapping batteries on vehicles that won't be used for hours"
-- "Reactive maintenance is 3x more expensive than preventive"
+**Pain Points:**
 - "I waste 2 hours every morning reviewing reports from regional managers"
+- "Staff spend 60% of their time driving between locations inefficiently"
 - "By the time field teams reach vehicles, they're already rented—we need predictive intelligence"
+- "Reactive maintenance is 3x more expensive than preventive"
 
 **Success Metrics:**
 - Cost per vehicle operation
 - Fleet utilization rate
-- Mean time between failures (MTBF)
-- Field staff productivity (tasks completed per shift)
 - Planning time reduction
+- Field staff productivity
 
-**Quote:** *"Show me which vehicles need attention RIGHT NOW and optimize my team's routes. Every wasted trip costs us money. I need AI to tell my field managers exactly where to send their teams and why."*
+**Quote:** *"Show me which vehicles need attention RIGHT NOW and optimize my team's routes. Every wasted trip costs us money."*
 
 **How We Solve This:**
-- **[ADR-02: Dynamic Relocation Incentives](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md)** - AI automatically offers users €3-5 credits to relocate vehicles, reducing manual swap costs from €15 → €6
-- **[ADR-02: AI Task Prioritization](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md)** - Prioritizes battery swaps based on predicted demand (not just current battery level)
-- **[ADR-15: Predictive Maintenance](./ADR/ADR_15_MLOps_Pipeline.md)** - Machine learning models predict battery failures and maintenance needs
-- **[WORKFLOWS/STAFF_WORKFLOWS.md](./WORKFLOWS/STAFF_WORKFLOWS.md)** - AI-powered task prioritization system for field operations
-- **[ADR-01: Microservices Architecture](./ADR/ADR_01_microservices_architecture.md)** - Fleet Operations Service scales independently to handle 50K+ vehicles
-- **Route Optimization** - Google Maps Directions API calculates most efficient multi-stop routes
+- **[ADR-02: AI Task Prioritization](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md)** - Prioritizes tasks by urgency × impact, reducing planning time from 2 hours → 15 minutes
+- **[ADR-15: Predictive Maintenance](./ADR/ADR_15_MLOps_Pipeline.md)** - Predicts failures 7 days ahead with 92% confidence
+- **[WORKFLOWS/STAFF_WORKFLOWS.md](./WORKFLOWS/STAFF_WORKFLOWS.md)** - AI-powered task prioritization system
+- See [Use Case 3](#use-case-3-marcuss-ai-optimized-morning-operational-efficiency) for detailed morning workflow
 
-**Marcus's AI-Powered Morning Workflow:**
-```
-6:00 AM: Marcus reviews consolidated dashboard across all cities
-  ↓ [AI analyzes 50,000 vehicles across 5 cities]
-  ↓ [Predictive model identifies critical tasks per region]
-
-AI Task List for Madrid Region (Prioritized by Urgency × Impact):
-┌─────────────────────────────────────────────────────────────┐
-│ 1. Priority: CRITICAL - Battery Swap                        │
-│    Vehicle: E-SCOOT-1247 (Salamanca district)              │
-│    Reason: 15% battery, HIGH demand predicted 8-9 AM        │
-│    Impact: €45 lost revenue if unavailable                  │
-│    Assigned to: Carlos (2.3 km away, ETA 8 min)            │
-├─────────────────────────────────────────────────────────────┤
-│ 2. Priority: HIGH - Preventive Maintenance                  │
-│    Vehicle: E-BIKE-0893 (Retiro Park)                      │
-│    Reason: Brake sensor anomaly detected, 7-day failure     │
-│             prediction with 92% confidence                   │
-│    Impact: Safety risk + €200 reactive repair cost          │
-│    Assigned to: Maria (1.8 km away, ETA 12 min)            │
-├─────────────────────────────────────────────────────────────┤
-│ 3. Priority: MEDIUM - Relocation                            │
-│    Vehicle: E-CAR-0456 (low-demand suburb)                  │
-│    Reason: Move to city center, €8 manual cost vs €3 AI     │
-│             incentive offered to user (no takers yet)        │
-│    Impact: €5 cost savings if AI incentive works            │
-│    Status: Wait 2 hours, escalate if no user accepts        │
-└─────────────────────────────────────────────────────────────┘
-
-6:15 AM: Marcus approves AI task lists, regional managers notified
-9:30 AM: All priority tasks completed, vehicles available for peak demand
-```
-
-**Operational & Business Impact:**
-- **Planning Time:** 2 hours → 15 minutes (88% reduction)
-- **Wasted Trips:** 40% → 8% (vehicles already rented before team arrives)
-- **Cost Savings:** €15/swap manual → €6/swap AI-optimized
-- **Annual Savings:** €11.176M from relocation automation + predictive maintenance
-- **Fleet Utilization:** 45% → 75% (+30 percentage points)
+**Impact:**
+- Planning Time: 2 hours → 15 minutes (88% reduction)
+- Cost: €15/swap → €6/swap (AI-optimized)
+- Annual Savings: €11.176M from automation + predictive maintenance
 
 ---
 
 ### David Park - Chief Technology & Security Officer (CTO/CISO)
-**Background:** Ex-AWS solutions architect with 18 years spanning cloud platforms and cybersecurity. Previously CISO at a fintech company before joining MobilityCorp to modernize tech stack and establish security-first architecture.
+**Background:** Ex-AWS solutions architect with 18 years in cloud platforms and cybersecurity.
 
 **Goals:**
-- Achieve 99.95% system uptime with zero security incidents
-- Scale infrastructure cost-effectively as fleet grows
-- Implement AI/ML capabilities without vendor lock-in
-- Ensure ISO 27001, SOC 2 Type II, and GDPR/PCI-DSS compliance
-- Secure IoT fleet against unauthorized access (50,000+ devices)
+- Achieve 99.95% uptime with zero security incidents
+- Scale infrastructure cost-effectively
+- Ensure GDPR, PCI-DSS, ISO 27001 compliance
+- Secure 50,000+ IoT devices
 
 **Pain Points:**
-- "Our monolithic architecture can't handle peak demand during events"
+- "Our monolithic architecture can't handle peak demand"
 - "We lack observability—troubleshooting takes hours"
-- "50,000 IoT devices are potential attack vectors if not properly secured"
-- "One data breach destroys our brand and costs millions in fines"
-- "GDPR right-to-erasure requests are manual and error-prone"
+- "50,000 IoT devices are potential attack vectors"
+- "One data breach destroys our brand and costs millions"
 
 **Success Metrics:**
-- System availability (99.95% SLA compliance)
-- P95 API response time (<200ms)
-- Infrastructure cost per transaction
-- Zero security incidents or data breaches
-- <24 hour mean time to detect (MTTD) threats
-- 100% IoT device certificate rotation compliance
+- 99.95% uptime SLA compliance
+- P95 API latency <200ms
+- Zero security incidents
+- <24 hour MTTD for threats
 
-**Quote:** *"I need an architecture that scales independently per service, fails gracefully, and embeds security from day one—not as an afterthought. Every API call, every data store, every IoT message needs encryption and authentication."*
+**Quote:** *"I need an architecture that scales independently per service, fails gracefully, and embeds security from day one—not as an afterthought."*
 
 **How We Solve This:**
+- **[ADR-01: Microservices](./ADR/ADR_01_microservices_architecture.md)** - 8 independently scalable services on AWS ECS
+- **[ADR-09: Multi-Region](./ADR/ADR_09_MULTI_REGION.md)** - Active-passive (Frankfurt + Ireland)
+- **[ADR-12: Zero-Trust Security](./ADR/ADR_12_SECURITY_ARCHITECTURE.md)** - IAM, KMS encryption, mTLS for IoT
+- **[ADR-14: Data Compliance](./ADR/ADR_14_DATA_COMPLIANT.md)** - GDPR, PCI-DSS automation
+- See [Use Case 5](#use-case-5-davids-security-incident-response-zero-trust-in-action) for incident response example
 
-**Infrastructure & Scalability:**
-- **[ADR-01: Microservices Architecture](./ADR/ADR_01_microservices_architecture.md)** - 8 independently scalable services on AWS ECS Fargate (Telemetry, Booking, Payment, Fleet Ops, Pricing, Analytics, Notification, User/KYC)
-- **[ADR-09: Multi-Region Deployment](./ADR/ADR_09_MULTI_REGION.md)** - Active-passive setup in eu-central-1 (Frankfurt) + eu-west-1 (Ireland) with 99.95% uptime SLA
-- **[ADR-10: Observability Stack](./ADR/ADR_10_Monitoring_and_Metrics.md)** - VictoriaMetrics, Grafana, Loki for unified metrics, logs, and traces
-- **[ADR-06: Event-Driven Architecture](./ADR/ADR_06_EVENT_DRIVEN_ARCHITECTURE.md)** - Kafka topics isolate failures, prevent cascading outages
-
-**Security & Compliance:**
-- **[ADR-12: Security-by-Design Architecture](./ADR/ADR_12_SECURITY_ARCHITECTURE.md)** - Comprehensive zero-trust model with AWS IAM, Secrets Manager, KMS encryption
-- **[ADR-14: Data Compliance](./ADR/ADR_14_DATA_COMPLIANT.md)** - GDPR data residency (EU regions only), automated right-to-erasure
-- **[ADR-11: IoT Security](./ADR/ADR_11_IoT_Enabled_Vehicles.md)** - X.509 certificates for 50K devices, AWS IoT Core mutual TLS (mTLS)
-- **[COST_ANALYSIS.md](./COST_ANALYSIS.md)** - Security ROI: €295K/year positive ROI (breach prevention)
-
-**Architecture Highlights:**
-- **Independent Scaling:** Telemetry (10 tasks, 2 vCPU) vs. Booking (20 tasks peak) vs. Analytics (4 vCPU, 8GB RAM)
-- **Fault Isolation:** Booking failure doesn't disrupt vehicle tracking
-- **Cost Efficiency:** $45K/month infrastructure for 50K vehicles (~$0.90 per vehicle/month)
-- **Zero-Trust Security:** Multi-layered defense with network isolation, IAM roles, encryption at rest/in transit
-- **Compliance Readiness:** GDPR, PCI-DSS Level 1, ISO 27001, SOC 2 Type II (in progress)
+**Impact:**
+- Uptime: 99.97% actual vs 99.95% target
+- Security ROI: €295K/year (breach prevention)
 
 ---
 
@@ -174,9 +118,6 @@ AI Task List for Madrid Region (Prioritized by Urgency × Impact):
 - Age: 28, Marketing Manager
 - Location: Amsterdam city center
 - Usage: Daily 4km commute (home → office)
-
-**Scenario:**
-Emma leaves for work at 8:15 AM every weekday. She needs a scooter within 100m of her apartment and wants to pre-book it the night before to guarantee availability.
 
 **Pain Points:**
 - "Half the time, there's no scooter available when I need it"
@@ -191,23 +132,11 @@ Emma leaves for work at 8:15 AM every weekday. She needs a scooter within 100m o
 **Quote:** *"I want to delete Uber and just use MobilityCorp, but I can't risk being late to work."*
 
 **How We Solve This:**
-- **[ADR-02: Predictive Rebalancing](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md)** - ML model predicts Emma's 8:15 AM demand and triggers relocation incentives the night before
-- **Pre-Booking Feature** - Emma reserves her scooter at 11:00 PM for next morning (30-minute advance booking)
-- **[WORKFLOWS/CUSTOMER_WORKFLOWS.md](WORKFLOWS/CUSTOMER_WORKFLOWS.md)** - Step-by-step booking, unlock, and return process with AI verification
-- **Dynamic Pricing Transparency** - Real-time surge/discount indicators in-app
+- **[ADR-02: Predictive Rebalancing](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md)** - ML predicts Emma's 8:15 AM demand, triggers overnight relocation
+- **Pre-Booking** - 30-minute advance booking guarantee
+- See [Use Case 1](#use-case-1-emmas-morning-commute-predictive-rebalancing) for full workflow
 
-**Emma's Typical Day:**
-```
-11:00 PM: Emma pre-books scooter for 8:15 AM pickup
-  ↓ [Demand Forecasting Service predicts high morning demand]
-  ↓ [System offers €3 credit to user near Emma's apartment to relocate scooter]
-8:10 AM: Emma opens app, sees reserved scooter 50m away
-8:15 AM: NFC unlock, AI takes pickup photo (damage detection)
-8:35 AM: Arrival at office, return photo, auto-verification
-8:36 AM: Payment processed, €4.20 charged, receipt sent
-```
-
-**Business Result:** *Emma's retention increased from occasional user → daily commuter (35% retention improvement target).*
+**Impact:** Retention improved from occasional user → daily commuter (20% → 58%)
 
 ---
 
@@ -217,9 +146,6 @@ Emma leaves for work at 8:15 AM every weekday. She needs a scooter within 100m o
 - Location: Barcelona for 3 days
 - Usage: Spontaneous sightseeing trips
 
-**Scenario:**
-Alex wants to explore Barcelona's beaches and Gothic Quarter. He needs on-demand access to vehicles near major attractions, simple payment, and multilingual support.
-
 **Pain Points:**
 - "I don't know where vehicles are available"
 - "The app should suggest routes and attractions"
@@ -227,31 +153,17 @@ Alex wants to explore Barcelona's beaches and Gothic Quarter. He needs on-demand
 
 **Needs:**
 - Real-time vehicle availability map
-- Route recommendations with tourist attractions
+- Route recommendations with attractions
 - Clear parking instructions in English
 
 **Quote:** *"Make it as easy as Google Maps—I shouldn't need to think about logistics."*
 
 **How We Solve This:**
-- **[ADR-13: Conversational AI Assistant](./ADR/ADR_13_CONVERSATIONAL_UX_AND_AI_ASSISTANT.md)** - Claude 3.7 Sonnet LLM with multilingual support (English, Spanish, German, French)
-- **[ADR-04: External APIs](./ADR/ADR_04_EXTERNAL_APIS.md)** - Google Maps integration for route planning and parking zone detection
-- **Real-Time Telemetry** - Vehicle availability updated every 30 seconds via IoT Core
-- **[WORKFLOWS/CUSTOMER_WORKFLOWS.md](WORKFLOWS/CUSTOMER_WORKFLOWS.md)** - Visual parking verification with AI-powered location checks
+- **[ADR-13: Conversational AI](./ADR/ADR_13_CONVERSATIONAL_UX_AND_AI_ASSISTANT.md)** - Claude 3.7 Sonnet with multilingual support
+- **[ADR-04: Maps Integration](./ADR/ADR_04_EXTERNAL_APIS.md)** - Route planning and parking zones
+- See [Use Case 2](#use-case-2-alexs-tourist-experience-conversational-ai) for interaction example
 
-**Alex's User Journey:**
-```
-Tourist opens app: "Show me scooters near Sagrada Familia"
-  ↓ [Conversational AI understands natural language query]
-  ↓ [Maps API locates 8 scooters within 200m]
-AI Assistant: "I found 8 scooters nearby. The closest one is €2.50 for 
-              30 min. Want me to reserve it?"
-Alex: "Yes, and suggest a route to Park Güell"
-  ↓ [Maps API generates scenic route with estimated 18 min travel time]
-AI Assistant: "Reserved! Here's your route. When you arrive at Park Güell, 
-              park in the blue zone marked on the map. I'll guide you."
-```
-
-**Business Impact:** *Tourist conversion rate improved 40% with conversational UI (vs. traditional map-only interface).*
+**Impact:** Tourist conversion rate +40% with conversational UI
 
 ---
 
@@ -260,9 +172,6 @@ AI Assistant: "Reserved! Here's your route. When you arrive at Park Güell,
 - Age: 41, Teacher with two kids
 - Location: Munich suburbs
 - Usage: Weekend errands and family outings
-
-**Scenario:**
-Lisa needs a van on Saturday mornings for grocery shopping and ferrying kids to activities. She books 2-3 days in advance and needs vehicles that are clean and well-maintained.
 
 **Pain Points:**
 - "Last time, the van was dirty with someone's coffee cup inside"
@@ -277,25 +186,11 @@ Lisa needs a van on Saturday mornings for grocery shopping and ferrying kids to 
 **Quote:** *"I need to trust that the vehicle will be clean, charged, and reliable—my kids depend on it."*
 
 **How We Solve This:**
-- **[ADR-17: Computer Vision for Quality](./ADR/ADR_17_Agentic_AI_Framework.md)** - ResNet-50 CNN detects damage, dirt, and trash with 88% accuracy
-- **[ADR-07: Battery Health Prediction](./ADR/ADR_15_MLOps_Pipeline.md)** - ML model predicts remaining range with 95% accuracy (±2 km)
-- **Pre-Rental Photos** - Lisa sees timestamped photos of van interior/exterior before booking
-- **Automated Quality Scoring** - Vehicles below 7/10 cleanliness score automatically flagged for cleaning
+- **[ADR-17: Computer Vision](./ADR/ADR_17_Agentic_AI_Framework.md)** - ResNet-50 CNN detects damage/dirt with 88% accuracy
+- **Battery Health Prediction** - ML predicts remaining range with 95% accuracy (±2 km)
+- See [Use Case 4](#use-case-4-lisas-family-rental-quality-assurance) for booking journey
 
-**Lisa's Weekend Booking:**
-```
-Thursday 8:00 PM: Lisa books family van for Saturday 9:00 AM
-  ↓ [System shows van's latest inspection photos with 9/10 quality score]
-  ↓ [Battery health check: 85% charge = 180 km range predicted]
-Lisa reviews: "Van looks clean, battery sufficient for 40 km trip"
-Saturday 8:50 AM: Arrives at van, takes pickup photo
-  ↓ [AI verifies no new damage, cleanliness matches booking photos]
-  ↓ [Kid car seat detected in back row—matches family profile]
-Rental starts, family drives to store + activities
-Return: AI detects minor coffee stain (not charged, below damage threshold)
-```
-
-**Trust Building:** *Lisa's NPS score: 9/10. "Finally, a rental service I can rely on with kids."*
+**Impact:** NPS +25 points, "Finally, a rental I can trust with kids"
 
 ---
 
@@ -305,10 +200,7 @@ Return: AI detects minor coffee stain (not charged, below damage threshold)
 **Profile:**
 - Age: 32, Fleet Coordinator
 - Location: Madrid operations center
-- Manages: 12-person field team
-
-**Scenario:**
-Javier starts each day reviewing battery levels across 2,000 vehicles. He manually assigns tasks to field staff based on experience and intuition about demand patterns.
+- Manages: 12-person field team across 2,000 vehicles
 
 **Pain Points:**
 - "I waste 2 hours every morning planning routes"
@@ -323,48 +215,14 @@ Javier starts each day reviewing battery levels across 2,000 vehicles. He manual
 **Quote:** *"Give me a smart system that tells my team exactly where to go and why—don't make me guess."*
 
 **How We Solve This:**
-- **[ADR-02: AI Task Prioritization](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md)** - Prioritizes battery swaps based on predicted demand (not just current battery level)
-- **[ADR-07: Predictive Maintenance Alerts](./ADR/ADR_15_MLOps_Pipeline.md)** - Flags vehicles needing preventive service before they fail
-- **[WORKFLOWS/STAFF_WORKFLOWS.md](WORKFLOWS/STAFF_WORKFLOWS.md)** - Detailed workflow for Javier's morning routine with AI-optimized task list
-- **Route Optimization** - Google Maps Directions API calculates most efficient multi-stop routes
+- **[ADR-02: AI Task Prioritization](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md)** - Same system as Marcus (VP Fleet Ops) uses
+- **[WORKFLOWS/STAFF_WORKFLOWS.md](WORKFLOWS/STAFF_WORKFLOWS.md)** - Detailed field operations workflow
+- See [Use Case 3: Marcus's AI-Optimized Morning](#use-case-3-marcuss-ai-optimized-morning-operational-efficiency) - Javier's regional workflow mirrors this at city level
 
-**Javier's AI-Powered Morning Workflow:**
-```
-6:00 AM: Javier logs into Field Ops Dashboard
-  ↓ [AI analyzes 2,000 vehicles across Madrid]
-  ↓ [Predictive model identifies critical tasks]
-
-AI Task List (Prioritized by Urgency × Impact):
-┌─────────────────────────────────────────────────────────────┐
-│ 1. Priority: CRITICAL - Battery Swap                        │
-│    Vehicle: E-SCOOT-1247 (Salamanca district)              │
-│    Reason: 15% battery, HIGH demand predicted 8-9 AM        │
-│    Impact: €45 lost revenue if unavailable                  │
-│    Assigned to: Carlos (2.3 km away, ETA 8 min)            │
-├─────────────────────────────────────────────────────────────┤
-│ 2. Priority: HIGH - Preventive Maintenance                  │
-│    Vehicle: E-BIKE-0893 (Retiro Park)                      │
-│    Reason: Brake sensor anomaly detected, 7-day failure     │
-│             prediction with 92% confidence                   │
-│    Impact: Safety risk + €200 reactive repair cost          │
-│    Assigned to: Maria (1.8 km away, ETA 12 min)            │
-├─────────────────────────────────────────────────────────────┤
-│ 3. Priority: MEDIUM - Relocation                            │
-│    Vehicle: E-CAR-0456 (low-demand suburb)                  │
-│    Reason: Move to city center, €8 manual cost vs €3 AI     │
-│             incentive offered to user (no takers yet)        │
-│    Impact: €5 cost savings if AI incentive works            │
-│    Status: Wait 2 hours, escalate if no user accepts        │
-└─────────────────────────────────────────────────────────────┘
-
-6:15 AM: Javier approves AI task list, team dispatched
-9:30 AM: All priority tasks completed, vehicles available for peak demand
-```
-
-**Efficiency Gains:** 
-- **Planning Time:** 2 hours → 15 minutes (88% reduction)
-- **Wasted Trips:** 40% → 8% (vehicles already rented before team arrives)
-- **Cost Savings:** €15/swap manual → €6/swap AI-optimized
+**Impact:**
+- Planning Time: 2 hours → 15 minutes
+- Wasted Trips: 40% → 8%
+- Cost: €15/swap → €6/swap
 
 ---
 
@@ -373,9 +231,6 @@ AI Task List (Prioritized by Urgency × Impact):
 - Age: 27, Support Team Lead
 - Location: Copenhagen support center
 - Handles: 200+ tickets/day
-
-**Scenario:**
-Nina resolves disputes about fines, parking violations, and damage claims. Most tickets involve "he said, she said" situations without clear evidence.
 
 **Pain Points:**
 - "Customers dispute fines because we lack photo proof"
@@ -390,39 +245,14 @@ Nina resolves disputes about fines, parking violations, and damage claims. Most 
 **Quote:** *"If the system could automatically verify returns and detect damage, I could focus on real customer issues."*
 
 **How We Solve This:**
-- **[ADR-17: Computer Vision Automation](./ADR/ADR_17_Agentic_AI_Framework.md)** - ResNet-50 CNN + AWS Rekognition for damage detection and location verification
-- **Automated Dispute Resolution** - 70% of cases auto-resolved with photo evidence + timestamps
-- **[WORKFLOWS/CUSTOMER_WORKFLOWS.md](WORKFLOWS/CUSTOMER_WORKFLOWS.md)** - Return verification workflow with AI-powered checks
-- **Audit Trail** - Immutable photo history stored in S3 with 90-day retention
+- **[ADR-17: Computer Vision Automation](./ADR/ADR_17_Agentic_AI_Framework.md)** - ResNet-50 CNN + AWS Rekognition for damage detection
+- **Automated Dispute Resolution** - 70% of cases auto-resolved with photo evidence
+- **Audit Trail** - Immutable photo history in S3 with 90-day retention
 
-**Nina's Automated Support Workflow:**
-```
-BEFORE (Manual Process):
-Customer: "I was charged €50 for damage I didn't cause!"
-Nina: [Spends 10 min reviewing booking history, photos]
-Nina: [Contacts previous renter, waits 24 hours for response]
-Nina: [Manually compares photos, makes judgment call]
-Resolution: 15 minutes per case, low customer satisfaction
-
-AFTER (AI-Powered Automation):
-Customer: "I was charged €50 for damage I didn't cause!"
-  ↓ [System automatically retrieves pickup/return photos]
-  ↓ [Computer Vision compares photos, timestamps damage to previous renter]
-  ↓ [AI generates evidence report with confidence score]
-
-System Auto-Response:
-"Our AI review shows the scratch appeared during the previous 
- rental (12/05 3:42 PM). We've refunded your €50 and updated 
- the correct account. Apologies for the error!"
-
-Nina's dashboard: ✅ Auto-resolved in 2 seconds
-```
-
-**Support Efficiency:**
-- **Ticket Resolution Time:** 15 min → 2 min (87% reduction)
-- **Auto-Resolution Rate:** 0% → 70%
-- **Customer Satisfaction:** +25% improvement
-- **Nina's Focus:** Now handles complex cases (privacy requests, payment disputes, escalations)
+**Impact:**
+- Resolution Time: 15 min → 2 min (87% reduction)
+- Auto-Resolution Rate: 70%
+- Customer Satisfaction: +25%
 
 ---
 
