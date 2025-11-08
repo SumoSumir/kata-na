@@ -182,268 +182,95 @@ This data must support:
 
 #### Bronze Layer: Raw Data Ingestion
 
-```python
-# Example: Vehicle Telemetry to Bronze Layer
+**Kafka to S3 Pipeline:**
+- Kinesis Firehose buffers streaming data (128 MB or 60 seconds)
+- Automatic conversion to Snappy-compressed Parquet format
+- Partitioned by timestamp (year/month/day/hour) for efficient querying
 
-# 1. Kafka (MSK) → Kinesis Firehose → S3
-{
-  "delivery_stream": "vehicle-telemetry-bronze",
-  "s3_configuration": {
-    "bucket_arn": "arn:aws:s3:::mobilityco rp-datalake-bronze",
-    "prefix": "telemetry/year=!{timestamp:yyyy}/month=!{timestamp:MM}/day=!{timestamp:dd}/hour=!{timestamp:HH}/",
-    "buffering_hints": {
-      "size_in_mbs": 128,  # Flush every 128 MB
-      "interval_in_seconds": 60  # Or every 60 seconds
-    },
-    "compression_format": "SNAPPY",
-    "data_format_conversion": {
-      "enabled": true,
-      "output_format": "PARQUET",
-      "schema": {
-        "database": "mobilit ycorp",
-        "table": "telemetry_raw"
-      }
-    }
-  }
-}
-
-# 2. Partitioning Strategy
+**Partitioning Structure:**
+```
 s3://mobilitycorp-datalake-bronze/
-├─ telemetry/
-│  ├─ year=2025/
-│  │  ├─ month=11/
-│  │  │  ├─ day=07/
-│  │  │  │  ├─ hour=00/
-│  │  │  │  │  ├─ part-00000.snappy.parquet
-│  │  │  │  │  └─ part-00001.snappy.parquet
-│  │  │  │  └─ hour=01/
-│  │  │  └─ day=08/
-│  │  └─ month=12/
-│  └─ year=2026/
-├─ bookings/
-├─ user_events/
-└─ external_data/
+├─ telemetry/year=2025/month=11/day=07/hour=00/
+├─ bookings/year=2025/month=11/day=07/
+├─ user_events/year=2025/month=11/day=07/
+└─ external_data/weather/year=2025/month=11/day=07/
 ```
 
 #### Silver Layer: Data Quality & Transformation
 
-```python
-# Example: Bronze → Silver Transformation (AWS Glue PySpark)
+**AWS Glue PySpark Processing:**
+- Reads last hour of Bronze layer data
+- Runs Great Expectations validation suite:
+  - Null checks on critical fields (vehicle_id required)
+  - Set validation (vehicle_type must be: scooter/ebike/car/van)
+  - Range validation (battery 0-100%)
+  - Format validation (vehicle ID regex pattern)
+- Failed records quarantined for investigation
+- Valid records transformed:
+  - Timestamp parsing and date extraction
+  - Status categorization (battery: critical/low/medium/good)
+  - Deduplication by vehicle ID and timestamp
+  - Geofence enrichment (zone assignment based on GPS coordinates)
 
-from pyspark.sql import SparkSession
-from pyspark.sql.functions import *
-from delta.tables import *
-import great_expectations as gx
-
-# Initialize Spark with Delta Lake
-spark = SparkSession.builder \
-    .appName("Bronze to Silver - Telemetry") \
-    .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension") \
-    .config("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog") \
-    .getOrCreate()
-
-# Read from Bronze (last hour of data)
-bronze_path = "s3://mobilitycorp-datalake-bronze/telemetry/"
-df_bronze = spark.read.parquet(bronze_path) \
-    .where(col("ingestion_time") >= current_timestamp() - expr("INTERVAL 1 HOUR"))
-
-# Data Quality Checks (Great Expectations)
-context = gx.get_context()
-datasource = context.sources.add_or_update_pandas(name="telemetry_bronze")
-batch_request = datasource.add_dataframe_asset(name="bronze_df")
-batch = batch_request.build_batch_request(dataframe=df_bronze.toPandas())
-
-# Validation Suite
-expectations = [
-    gx.expectations.ExpectColumnValuesToNotBeNull(column="vehicle_id"),
-    gx.expectations.ExpectColumnValuesToBeInSet(column="vehicle_type", value_set=["scooter", "ebike", "car", "van"]),
-    gx.expectations.ExpectColumnValuesToBeBetween(column="battery_level", min_value=0, max_value=100),
-    gx.expectations.ExpectColumnValuesToMatchRegex(column="vehicle_id", regex=r"^[A-Z]{2}\d{6}$")
-]
-
-validation_result = context.run_checkpoint(checkpoint_name="telemetry_quality", batch_request=batch)
-
-if not validation_result.success:
-    # Log failed records to quarantine
-    df_bronze.where(~validation_result.passed_mask) \
-        .write.mode("append") \
-        .parquet("s3://mobilitycorp-datalake-quarantine/telemetry/")
-    
-    # Continue with valid records only
-    df_bronze = df_bronze.where(validation_result.passed_mask)
-
-# Transformations
-df_silver = df_bronze \
-    .withColumn("event_timestamp", to_timestamp(col("timestamp"))) \
-    .withColumn("date", to_date(col("event_timestamp"))) \
-    .withColumn("hour", hour(col("event_timestamp"))) \
-    .withColumn("battery_status", 
-        when(col("battery_level") < 10, "critical")
-        .when(col("battery_level") < 30, "low")
-        .when(col("battery_level") < 70, "medium")
-        .otherwise("good")) \
-    .dropDuplicates(["vehicle_id", "timestamp"]) \
-    .withColumn("ingestion_date", current_date()) \
-    .withColumn("processing_timestamp", current_timestamp())
-
-# Add geofence enrichment
-df_geofences = spark.read.format("delta").load("s3://mobilitycorp-datalake-silver/geofences/")
-df_silver = df_silver.join(
-    df_geofences,
-    expr("ST_Contains(df_geofences.polygon, ST_Point(df_silver.longitude, df_silver.latitude))"),
-    "left"
-).select(
-    df_silver["*"],
-    df_geofences["zone_id"],
-    df_geofences["zone_name"]
-)
-
-# Write to Silver (Delta Lake with ACID)
-silver_path = "s3://mobilitycorp-datalake-silver/telemetry/"
-
-df_silver.write \
-    .format("delta") \
-    .mode("append") \
-    .partitionBy("date", "vehicle_type") \
-    .option("mergeSchema", "true") \
-    .option("overwriteSchema", "false") \
-    .save(silver_path)
-
-# Optimize Delta Table (weekly job)
-deltaTable = DeltaTable.forPath(spark, silver_path)
-deltaTable.optimize() \
-    .where(f"date >= current_date() - 7") \
-    .executeZOrderBy("vehicle_id", "event_timestamp")
-
-# Vacuum old files (retention = 30 days)
-deltaTable.vacuum(retentionHours=720)  # 30 days
-```
+**Delta Lake Storage:**
+- ACID transactions ensure data consistency
+- Automatic schema evolution when new fields added
+- Partitioned by date and vehicle type for query optimization
+- Z-ordering by vehicle_id and timestamp (weekly optimization)
+- 30-day retention with automatic vacuum of old files
 
 #### Gold Layer: Business Aggregations
 
-```python
-# Example: Silver → Gold Aggregation (demand_by_zone_hour)
-
-from pyspark.sql.window import Window
-
-# Read from Silver
-df_bookings = spark.read.format("delta") \
-    .load("s3://mobilitycorp-datalake-silver/bookings/") \
-    .where(col("date") >= current_date() - 90)  # Last 90 days
-
-df_telemetry = spark.read.format("delta") \
-    .load("s3://mobilitycorp-datalake-silver/telemetry/") \
-    .where(col("date") >= current_date() - 90)
-
-# Aggregate demand by zone, vehicle_type, hour
-df_demand = df_bookings \
-    .withColumn("hour", hour(col("booking_timestamp"))) \
-    .groupBy("zone_id", "vehicle_type", "date", "hour") \
-    .agg(
-        count("*").alias("booking_count"),
-        countDistinct("user_id").alias("unique_users"),
-        avg("trip_duration_minutes").alias("avg_trip_duration"),
-        sum("revenue").alias("total_revenue")
-    )
-
-# Add supply metrics from telemetry
-df_supply = df_telemetry \
-    .groupBy("zone_id", "vehicle_type", "date", "hour") \
-    .agg(
-        countDistinct("vehicle_id").alias("available_vehicles"),
-        avg("battery_level").alias("avg_battery_level")
-    )
-
-# Join demand + supply
-df_gold = df_demand.join(
-    df_supply,
-    on=["zone_id", "vehicle_type", "date", "hour"],
-    how="outer"
-).fillna(0)
-
-# Add rolling averages (7-day, 28-day)
-window_7d = Window.partitionBy("zone_id", "vehicle_type", "hour") \
-    .orderBy("date") \
-    .rowsBetween(-6, 0)
-
-window_28d = Window.partitionBy("zone_id", "vehicle_type", "hour") \
-    .orderBy("date") \
-    .rowsBetween(-27, 0)
-
-df_gold = df_gold \
-    .withColumn("booking_count_7d_avg", avg("booking_count").over(window_7d)) \
-    .withColumn("booking_count_28d_avg", avg("booking_count").over(window_28d)) \
-    .withColumn("utilization_rate", 
-        (col("booking_count") / col("available_vehicles")) * 100)
-
-# Write to Gold (Delta Lake + Redshift)
-gold_path = "s3://mobilitycorp-datalake-gold/demand_by_zone_hour/"
-
-df_gold.write \
-    .format("delta") \
-    .mode("overwrite") \
-    .partitionBy("date") \
-    .option("replaceWhere", f"date >= '{(current_date() - 90).isoformat()}'") \
-    .save(gold_path)
-
-# Also sync to Redshift for BI tools
-df_gold.write \
-    .format("jdbc") \
-    .option("url", "jdbc:redshift://mobilit ycorp-redshift.xxx.eu-central-1.redshift.amazonaws.com:5439/analytics") \
-    .option("dbtable", "gold.demand_by_zone_hour") \
-    .option("user", get_secret("redshift_user")) \
-    .option("password", get_secret("redshift_password")) \
-    .option("driver", "com.amazon.redshift.jdbc.Driver") \
-    .mode("overwrite") \
-    .save()
-```
+**Demand Analysis Pipeline:**
+- Aggregates bookings by zone, vehicle type, date, and hour
+- Metrics: booking count, unique users, average trip duration, total revenue
+- Joins with supply metrics (available vehicles, average battery level)
+- Calculates rolling averages (7-day and 28-day windows)
+- Computes utilization rate (bookings per available vehicle)
+- Writes to Delta Lake and syncs to Redshift for BI tools
 
 ### Cost Analysis
 
 #### Storage Costs (Monthly, Year 1)
 
-```
-Bronze Layer (Parquet, 90-day retention):
-  - 5TB/month × 3 months = 15TB
-  - S3 Standard: 15TB × $0.023/GB = $345
-  - After 90 days → Glacier: $0.004/GB = $60
+**Bronze Layer (Parquet, 90-day retention):**
+- 5TB/month × 3 months = 15TB total
+- S3 Standard: $345/month
+- After 90 days → Glacier: $60/month
 
-Silver Layer (Delta Lake, 2-year retention):
-  - 3TB/month × 24 months = 72TB (deduped, cleaned)
-  - S3 Standard (last 90 days): 9TB × $0.023 = $207
-  - S3 IA (90d-2yr): 63TB × $0.0125 = $788
+**Silver Layer (Delta Lake, 2-year retention):**
+- 3TB/month × 24 months = 72TB (deduplicated, cleaned)
+- S3 Standard (last 90 days): $207/month
+- S3 IA (90d-2yr): $788/month
 
-Gold Layer (Aggregated, 5-year retention):
-  - 500GB/month × 12 months = 6TB
-  - S3 Standard: 6TB × $0.023 = $138
+**Gold Layer (Aggregated, 5-year retention):**
+- 500GB/month × 12 months = 6TB
+- S3 Standard: $138/month
 
-Feature Store (SageMaker):
-  - Offline: 2TB × $0.023 = $46
-  - Online (DynamoDB): 100M requests/month = $125
+**Feature Store (SageMaker):**
+- Offline: $46/month
+- Online (DynamoDB): $125/month
 
-Total Storage: $1,709/month
-```
+**Total Storage: $1,709/month**
 
 #### Processing Costs (Monthly)
 
-```
-Glue ETL Jobs:
-  - Bronze → Silver: 20 DPU × 2 hrs/day × 30 days = 1,200 DPU-hours
-  - Silver → Gold: 10 DPU × 1 hr/day × 30 days = 300 DPU-hours
-  - Total: 1,500 DPU-hours × $0.44/DPU-hour = $660
+**Glue ETL Jobs:**
+- Bronze → Silver: 20 DPU × 2 hrs/day × 30 days = 1,200 DPU-hours
+- Silver → Gold: 10 DPU × 1 hr/day × 30 days = 300 DPU-hours
+- Total: 1,500 DPU-hours × $0.44/DPU-hour = $660/month
 
-Athena Queries:
-  - 10TB scanned/month × $5/TB = $50
+**Athena Queries:**
+- 10TB scanned/month × $5/TB = $50/month
 
-Redshift Spectrum:
-  - 5TB scanned/month × $5/TB = $25
+**Redshift Spectrum:**
+- 5TB scanned/month × $5/TB = $25/month
 
-Total Processing: $735/month
-```
+**Total Processing: $735/month**
 
 #### Grand Total: $2,444/month (~$29K/year)
 
-Compare to:
+**Cost Comparison:**
 - Databricks Lakehouse: ~$8,000/month
 - Snowflake Data Cloud: ~$6,000/month
 

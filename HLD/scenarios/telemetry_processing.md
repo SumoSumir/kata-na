@@ -108,49 +108,19 @@ sequenceDiagram
     Glue->>S3: Read Bronze layer (last 1 hour)
     Glue->>Glue: Clean, validate, aggregate
     Glue->>S3: Write Silver layer (Delta Lake)
-```
 
----
 
-## 6. Telemetry Message Format
+## 6. Telemetry Data Structure
 
 **MQTT Topic:** `telemetry/{vehicle_id}`
 
-**Payload (JSON, ~500 bytes):**
-```json
-{
-  "vehicle_id": 12345,
-  "timestamp": "2025-01-15T14:32:18.123Z",
-  "location": {
-    "lat": 50.1105,
-    "lon": 8.6821,
-    "altitude": 112.5,
-    "accuracy": 5.2
-  },
-  "battery": {
-    "percent": 68,
-    "voltage": 48.2,
-    "current": 3.5,
-    "temperature": 32.1,
-    "charging": false
-  },
-  "motion": {
-    "speed_kmh": 18.5,
-    "heading": 245,
-    "acceleration": {"x": 0.2, "y": -0.1, "z": 9.8}
-  },
-  "vehicle_status": {
-    "locked": false,
-    "in_use": true,
-    "trip_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
-  },
-  "diagnostics": {
-    "odometer_km": 2458,
-    "error_codes": [],
-    "last_maintenance_km": 2100
-  }
-}
-```
+**Message Payload (~500 bytes):**
+- Vehicle ID and timestamp
+- Location data (GPS coordinates, altitude, accuracy)
+- Battery metrics (percentage, voltage, current, temperature, charging status)
+- Motion data (speed, heading, acceleration)
+- Vehicle status (locked/unlocked, in-use, trip ID)
+- Diagnostics (odometer, error codes, last maintenance)
 
 **Message Rate:**
 - Normal operation: 1 msg/sec (GPS + battery every second)
@@ -163,27 +133,14 @@ sequenceDiagram
 
 ## 7. AWS IoT Core Configuration
 
-**IoT Rule (Route to Kafka):**
-```sql
-SELECT 
-    vehicle_id,
-    timestamp,
-    location,
-    battery,
-    motion,
-    vehicle_status,
-    diagnostics
-FROM 'telemetry/+'
-WHERE battery.percent >= 0 AND location.lat IS NOT NULL
-```
-
-**Actions:**
-1. **Kafka:** Publish to MSK topic `vehicle-telemetry`
-2. **Lambda:** Trigger `anomaly-detector` function (for critical alerts)
+**IoT Rule (Routing Logic):**
+- Filters valid messages (battery >= 0%, GPS coordinates present)
+- Routes to Kafka topic for stream processing
+- Triggers Lambda for critical real-time alerts
 
 **Cost Optimization:**
-- Use IoT Core SQL to filter out invalid messages (saves downstream costs)
-- Batch messages where possible (not applicable for telemetry due to 1 msg/sec rate)
+- SQL filtering at IoT Core level reduces downstream processing
+- Invalid messages dropped early in pipeline
 
 ---
 
@@ -203,10 +160,8 @@ WHERE battery.percent >= 0 AND location.lat IS NOT NULL
 - Storage: 2 TB EBS per broker (gp3)
 
 **Throughput:**
-- Ingress: 50K msg/sec × 500 bytes = **25 MB/sec** (peak)
-- Egress: 3× replication + 2× consumers = **125 MB/sec**
-
-**Cost:** ~$5,000/month (MSK cluster + EBS storage)
+- Ingress: 50K msg/sec × 500 bytes = 25 MB/sec (peak)
+- Egress: 125 MB/sec (accounting for replication and consumers)
 
 ---
 
@@ -214,217 +169,74 @@ WHERE battery.percent >= 0 AND location.lat IS NOT NULL
 
 ### 9.1 Enrichment Function
 
-```python
-import json
-import boto3
-import geohash2
-
-timestream_write = boto3.client("timestream-write")
-
-def lambda_handler(event, context):
-    records = []
-    
-    for record in event["records"]:
-        # Parse Kafka message
-        payload = json.loads(record["value"])
-        vehicle_id = payload["vehicle_id"]
-        
-        # Enrich: Add zone_id (geohash)
-        lat, lon = payload["location"]["lat"], payload["location"]["lon"]
-        zone_id = geohash2.encode(lat, lon, precision=6)  # ~1.2 km × 0.6 km area
-        payload["zone_id"] = zone_id
-        
-        # Enrich: Add vehicle_type (lookup from DynamoDB)
-        vehicle_type = get_vehicle_type(vehicle_id)  # Cached
-        payload["vehicle_type"] = vehicle_type
-        
-        # Prepare Timestream record
-        records.append({
-            "Time": str(int(payload["timestamp"] * 1000)),  # Milliseconds
-            "Dimensions": [
-                {"Name": "vehicle_id", "Value": str(vehicle_id)},
-                {"Name": "zone_id", "Value": zone_id},
-                {"Name": "vehicle_type", "Value": vehicle_type}
-            ],
-            "MeasureValues": [
-                {"Name": "latitude", "Value": str(lat), "Type": "DOUBLE"},
-                {"Name": "longitude", "Value": str(lon), "Type": "DOUBLE"},
-                {"Name": "battery_percent", "Value": str(payload["battery"]["percent"]), "Type": "BIGINT"},
-                {"Name": "speed_kmh", "Value": str(payload["motion"]["speed_kmh"]), "Type": "DOUBLE"}
-            ],
-            "MeasureName": "telemetry",
-            "MeasureValueType": "MULTI"
-        })
-        
-        # Batch write to Timestream (max 100 records)
-        if len(records) >= 100:
-            timestream_write.write_records(
-                DatabaseName="mobility",
-                TableName="telemetry",
-                Records=records
-            )
-            records = []
-    
-    # Write remaining records
-    if records:
-        timestream_write.write_records(
-            DatabaseName="mobility",
-            TableName="telemetry",
-            Records=records
-        )
-    
-    return {"statusCode": 200}
-```
+**Processing Logic:**
+- Parses Kafka messages and enriches with zone information (geohash)
+- Looks up vehicle type from cached DynamoDB data
+- Batches writes to Timestream for efficiency (100 records per batch)
 
 **Performance:**
-- Concurrency: 500 (parallel Lambda invocations)
-- Batch size: 100 Kafka records/invocation
-- Processing time: ~200ms/batch
-- Throughput: 500 × (100 / 0.2) = **250,000 records/sec** (5× headroom)
-
-**Cost:** $7,160/month (4.3B invocations/month × $0.20/1M + compute)
-
----
+- Concurrency: 500 parallel Lambda invocations
+- Batch size: 100 Kafka records per invocation
+- Processing time: ~200ms per batch
+- Throughput capacity: 250,000 records/sec (5× headroom)
 
 ### 9.2 Anomaly Detection Function
 
-```python
-import json
-import boto3
+**Alert Triggers:**
+- **Low Battery:** < 15% and not charging → dispatch swap team
+- **Geofence Violation:** Vehicle outside operational area
+- **Offline Vehicle:** No telemetry for 10 minutes
 
-sns = boto3.client("sns")
-dynamodb = boto3.resource("dynamodb")
-
-def lambda_handler(event, context):
-    payload = json.loads(event["payload"])
-    vehicle_id = payload["vehicle_id"]
-    
-    # Check 1: Low battery alert
-    if payload["battery"]["percent"] < 15 and not payload["battery"]["charging"]:
-        send_alert(
-            subject=f"Low Battery: Vehicle {vehicle_id}",
-            message=f"Vehicle {vehicle_id} has {payload['battery']['percent']}% battery. Dispatch swap team."
-        )
-    
-    # Check 2: Geofence violation
-    if not is_within_operational_zone(payload["location"]["lat"], payload["location"]["lon"]):
-        send_alert(
-            subject=f"Geofence Violation: Vehicle {vehicle_id}",
-            message=f"Vehicle {vehicle_id} is outside operational area. Location: {payload['location']}"
-        )
-    
-    # Check 3: Offline vehicle (no telemetry for 10 minutes)
-    last_seen = get_last_seen(vehicle_id)
-    if (time.time() - last_seen) > 600:  # 10 minutes
-        send_alert(
-            subject=f"Vehicle Offline: {vehicle_id}",
-            message=f"Vehicle {vehicle_id} hasn't reported telemetry for 10 minutes."
-        )
-    
-    # Update last seen timestamp
-    update_last_seen(vehicle_id, payload["timestamp"])
-    
-    return {"statusCode": 200}
-
-def send_alert(subject, message):
-    sns.publish(
-        TopicArn="arn:aws:sns:eu-central-1:123456789012:fleet-alerts",
-        Subject=subject,
-        Message=message
-    )
-```
+**Actions:**
+- Publishes SNS alerts to operations team
+- Updates vehicle health status in DynamoDB
 
 ---
 
-## 10. Timestream Storage (Hot Storage, 3 Days)
+## 10. Timestream Storage (Hot Storage)
 
-**Table Schema:**
-```sql
-CREATE TABLE telemetry (
-    vehicle_id VARCHAR (dimension),
-    zone_id VARCHAR (dimension),
-    vehicle_type VARCHAR (dimension),
-    time TIMESTAMP (time column),
-    latitude DOUBLE (measure),
-    longitude DOUBLE (measure),
-    battery_percent BIGINT (measure),
-    speed_kmh DOUBLE (measure),
-    ...
-)
-```
+**Configuration:**
+- Memory store retention: 3 days (high-frequency queries)
+- Magnetic store: Immediate transfer to S3 (cold storage)
 
-**Retention Policy:**
-- Memory store: 3 days (high-frequency queries)
-- Magnetic store: 0 days (immediately archive to S3)
-
-**Query Example (Last 1 Hour GPS Trace):**
-```sql
-SELECT time, latitude, longitude, speed_kmh
-FROM "mobility"."telemetry"
-WHERE vehicle_id = '12345' AND time > ago(1h)
-ORDER BY time DESC
-```
+**Use Cases:**
+- Real-time GPS tracking queries
+- Recent battery health analysis
+- Active trip monitoring
 
 **Cost:** $9,400/month (4.3B writes/month + 1 TB memory store)
 
 ---
 
-## 11. S3 Archival (Cold Storage, 90 Days)
+## 11. S3 Archival (Cold Storage)
 
 **Kinesis Firehose Configuration:**
 - Source: Kafka topic `vehicle-telemetry`
-- Buffer interval: 300 seconds (5 minutes)
-- Buffer size: 5 MB
+- Buffer: 5 minutes or 5 MB (whichever comes first)
 - Format: Parquet (compressed with Snappy)
-- Partitioning: `s3://mobility-lake/bronze/telemetry/year=2025/month=01/day=15/hour=14/`
+- Partitioning: By year/month/day/hour for efficient querying
 
 **Data Volume:**
-- Raw JSON: 50K msg/sec × 500 bytes × 86,400 sec/day = **2.16 TB/day**
-- Compressed Parquet: 2.16 TB × 0.25 (compression ratio) = **540 GB/day**
-- Monthly: 540 GB × 30 = **16.2 TB/month**
-- 90-day retention: 16.2 TB × 3 = **48.6 TB**
+- Raw JSON: 2.16 TB/day
+- Compressed Parquet: 540 GB/day (25% of raw)
+- Monthly: 16.2 TB
+- 90-day retention: 48.6 TB
 
-**Cost:** $1,290/month (S3 Standard: 48.6 TB × $0.023 + PUT requests)
+**Cost:** $1,290/month
 
 ---
 
-## 12. Batch ETL (Bronze → Silver → Gold)
+## 12. Batch ETL (Glue Jobs)
 
-**Glue Job (Hourly):**
-```python
-# Bronze → Silver transformation
-from pyspark.sql import functions as F
+**Hourly Job (Bronze → Silver):**
+- Reads last hour of raw telemetry from Bronze layer
+- Cleanses and validates data (removes duplicates, invalid GPS coordinates)
+- Writes to Silver layer using Delta Lake format (ACID compliance)
 
-# Read Bronze (last 1 hour)
-bronze_df = spark.read.parquet("s3://mobility-lake/bronze/telemetry/year=2025/month=01/day=15/hour=14/")
-
-# Clean and validate
-silver_df = bronze_df \
-    .dropDuplicates(["vehicle_id", "timestamp"]) \
-    .filter(F.col("battery.percent").between(0, 100)) \
-    .filter(F.col("location.lat").between(-90, 90)) \
-    .filter(F.col("location.lon").between(-180, 180)) \
-    .withColumn("ingestion_time", F.current_timestamp())
-
-# Write Silver (Delta Lake)
-silver_df.write.format("delta").mode("append").partitionBy("date").save("s3://mobility-lake/silver/telemetry/")
-```
-
-**Glue Job (Daily):**
-```python
-# Silver → Gold aggregation (hourly summaries)
-silver_df = spark.read.format("delta").load("s3://mobility-lake/silver/telemetry/").filter(F.col("date") == "2025-01-15")
-
-gold_df = silver_df.groupBy("vehicle_id", F.hour("timestamp").alias("hour")).agg(
-    F.avg("battery.percent").alias("avg_battery_percent"),
-    F.min("battery.percent").alias("min_battery_percent"),
-    F.max("speed_kmh").alias("max_speed_kmh"),
-    F.sum(F.when(F.col("vehicle_status.in_use"), 1).otherwise(0)).alias("seconds_in_use"),
-    F.approx_count_distinct("location.lat", "location.lon").alias("unique_locations")
-)
-
-gold_df.write.format("delta").mode("overwrite").partitionBy("date").save("s3://mobility-lake/gold/telemetry_summary/")
-```
+**Daily Job (Silver → Gold):**
+- Aggregates Silver layer data into hourly summaries
+- Calculates statistics per vehicle (average battery, max speed, usage seconds)
+- Writes aggregated data to Gold layer for analytics
 
 **Cost:** $18,040/month (AWS Glue DPU-hours)
 
@@ -448,39 +260,28 @@ gold_df.write.format("delta").mode("overwrite").partitionBy("date").save("s3://m
 
 ## 14. Scalability
 
-**Current:** 50K vehicles × 1 msg/sec = 50K msg/sec
+**Current Capacity:** 50K vehicles × 1 msg/sec = 50K msg/sec
 
-**Future (100K vehicles):**
+**Future Scaling (100K vehicles):**
 - IoT Core: Auto-scales ✅
-- Kafka: Add 3 more partitions (50 → 75) ✅
+- Kafka: Add partitions (50 → 75) ✅
 - Lambda: Increase concurrency (500 → 1,000) ✅
 - Timestream: Auto-scales ✅
-- S3: Unlimited ✅
+- S3: Unlimited capacity ✅
 - Glue: Increase DPUs (50 → 100) ✅
 
-**Bottleneck:** Kafka throughput at 100K vehicles (50 MB/sec ingress). Solution: Increase partition count or add more brokers.
+**Bottleneck:** Kafka throughput at 100K vehicles (50 MB/sec ingress)
+**Solution:** Increase partition count or add more brokers
 
 ---
 
 ## 15. Cost Optimization
 
-1. **IoT Core:** Negotiate enterprise pricing (> 10M messages/month) → Save $500/month
-2. **Timestream:** Reduce memory store retention (3 days → 1 day) → Save $3,000/month
-3. **S3:** Use Intelligent-Tiering (auto-moves infrequent data to cheaper tiers) → Save $400/month
-4. **Glue:** Optimize jobs (reduce DPU usage 20%) → Save $3,600/month
+**Optimization Strategies:**
+1. **IoT Core:** Enterprise pricing negotiation → Save $500/month
+2. **Timestream:** Reduce memory store retention (3 → 1 day) → Save $3,000/month
+3. **S3:** Intelligent-Tiering (automatic cost optimization) → Save $400/month
+4. **Glue:** Optimize jobs (20% DPU reduction) → Save $3,600/month
 
-**Total Savings:** $7,500/month (16% reduction)
+**Total Potential Savings:** $7,500/month (16% reduction)
 
----
-
-## 16. Related Documentation
-
-- [ADR-15: Cloud Provider Selection](../../ADR/ADR_15_Cloud_Provider_Selection.md) - AWS IoT Core
-- [ADR-17: Data Lakehouse Strategy](../../ADR/ADR_17_Data_Lakehouse_Strategy.md) - Medallion architecture
-- [ADR-19: Edge vs Cloud AI Strategy](../../ADR/ADR_19_Edge_Cloud_AI_Strategy.md) - Edge telemetry generation
-- [Scenario 4: Predictive Maintenance](predictive_maintenance.md) - Consumes telemetry
-
----
-
-**Last Updated:** 2025-01-07  
-**Maintained By:** Platform Engineering Team

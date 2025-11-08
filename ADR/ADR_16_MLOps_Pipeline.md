@@ -133,77 +133,31 @@ Without a robust MLOps pipeline, we risk:
 
 #### Example Pipeline: Demand Forecasting Model
 
-```python
-# Simplified SageMaker Pipeline Definition
-from sagemaker.workflow.pipeline import Pipeline
-from sagemaker.workflow.steps import ProcessingStep, TrainingStep, CreateModelStep
+**SageMaker Pipeline Components:**
 
-# Step 1: Data Validation & Feature Engineering
-processing_step = ProcessingStep(
-    name="PreprocessData",
-    processor=sklearn_processor,
-    code="preprocess.py",
-    inputs=[
-        ProcessingInput(source=s3_input_data, destination="/opt/ml/processing/input")
-    ],
-    outputs=[
-        ProcessingOutput(output_name="train", source="/opt/ml/processing/train"),
-        ProcessingOutput(output_name="validation", source="/opt/ml/processing/validation")
-    ]
-)
+1. **Data Validation & Feature Engineering:**
+   - ProcessingStep runs data preprocessing script
+   - Validates data quality and generates features
+   - Outputs training and validation datasets to S3
 
-# Step 2: Hyperparameter Tuning & Training
-training_step = TrainingStep(
-    name="TrainModel",
-    estimator=lightgbm_estimator,
-    inputs={
-        "train": TrainingInput(
-            s3_data=processing_step.properties.ProcessingOutputConfig.Outputs["train"].S3Output.S3Uri
-        ),
-        "validation": TrainingInput(
-            s3_data=processing_step.properties.ProcessingOutputConfig.Outputs["validation"].S3Output.S3Uri
-        )
-    }
-)
+2. **Hyperparameter Tuning & Training:**
+   - TrainingStep with LightGBM estimator
+   - Consumes preprocessed datasets
+   - Trains model with optimized hyperparameters
 
-# Step 3: Model Evaluation
-evaluation_step = ProcessingStep(
-    name="EvaluateModel",
-    processor=sklearn_processor,
-    code="evaluate.py",
-    inputs=[
-        ProcessingInput(source=training_step.properties.ModelArtifacts.S3ModelArtifacts)
-    ],
-    outputs=[
-        ProcessingOutput(output_name="evaluation", source="/opt/ml/processing/evaluation")
-    ],
-    property_files=[
-        PropertyFile(name="EvaluationReport", output_name="evaluation", path="evaluation.json")
-    ]
-)
+3. **Model Evaluation:**
+   - ProcessingStep runs evaluation script
+   - Calculates metrics (MAPE, RMSE, R²)
+   - Outputs evaluation report as JSON
 
-# Step 4: Conditional Model Registration (only if MAPE < 15%)
-register_step = CreateModelStep(
-    name="RegisterModel",
-    model=model,
-    model_package_group_name="demand-forecasting-models",
-    approval_status="PendingManualApproval",
-    depends_on=[evaluation_step]
-)
+4. **Conditional Model Registration:**
+   - Registers model only if MAPE < 15% threshold
+   - Assigns "PendingManualApproval" status
+   - Adds model to Model Registry
 
-# Step 5: Deploy to Endpoint (manual approval required)
-# Handled separately via EventBridge + Lambda
-
-# Create Pipeline
-pipeline = Pipeline(
-    name="DemandForecastingPipeline",
-    parameters=[...],
-    steps=[processing_step, training_step, evaluation_step, register_step]
-)
-
-pipeline.upsert(role_arn=sagemaker_role)
-pipeline.start()
-```
+5. **Deployment:**
+   - Manual approval process via EventBridge + Lambda
+   - Blue-green deployment to minimize downtime
 
 #### Strengths
 ✅ **Fully Managed:** No infrastructure to manage
@@ -222,12 +176,12 @@ pipeline.start()
 ❌ **Flexibility:** Less flexible than custom solutions
 
 #### Cost (Monthly, Production)
-```
-Model Training (Spot Instances):       $8,000
-  - 10 models × 2 retrainings/month
-  - ml.p3.2xlarge (GPU) for 20 hours
+
+**Model Training (Spot Instances): $8,000**
+- 10 models × 2 retrainings/month
+- ml.p3.2xlarge (GPU) for 20 hours
   
-Model Endpoints (Real-time):          $15,000
+**Model Endpoints (Real-time): $15,000**
   - 5 production endpoints
   - ml.m5.xlarge × 3 instances each (HA)
   - Auto-scaling 3-10 instances

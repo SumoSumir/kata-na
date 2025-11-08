@@ -31,14 +31,14 @@ Implement microservices architecture with services organized by business capabil
 **Service Mesh:** AWS App Mesh for advanced traffic management (optional, Phase 3+)
 
 **Core Services:**
-- **Vehicle Telemetry Service:** Node.js (real-time processing), 10 tasks, 2 vCPU, 4GB RAM
-- **Booking Service:** Python FastAPI, 20 tasks (peak), 2 vCPU, 4GB RAM
-- **Payment Service:** Python, 15 tasks, 2 vCPU, 4GB RAM (PCI-DSS compliant)
-- **User/KYC Service:** Python FastAPI, 12 tasks, 2 vCPU, 4GB RAM
-- **Fleet Operations Service:** Python, 10 tasks, 2 vCPU, 4GB RAM
-- **Pricing Service:** Python, 8 tasks, 1 vCPU, 2GB RAM
-- **Analytics Service:** Python, 6 tasks, 4 vCPU, 8GB RAM
-- **Notification Service:** Python, 5 tasks, 1 vCPU, 2GB RAM
+- **Vehicle Telemetry Service:** Node.js (real-time processing)
+- **Booking Service:** Python FastAPI
+- **Payment Service:** Python, 15 tasks (PCI-DSS compliant)
+- **User/KYC Service:** Python FastAPI
+- **Fleet Operations Service:** Python
+- **Pricing Service:** Python
+- **Analytics Service:** Python
+- **Notification Service:** Python
 
 **Rationale for Microservices over Service-Based Architecture:**
 - **Independent Scaling:** Telemetry processes continuous high-volume data streams requiring aggressive scaling, while booking/payment services handle low-volume transactional loads. Service-based architecture would force scaling entire service groups together, wasting resources. Microservices enable precise capacity allocation per service.

@@ -185,119 +185,30 @@ Agent:
 - API Gateway (rate limiting, auth)
 - CloudFront (caching, global distribution)
 
-#### Example Code
+#### Example Architecture
 
-```python
-# LangChain Agent with Claude 3.5 on Bedrock
+**LangChain Agent with Claude 3.5 on Bedrock:**
 
-from langchain.agents import AgentExecutor, create_react_agent
-from langchain_aws import ChatBedrock
-from langchain.tools import Tool
-from langchain.memory import DynamoDBChatMessageHistory
-from langchain.prompts import PromptTemplate
-import boto3
+**Components:**
+1. **LLM:** Claude 3.5 Sonnet via AWS Bedrock
+   - max_tokens: 2048, temperature: 0.7
+   - Streaming responses for better UX
 
-# Initialize Bedrock client
-bedrock = boto3.client('bedrock-runtime', region_name='eu-central-1')
+2. **Tools:**
+   - GetVehicleAvailability: Calls Fleet Service API
+   - CalculateRoute: Calls Mapbox API for routing
+   - SearchKnowledge: RAG over OpenSearch knowledge base
 
-# LLM
-llm = ChatBedrock(
-    model_id="anthropic.claude-3-5-sonnet-20241022-v2:0",
-    model_kwargs={
-        "max_tokens": 2048,
-        "temperature": 0.7,
-        "top_p": 0.9
-    },
-    streaming=True,
-    client=bedrock
-)
+3. **Memory:** DynamoDB stores conversation history per session
 
-# Define Tools
-def get_vehicle_availability(zone_id: str, vehicle_type: str) -> dict:
-    """Get available vehicles in a zone"""
-    # Call Fleet Service API
-    response = requests.get(f"{FLEET_API}/vehicles/available",
-        params={"zone_id": zone_id, "vehicle_type": vehicle_type})
-    return response.json()
+4. **Prompt Pattern:** ReAct (Reasoning + Acting)
+   - Question → Thought → Action → Observation → Final Answer
+   - Agent iterates until it has sufficient information
 
-def calculate_route(origin: str, destination: str, mode: str) -> dict:
-    """Calculate optimal route"""
-    # Call Mapbox API
-    response = requests.get(f"{MAPBOX_API}/directions/v5/mapbox/{mode}/{origin};{destination}")
-    return response.json()
-
-def search_knowledge_base(query: str) -> str:
-    """Search FAQs and documentation"""
-    # RAG over OpenSearch
-    embedding = get_embedding(query)
-    results = opensearch.search(
-        index="knowledge-base",
-        body={
-            "query": {
-                "knn": {
-                    "embedding": {
-                        "vector": embedding,
-                        "k": 3
-                    }
-                }
-            }
-        }
-    )
-    return "\n".join([hit["_source"]["text"] for hit in results["hits"]["hits"]])
-
-# Create LangChain Tools
-tools = [
-    Tool(
-        name="GetVehicleAvailability",
-        func=get_vehicle_availability,
-        description="Get list of available vehicles in a specific zone. Input: zone_id and vehicle_type (scooter/ebike/car/van)"
-    ),
-    Tool(
-        name="CalculateRoute",
-        func=calculate_route,
-        description="Calculate route between two locations. Input: origin (lat,lon), destination (lat,lon), mode (driving/cycling/walking)"
-    ),
-    Tool(
-        name="SearchKnowledge",
-        func=search_knowledge_base,
-        description="Search FAQs and documentation for answers to user questions"
-    )
-]
-
-# Prompt Template (ReAct pattern)
-prompt = PromptTemplate.from_template("""
-You are a helpful mobility assistant for MobilityCorp. Help users find and book vehicles for their trips.
-
-You have access to these tools:
-{tools}
-
-Use the following format:
-Question: the input question
-Thought: think about what to do
-Action: the tool to use
-Action Input: the input to the tool
-Observation: the result of the action
-... (repeat Thought/Action/Observation as needed)
-Thought: I now know the final answer
-Final Answer: the final response to the user
-
-Question: {input}
-{agent_scratchpad}
-""")
-
-# Memory (conversation history)
-message_history = DynamoDBChatMessageHistory(
-    table_name="conversational-ai-history",
-    session_id=user_session_id
-)
-
-# Create Agent
-agent = create_react_agent(llm, tools, prompt)
-agent_executor = AgentExecutor(
-    agent=agent,
-    tools=tools,
-    memory=message_history,
-    verbose=True,
+5. **Agent Executor:**
+   - Orchestrates tool calls and reasoning
+   - Handles errors and retries
+   - Manages token limits and costs
     max_iterations=5,
     handle_parsing_errors=True
 )

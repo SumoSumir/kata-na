@@ -152,377 +152,140 @@ sequenceDiagram
 
 ### 4.1 Phase 1: Search for Available Vehicles
 
-**Step 1: User Input**
-- User opens app, grants location permission
-- App detects location: `lat=50.11, lon=8.68` (Frankfurt)
-- User selects vehicle type: "Scooter"
+**User Journey:**
+- User opens app and grants location permission
+- App detects location (e.g., Frankfurt)
+- User selects vehicle type (Scooter, E-bike, Car, etc.)
 
-**Step 2: API Request**
-```http
-GET /vehicles/search?lat=50.11&lon=8.68&type=scooter&radius=1000 HTTP/1.1
-Host: api.mobilitycorp.com
-Authorization: Bearer <jwt_token>
-```
+**System Processing:**
+1. **Cache Check:** Fleet Service first checks Redis cache for nearby available vehicles
+   - **Cache Hit:** Returns cached results immediately (30s TTL)
+   - **Cache Miss:** Queries Aurora PostgreSQL using geospatial queries (PostGIS extension)
 
-**Step 3: Fleet Service Processing**
-- Check Redis cache for `availability:50.11:8.68:scooter:1000`
-- **Cache Hit:** Return cached results (30s TTL)
-- **Cache Miss:**
-  - Query Aurora: `SELECT * FROM vehicles WHERE vehicle_type='scooter' AND status='available' AND ST_Distance_Sphere(location, POINT(8.68, 50.11)) <= 1000`
-  - PostGIS extension for geospatial queries
-  - Results: 25 scooters within 1 km
-  - Cache results in Redis with 30s expiry
+2. **Pricing Enrichment:** Fleet Service calls Pricing Service to get current rates for each vehicle
 
-**Step 4: Pricing Lookup**
-- Fleet Service calls Pricing Service: `GET /pricing/batch?vehicle_ids=1,2,3...25`
-- Pricing Service checks Redis cache for each vehicle
-- Returns current prices (e.g., `€2.50/hour`)
-
-**Step 5: Response**
-```json
-{
-  "vehicles": [
-    {
-      "id": 12345,
-      "type": "scooter",
-      "battery": 85,
-      "location": {"lat": 50.1105, "lon": 8.6821},
-      "distance_meters": 120,
-      "price_per_hour": 2.50,
-      "currency": "EUR",
-      "estimated_range_km": 18
-    },
-    ...
-  ],
-  "count": 25,
-  "search_radius_meters": 1000
-}
-```
+3. **Response:** Returns list of available vehicles with location, battery level, distance, and price
 
 **Performance:**
-- Cache hit: **~20ms**
-- Cache miss: **~150ms** (DB query + pricing lookup)
-- Target: **< 200ms P95**
+- Cache hit: ~20ms
+- Cache miss: ~150ms (includes database query and pricing lookup)
+- Target: < 200ms P95
 
 ---
 
 ### 4.2 Phase 2: Initiate Booking
 
-**Step 1: User Selection**
-- User selects vehicle #12345
-- App displays: "Reserve for €2.50/hour"
-- User taps "Reserve"
+**User Action:**
+- User selects a vehicle from search results
+- Reviews estimated charge
+- Taps "Reserve" button
 
-**Step 2: Reservation Request**
-```http
-POST /bookings HTTP/1.1
-Host: api.mobilitycorp.com
-Authorization: Bearer <jwt_token>
-Content-Type: application/json
+**System Processing:**
+1. **Booking Creation:** Booking Service generates a unique booking ID and coordinates reservation
 
-{
-  "vehicle_id": 12345,
-  "start_time": "2025-01-15T14:30:00Z",
-  "estimated_duration_minutes": 30
-}
-```
+2. **Vehicle Reservation (Pessimistic Locking):**
+   - Fleet Service attempts to reserve the vehicle using database transaction
+   - Updates vehicle status from 'available' to 'reserved'
+   - Records user ID and reservation timestamp
 
-**Step 3: Booking Service Orchestration**
-- Extract `user_id` from JWT token
-- Generate `booking_id` (UUID)
-- Call Fleet Service to reserve vehicle
+3. **Race Condition Handling:**
+   - **Success:** Vehicle reserved, returns reservation token
+   - **Conflict:** Another user reserved simultaneously → returns error
+   - User notified to try another vehicle
 
-**Step 4: Fleet Service Reservation (Pessimistic Locking)**
-```sql
-BEGIN TRANSACTION;
-
--- Attempt to reserve vehicle (pessimistic lock)
-UPDATE vehicles 
-SET status = 'reserved', 
-    reserved_by = <user_id>, 
-    reserved_at = NOW() 
-WHERE id = 12345 
-  AND status = 'available';
-
--- Check if update succeeded
-GET @@ROWCOUNT;
-
--- If 1 row updated: success
--- If 0 rows updated: conflict (vehicle already reserved)
-
-COMMIT;
-```
-
-**Step 5: Handle Race Conditions**
-- **Success:** Vehicle reserved, return `reservation_token`
-- **Conflict:** Another user reserved the vehicle simultaneously
-  - Return `409 Conflict`
-  - User sees: "Sorry, this vehicle is no longer available. Try another one."
-
-**Step 6: Publish Event**
-```json
-{
-  "event_type": "VehicleReserved",
-  "vehicle_id": 12345,
-  "user_id": 98765,
-  "booking_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-  "reserved_at": "2025-01-15T14:30:00Z",
-  "expires_at": "2025-01-15T14:35:00Z"
-}
-```
-- Published to Kafka topic: `vehicle-lifecycle`
-- Consumers: Analytics Service, Fleet Monitoring
+4. **Event Publication:** Publishes VehicleReserved event to Kafka for downstream consumers (Analytics, Fleet Monitoring)
 
 **Performance:**
-- Reservation: **~50ms** (DB transaction + cache invalidation)
-- Target: **< 100ms P95**
+- Reservation: ~50ms (database transaction + cache invalidation)
+- Target: < 100ms P95
 
 ---
 
 ### 4.3 Phase 3: Payment Processing
 
-**Step 1: Create Payment Intent (Stripe)**
-```javascript
-const paymentIntent = await stripe.paymentIntents.create({
-  amount: 1250, // €12.50 estimated charge (30 min × €2.50/hr × 10)
-  currency: 'eur',
-  customer: stripe_customer_id,
-  payment_method_types: ['card'],
-  capture_method: 'manual', // Capture after trip ends
-  metadata: {
-    booking_id: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
-    vehicle_id: '12345',
-    user_id: '98765'
-  }
-});
-```
+**Payment Flow:**
+1. **Payment Intent Creation:** Payment Service integrates with Stripe to create a payment authorization
 
-**Step 2: Return Payment Intent to Client**
-- Client uses Stripe SDK to confirm payment (3D Secure if required)
-- User enters CVV or biometric authentication
+2. **User Authentication:** Client uses Stripe SDK for secure payment confirmation
+   - Supports 3D Secure authentication when required
+   - User provides biometric or CVV authentication
 
-**Step 3: Confirm Payment**
-```http
-POST /bookings/a1b2c3d4-e5f6-7890-abcd-ef1234567890/confirm-payment HTTP/1.1
+3. **Authorization:** Payment is authorized but not captured (captured after trip completion)
+   - Enables accurate charging based on actual trip duration
+   - Reduces risk of overcharging customers
 
-{
-  "payment_method_id": "pm_1KyZ2K2eZvKYlo2C..."
-}
-```
+4. **Database Recording:** Payment details recorded with booking reference
 
-**Step 4: Stripe Confirmation**
-```javascript
-const confirmedIntent = await stripe.paymentIntents.confirm(payment_intent_id, {
-  payment_method: payment_method_id
-});
-
-// confirmedIntent.status === 'requires_capture'
-```
-
-**Step 5: Record Payment in Database**
-```sql
-INSERT INTO payments (
-  id, booking_id, user_id, amount, currency, 
-  stripe_payment_intent_id, status, created_at
-) VALUES (
-  <uuid>, <booking_id>, <user_id>, 1250, 'EUR', 
-  <payment_intent_id>, 'authorized', NOW()
-);
-```
-
-**Step 6: Publish Event**
-```json
-{
-  "event_type": "PaymentAuthorized",
-  "booking_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-  "payment_id": "pay_1234567890",
-  "amount": 1250,
-  "currency": "EUR",
-  "authorized_at": "2025-01-15T14:30:45Z"
-}
-```
+5. **Event Publication:** PaymentAuthorized event published to Kafka
 
 **Error Handling:**
-- **Insufficient Funds:** Return `400 Bad Request`, release vehicle reservation
-- **3D Secure Failed:** Return `400 Bad Request`, user can retry
-- **Network Error:** Retry with exponential backoff, release reservation after 5 minutes
+- **Insufficient Funds:** Vehicle reservation released, user notified
+- **3D Secure Failed:** User can retry with same or different payment method
+- **Network Error:** Retry with exponential backoff, auto-release after 5 minutes
 
 **Performance:**
-- Payment authorization: **~800ms** (Stripe API latency)
-- Target: **< 1 second P95**
+- Payment authorization: ~800ms (includes external Stripe API latency)
+- Target: < 1 second P95
 
 ---
 
 ### 4.4 Phase 4: Booking Confirmation
 
-**Step 1: Update Booking Status**
-```sql
-UPDATE bookings 
-SET status = 'confirmed', 
-    payment_id = <payment_id>, 
-    confirmed_at = NOW() 
-WHERE id = <booking_id>;
-```
+**Confirmation Process:**
+1. **Status Update:** Booking status updated to 'confirmed' in database
 
-**Step 2: Publish Event**
-```json
-{
-  "event_type": "BookingConfirmed",
-  "booking_id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-  "user_id": 98765,
-  "vehicle_id": 12345,
-  "confirmed_at": "2025-01-15T14:30:50Z",
-  "estimated_start": "2025-01-15T14:30:00Z",
-  "estimated_duration_minutes": 30
-}
-```
+2. **Event Publication:** BookingConfirmed event published to Kafka for system-wide notification
 
-**Step 3: Response to Client**
-```json
-{
-  "booking": {
-    "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-    "status": "confirmed",
-    "vehicle": {
-      "id": 12345,
-      "type": "scooter",
-      "battery": 85,
-      "location": {"lat": 50.1105, "lon": 8.6821}
-    },
-    "payment": {
-      "status": "authorized",
-      "estimated_charge": 12.50,
-      "currency": "EUR"
-    },
-    "unlock_expires_at": "2025-01-15T14:40:00Z"
-  }
-}
-```
+3. **Response to Client:** Booking details returned including vehicle information, payment status, and unlock expiration time
 
 **Performance:**
-- Confirmation: **~30ms** (DB update)
-- Target: **< 50ms P95**
+- Confirmation: ~30ms (database update)
+- Target: < 50ms P95
 
 ---
 
 ### 4.5 Phase 5: Notifications
 
-**Step 1: Kafka Consumer (Notification Service)**
-- Listens to `booking-lifecycle` topic
-- Receives `BookingConfirmed` event
+**Notification Channels:**
+1. **Push Notification:** Sent via AWS SNS to user's mobile device
+   - Real-time confirmation alert
+   - Includes quick action to unlock vehicle
 
-**Step 2: Send Push Notification (AWS SNS)**
-```javascript
-await sns.publish({
-  TargetArn: user_device_arn,
-  Message: JSON.stringify({
-    notification: {
-      title: 'Booking Confirmed!',
-      body: 'Your scooter is ready. Tap to unlock.'
-    },
-    data: {
-      booking_id: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
-      action: 'unlock'
-    }
-  })
-});
-```
+2. **Email Confirmation:** Sent via AWS SES
+   - Detailed booking summary
+   - Receipt and trip information
 
-**Step 3: Send Email (AWS SES)**
-```javascript
-await ses.sendTemplatedEmail({
-  Source: 'noreply@mobilitycorp.com',
-  Destination: { ToAddresses: [user_email] },
-  Template: 'BookingConfirmation',
-  TemplateData: JSON.stringify({
-    user_name: 'John Doe',
-    vehicle_type: 'Scooter',
-    vehicle_id: '12345',
-    location: 'Hauptwache, Frankfurt',
-    estimated_charge: '€12.50'
-  })
-});
-```
+**Event-Driven Architecture:** Notification Service consumes BookingConfirmed events from Kafka, decoupling notification delivery from booking flow
 
 **Performance:**
-- Push notification: **~200ms**
-- Email: **~500ms** (asynchronous, non-blocking)
+- Push notification: ~200ms
+- Email: ~500ms (asynchronous, non-blocking)
 
 ---
 
 ### 4.6 Phase 6: Vehicle Unlock
 
-**Step 1: Unlock Request**
-```http
-POST /vehicles/12345/unlock HTTP/1.1
-Authorization: Bearer <jwt_token>
-```
+**Unlock Flow:**
+1. **Verification:** Fleet Service verifies booking is confirmed and vehicle is reserved for requesting user
 
-**Step 2: Verify Booking**
-```sql
-SELECT b.id, b.status, v.id, v.status 
-FROM bookings b 
-JOIN vehicles v ON b.vehicle_id = v.id 
-WHERE b.user_id = <user_id> 
-  AND b.vehicle_id = 12345 
-  AND b.status = 'confirmed' 
-  AND v.status = 'reserved';
-```
+2. **IoT Command:** Unlock command published to vehicle via AWS IoT Core using MQTT protocol
+   - Quality of Service (QoS) 1 ensures at-least-once delivery
+   - Command includes booking context for vehicle-side verification
 
-**Step 3: Send Unlock Command (MQTT)**
-```javascript
-await iotData.publish({
-  topic: `vehicles/12345/commands/unlock`,
-  payload: JSON.stringify({
-    command: 'unlock',
-    timestamp: Date.now(),
-    user_id: 98765,
-    booking_id: 'a1b2c3d4-e5f6-7890-abcd-ef1234567890'
-  }),
-  qos: 1 // At least once delivery
-});
-```
+3. **Vehicle Processing:** IoT agent on vehicle (AWS IoT Greengrass):
+   - Verifies command signature to prevent spoofing
+   - Activates unlock mechanism (solenoid/relay)
+   - Publishes status confirmation
 
-**Step 4: Vehicle IoT Agent Processing**
-```python
-# Running on IoT Greengrass (vehicle edge device)
-def on_unlock_command(payload):
-    # Verify signature (prevent spoofing)
-    if not verify_signature(payload):
-        publish_status("unlock_failed_auth")
-        return
-    
-    # Unlock vehicle (GPIO control)
-    unlock_relay()  # Activate solenoid/relay
-    
-    # Publish status update
-    publish_status("unlocked")
-```
-
-**Step 5: Status Confirmation (MQTT → Kafka)**
-- Vehicle publishes: `vehicles/12345/status` → `{"status": "unlocked"}`
-- IoT Core rule routes to Kafka topic: `vehicle-status`
-- Fleet Service consumes event, updates database
-
-**Step 6: Update Vehicle Status**
-```sql
-UPDATE vehicles 
-SET status = 'in_use', 
-    trip_start_time = NOW(), 
-    current_booking_id = <booking_id> 
-WHERE id = 12345;
-```
-
-**Step 7: Invalidate Caches**
-```javascript
-await redis.del(`availability:50.11:8.68:scooter:1000`);
-await redis.del(`vehicle:12345:status`);
-```
+4. **Status Update:** Fleet Service consumes vehicle status event, updates database:
+   - Vehicle status: 'reserved' → 'in_use'
+   - Records trip start time
+   - Invalidates availability caches
 
 **Performance:**
-- Unlock command: **~500ms** (MQTT + vehicle response)
-- Total unlock flow: **~2 seconds** (request → unlocked confirmation)
-- Target: **< 3 seconds P95**
+- Unlock command delivery: ~500ms (MQTT roundtrip)
+- Total unlock flow: ~2 seconds (request to confirmed unlock)
+- Target: < 3 seconds P95
 
 ---
 
@@ -530,151 +293,80 @@ await redis.del(`vehicle:12345:status`);
 
 ### 5.1 Write Path (Booking Creation)
 
-```
-User → API Gateway → Booking Service → Aurora PostgreSQL (bookings table)
-                   ↓
-              Kafka (BookingConfirmed event)
-                   ↓
-        [Consumers: Analytics, Notification, Audit]
-```
+**Flow:** User → API Gateway → Booking Service → Aurora PostgreSQL → Kafka → Downstream Consumers
 
-**Aurora Schema:**
-```sql
-CREATE TABLE bookings (
-  id UUID PRIMARY KEY,
-  user_id BIGINT REFERENCES users(id),
-  vehicle_id BIGINT REFERENCES vehicles(id),
-  status VARCHAR(20) CHECK (status IN ('pending', 'confirmed', 'in_progress', 'completed', 'cancelled')),
-  payment_id UUID REFERENCES payments(id),
-  start_time TIMESTAMP,
-  end_time TIMESTAMP,
-  estimated_duration_minutes INT,
-  actual_duration_minutes INT,
-  estimated_charge DECIMAL(10, 2),
-  final_charge DECIMAL(10, 2),
-  created_at TIMESTAMP DEFAULT NOW(),
-  confirmed_at TIMESTAMP,
-  cancelled_at TIMESTAMP,
-  INDEX idx_user_bookings (user_id, created_at DESC),
-  INDEX idx_vehicle_bookings (vehicle_id, start_time DESC),
-  INDEX idx_status (status, created_at DESC)
-);
-```
-
----
+- **Database:** Transactional writes to bookings table
+- **Event Bus:** BookingConfirmed events for Analytics, Notification, and Audit services
+- **Consistency:** Strong consistency for booking state
 
 ### 5.2 Read Path (Vehicle Search)
 
-```
-User → API Gateway → Fleet Service → Redis Cache (availability)
-                                    ↓ (cache miss)
-                              Aurora PostgreSQL (vehicles table)
-```
+**Flow:** User → API Gateway → Fleet Service → Redis Cache (with Aurora fallback)
 
-**Redis Cache Structure:**
-```
-Key: availability:50.11:8.68:scooter:1000
-Value: [{"id": 12345, "battery": 85, "location": {...}}, ...]
-TTL: 30 seconds
-```
-
-**Aurora Schema:**
-```sql
-CREATE TABLE vehicles (
-  id BIGSERIAL PRIMARY KEY,
-  vehicle_type VARCHAR(20) CHECK (vehicle_type IN ('scooter', 'ebike', 'car', 'van')),
-  status VARCHAR(20) CHECK (status IN ('available', 'reserved', 'in_use', 'maintenance', 'offline')),
-  location GEOGRAPHY(POINT, 4326), -- PostGIS extension
-  battery_percent INT CHECK (battery_percent BETWEEN 0 AND 100),
-  reserved_by BIGINT REFERENCES users(id),
-  reserved_at TIMESTAMP,
-  current_booking_id UUID REFERENCES bookings(id),
-  trip_start_time TIMESTAMP,
-  last_telemetry_at TIMESTAMP,
-  INDEX idx_availability (vehicle_type, status, location) USING GIST,
-  INDEX idx_reserved_by (reserved_by, reserved_at)
-);
-```
+- **Cache Strategy:** 30-second TTL for availability data
+- **Geospatial Queries:** PostGIS extension for proximity search
+- **Cache Miss Handling:** Database query with automatic cache population
+- **Consistency:** Eventual consistency acceptable for search (slight staleness)
 
 ---
 
 ## 6. Error Handling
 
-### 6.1 Vehicle Already Reserved (409 Conflict)
+### 6.1 Vehicle Already Reserved (Conflict)
 
-**Scenario:** Two users simultaneously try to book the same vehicle.
-
-**Handling:**
-1. First user's transaction commits → Success
-2. Second user's transaction updates 0 rows → Rollback
-3. Return `409 Conflict` to second user
-4. Mobile app shows: "This vehicle is no longer available. Here are other nearby options:"
-5. Auto-refresh search results with next-best alternatives
-
----
-
-### 6.2 Payment Failure (400 Bad Request)
-
-**Scenario:** User's card is declined (insufficient funds, fraud detection).
+**Scenario:** Two users simultaneously attempt to book the same vehicle
 
 **Handling:**
-1. Stripe returns `payment_failed` status
-2. Payment Service publishes `PaymentFailed` event
-3. Booking Service listens, releases vehicle reservation
-4. User sees: "Payment failed. Please try another payment method."
-5. Booking moves to `cancelled` status
-6. Vehicle returns to `available` status
+- First transaction commits successfully
+- Second transaction detects conflict (zero rows updated)
+- User receives error notification with alternative vehicle suggestions
+- App automatically refreshes search results
 
-**Idempotency:** If user retries, use same `booking_id` to prevent duplicate reservations.
+### 6.2 Payment Failure
 
----
-
-### 6.3 Vehicle Offline (503 Service Unavailable)
-
-**Scenario:** Vehicle has no network connectivity (underground garage, poor signal).
+**Scenario:** Card declined due to insufficient funds or fraud detection
 
 **Handling:**
-1. IoT Core detects: Last heartbeat > 5 minutes ago
-2. Fleet Service marks vehicle as `offline`
-3. Vehicle excluded from search results
-4. If booking already confirmed, show: "Vehicle may be offline. Try unlock again in 1 minute."
-5. Booking expires after 10 minutes, user refunded
+- Payment authorization fails
+- PaymentFailed event triggers vehicle reservation release
+- Booking moves to 'cancelled' status
+- Vehicle returns to 'available' status
+- User prompted to try alternative payment method
+- **Idempotency:** Retries use same booking ID to prevent duplicates
 
-**Graceful Degradation:** Allow booking but warn: "This vehicle hasn't reported its status recently."
+### 6.3 Vehicle Offline
 
----
-
-### 6.4 Database Unavailable (503 Service Unavailable)
-
-**Scenario:** Aurora PostgreSQL primary fails, failover in progress.
+**Scenario:** Vehicle has no network connectivity
 
 **Handling:**
-1. Aurora auto-failover to read replica: **~1 minute**
-2. During failover:
-   - Return `503 Service Unavailable` to API requests
-   - Mobile app shows: "We're experiencing issues. Please try again shortly."
-   - Retry with exponential backoff: 1s, 2s, 4s, 8s
-3. After failover completes, requests resume normally
+- IoT Core detects missing heartbeat (> 5 minutes)
+- Fleet Service marks vehicle as 'offline'
+- Vehicle automatically excluded from search results
+- For confirmed bookings: User warned and advised to retry
+- Booking auto-expires after 10 minutes with automatic refund
 
-**Circuit Breaker:** After 3 consecutive failures, open circuit for 30 seconds (prevent cascading).
+**Graceful Degradation:** May allow booking with staleness warning
 
----
+### 6.4 Database Unavailable
 
-### 6.5 Kafka Unavailable (Eventual Consistency)
-
-**Scenario:** Kafka broker outage, events cannot be published.
+**Scenario:** Aurora PostgreSQL primary failure during booking
 
 **Handling:**
-1. Booking Service uses Transactional Outbox Pattern:
-   - Write booking + event to database in same transaction
-   - Separate process polls outbox table, publishes to Kafka
-2. If Kafka is down:
-   - Booking still succeeds (database write)
-   - Events queued in outbox table
-   - Published when Kafka recovers (eventual consistency)
-3. Notification may be delayed, but booking is valid
+- Aurora auto-failover to read replica (~1 minute)
+- During failover: API returns 503 Service Unavailable
+- Client implements exponential backoff retry (1s, 2s, 4s, 8s)
+- **Circuit Breaker:** Opens after 3 consecutive failures, prevents cascading
 
-**Trade-off:** Accept delayed notifications (seconds to minutes) to maintain booking availability.
+### 6.5 Kafka Unavailable
+
+**Scenario:** Kafka broker outage prevents event publication
+
+**Handling:**
+- **Transactional Outbox Pattern:** Booking and event both written to database in same transaction
+- Separate process polls outbox table and publishes to Kafka when available
+- Booking succeeds even if Kafka is down
+- Events eventually published (eventual consistency)
+- Notifications may be delayed but booking remains valid
 
 ---
 
@@ -692,54 +384,42 @@ CREATE TABLE vehicles (
 | Network (user ↔ AWS) | < 100ms | 80ms |
 | **Total** | **< 200ms** | **~150ms** |
 
----
-
 ### 7.2 Throughput (Peak: 500 bookings/second)
 
 **Scaling Strategy:**
-- **Horizontal Scaling:** 20 ECS Fargate tasks (Booking Service)
+- **Horizontal Scaling:** 20 ECS Fargate tasks for Booking Service
 - **Database:** Aurora read replicas (2×) for search queries
 - **Cache:** ElastiCache Redis cluster (3 nodes, sharded by geohash)
 
 **Load Test Results:**
 - 500 req/s sustained: ✅ P95 latency < 200ms
-- 1,000 req/s burst: ✅ P95 latency < 350ms (acceptable)
+- 1,000 req/s burst: ✅ P95 latency < 350ms
 - 2,000 req/s: ❌ P95 latency > 1 second (database bottleneck)
 
-**Bottleneck:** Aurora write capacity (connection pool exhaustion at 2K req/s).
+**Bottleneck Mitigation:**
+1. Increase Aurora instance size or use Serverless v2 (auto-scales)
+2. Implement per-user rate limiting (10 bookings/minute)
+3. Use RDS Proxy for connection pooling
 
-**Mitigation:**
-1. Increase Aurora instance size (db.r6g.4xlarge → db.r6g.8xlarge)
-2. Use Aurora Serverless v2 (auto-scales to 128 ACUs)
-3. Implement rate limiting per user (10 bookings/minute)
+### 7.3 Cache Optimization
 
----
+**Target:** > 90% cache hit rate for vehicle search
 
-### 7.3 Cache Hit Rate
+**Current Performance:** ~85% cache hit rate
 
-**Target:** > 90% cache hit rate for vehicle search.
+**Optimization Strategies:**
+1. Increase TTL (30s → 60s) with acceptable staleness
+2. Pre-warm cache for top 100 zones every 15 seconds
+3. Implement geo-sharding to reduce key collisions
 
-**Measurement:**
-- CloudWatch metric: `cache_hit_rate = cache_hits / (cache_hits + cache_misses)`
-- Current: **~85%** (needs improvement)
+### 7.4 Connection Pooling
 
-**Optimization:**
-1. Increase TTL: 30s → 60s (trade-off: slightly stale data)
-2. Pre-warm cache: Background job updates top 100 zones every 15s
-3. Geo-sharding: Shard cache by geohash prefix (reduces key collisions)
+**Challenge:** Each ECS task opens multiple connections to Aurora
 
----
-
-### 7.4 Database Connection Pooling
-
-**Problem:** Each ECS task opens 10 connections to Aurora → 200 total connections at peak.
-
-**Solution:** Use RDS Proxy (connection pooling):
-- Tasks connect to RDS Proxy (unlimited)
-- Proxy maintains 50-100 connections to Aurora
-- Reduces connection overhead, improves latency
-
-**Cost:** $0.015/hour per vCPU = $87/month (3× db.r6g.4xlarge proxy)
+**Solution:** RDS Proxy provides connection pooling
+- Tasks connect to proxy (unlimited connections)
+- Proxy maintains optimized pool to Aurora
+- Reduces connection overhead and improves latency
 
 ---
 
@@ -747,40 +427,30 @@ CREATE TABLE vehicles (
 
 ### 8.1 Cost per Booking Transaction
 
-**Infrastructure Costs:**
-- API Gateway: $0.0000035 (1 request)
-- ECS Fargate: $0.00004 (100ms compute)
-- Aurora PostgreSQL: $0.00005 (1 write + 2 reads)
-- Redis Cache: $0.000002 (3 reads)
-- Kafka (MSK): $0.000003 (1 event)
-- Lambda (notifications): $0.00001 (2 invocations)
-- **Total Infrastructure:** $0.0001/booking
+**Infrastructure Costs (per booking):**
+- API Gateway, ECS Fargate, Aurora, Redis, Kafka, Lambda combined: ~$0.0001
 
-**Third-Party Costs:**
-- Stripe: $0.10 + 1.5% = $0.10 + $0.19 (for €12.50 charge) = **$0.29/booking**
+**Third-Party Costs (per booking):**
+- Stripe payment processing: ~$0.29 (including percentage-based fees)
 
-**Total Cost per Booking:** **$0.29/booking**
+**Total Cost per Booking:** ~$0.29
 
 **Monthly Costs (1M bookings):**
-- Infrastructure: 1M × $0.0001 = $100
-- Stripe: 1M × $0.29 = $290,000
-- **Total:** **$290,100/month**
-
----
+- Infrastructure: ~$100
+- Stripe: ~$290,000
+- **Total:** ~$290,100/month
 
 ### 8.2 Optimization Opportunities
 
-**Reduce Stripe Fees:**
-- Negotiate enterprise pricing: 1.5% → 1.2% saves $36,000/month
-- Use ACH/SEPA for recurring users: 0.8% saves $84,000/month (if 50% adoption)
+**Payment Processing:**
+- Enterprise pricing negotiation: Potential 20% reduction
+- ACH/SEPA for recurring customers: ~30% savings on eligible transactions
 
-**Reduce Infrastructure Costs:**
-- Use Aurora Serverless v2: Pay only for active usage (nights/weekends idle)
-  - Savings: ~$1,000/month (20% reduction)
-- Cache aggressively: Increase TTL, reduce Aurora queries
-  - Savings: ~$200/month (10% fewer queries)
+**Infrastructure:**
+- Aurora Serverless v2: Pay-per-use reduces idle costs (~20%)
+- Aggressive caching: Reduces database query costs (~10%)
 
-**Total Savings Potential:** ~$121,200/month (42% reduction)
+**Total Potential Savings:** ~42% reduction in overall costs
 
 ---
 
@@ -788,39 +458,30 @@ CREATE TABLE vehicles (
 
 ### 9.1 Unit Tests
 
-**Booking Service:**
-- ✅ Test booking creation with valid inputs
-- ✅ Test race condition handling (concurrent reservations)
-- ✅ Test payment failure rollback
-- ✅ Test idempotency (duplicate booking requests)
+**Booking Service Test Coverage:**
+- Booking creation with valid inputs
+- Race condition handling (concurrent reservations)
+- Payment failure rollback scenarios
+- Idempotency verification (duplicate requests)
 
 **Coverage:** 85%
 
----
-
 ### 9.2 Integration Tests
 
-**End-to-End Flow:**
-1. Mock external dependencies (Stripe, IoT Core)
-2. Test: Search → Reserve → Pay → Confirm → Unlock
-3. Verify: Database state, Kafka events, cache invalidation
-4. Assertions:
-   - Booking status = 'confirmed'
-   - Vehicle status = 'in_use'
-   - Payment status = 'authorized'
-   - Kafka events published (3 events)
+**End-to-End Flow Testing:**
+- Mock external dependencies (Stripe, IoT Core)
+- Test complete journey: Search → Reserve → Pay → Confirm → Unlock
+- Verify database state, Kafka events, and cache invalidation
+- Assert correct statuses and event publication
 
 **Tools:** Jest, Testcontainers (Aurora, Redis, Kafka)
 
----
-
 ### 9.3 Load Tests
 
-**Scenario:** 1M bookings/day (11.5 bookings/second average, 500 bookings/second peak)
-
-**Tools:** Gatling, AWS Distributed Load Testing
+**Scenario:** 1M bookings/day (11.5 bookings/second average, 500 peak)
 
 **Results:**
+
 | Metric | Target | Actual |
 |--------|--------|--------|
 | P50 Latency | < 100ms | 85ms ✅ |
@@ -829,16 +490,16 @@ CREATE TABLE vehicles (
 | Error Rate | < 0.1% | 0.05% ✅ |
 | Throughput | 500 req/s | 520 req/s ✅ |
 
----
+**Tools:** Gatling, AWS Distributed Load Testing
 
 ### 9.4 Chaos Engineering
 
-**Failure Scenarios:**
-1. **Kill Aurora Primary:** Verify failover < 1 minute, no data loss
-2. **Kafka Broker Down:** Verify Transactional Outbox Pattern works
-3. **Redis Eviction:** Verify cache miss fallback to database
-4. **Network Latency (250ms):** Verify graceful degradation, no timeouts
-5. **Stripe API Timeout:** Verify retry logic, eventual consistency
+**Failure Scenarios Tested:**
+1. **Aurora Primary Failure:** Verify automatic failover < 1 minute, no data loss
+2. **Kafka Broker Outage:** Verify Transactional Outbox Pattern maintains consistency
+3. **Redis Cache Eviction:** Verify graceful fallback to database
+4. **Network Latency Injection:** Verify no timeouts under 250ms added latency
+5. **Stripe API Timeout:** Verify retry logic and eventual consistency
 
 **Tools:** AWS Fault Injection Simulator (FIS), Chaos Toolkit
 

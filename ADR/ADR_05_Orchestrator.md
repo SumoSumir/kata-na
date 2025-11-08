@@ -32,15 +32,9 @@ We have accepted the idea of building an **independent orchestrator module** for
   - **Circuit breaker:** AWS Lambda with exponential backoff and DLQ (SQS)
   - **Cost tracking:** CloudWatch Logs + Lambda extension records tokens used per provider
   - **Routing logic:** Python Lambda function (512 MB RAM, 30s timeout)
-    ```python
-    # Simplified routing logic
-    if bedrock_available and cost_per_token < threshold:
-        return invoke_bedrock(prompt)
-    elif openai_available:
-        return invoke_openai(prompt)
-    else:
-        raise ServiceUnavailableError()
-    ```
+    - Checks Bedrock availability and cost threshold
+    - Falls back to OpenAI if Bedrock unavailable or over budget
+    - Raises ServiceUnavailableError if both providers fail
 - **Deployment:** ECS Fargate service (2 vCPU, 4GB RAM, 2 tasks min)
 - **Monitoring:** CloudWatch alarms on error rate, latency, token cost
 
