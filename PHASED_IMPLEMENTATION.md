@@ -21,8 +21,8 @@ This document outlines the detailed, phased approach to migrating from MobilityC
 │           CURRENT MONOLITHIC SYSTEM                      │
 ├─────────────────────────────────────────────────────────┤
 │                                                          │
-│  • Single PHP/Laravel application                       │
-│  • MySQL database (single instance)                     │
+│  • Single Node.js/Express application                   │
+│  • PostgreSQL database (single instance)                │
 │  • Manual vehicle rebalancing (spreadsheets)            │
 │  • Reactive battery management                          │
 │  • No predictive capabilities                           │
