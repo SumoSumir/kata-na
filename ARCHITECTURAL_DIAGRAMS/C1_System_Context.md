@@ -163,10 +163,9 @@ The MobilityCorp Platform handles:
 
 - [C2: Container Diagram](C2_Container_UPDATED.md) - Detailed service architecture
 - [C3: AI/ML Component Diagram](C3_Component_AIML_UPDATED.md) - ML model architecture
-- [ADR-01: Microservices Architecture](../ADR/ADR_01_microservices_architecture.md)
-- [ADR-09: Multi-Region Deployment](../ADR/ADR_09_MULTI_REGION.md)
-- [ADR-15: Cloud Provider Selection](../ADR/ADR_15_Cloud_Provider_Selection.md)
-- [ADR-19: Edge vs Cloud AI Strategy](../ADR/ADR_19_Edge_Cloud_AI_Strategy.md)
+- [ADR-01: Microservices Architecture](./ADR/ADR_01_microservices_architecture.md)
+- [ADR-09: Multi-Region Deployment](./ADR/ADR_09_MULTI_REGION.md)
+- [ADR-18: Edge vs Cloud AI Strategy](./ADR/ADR_18_Edge_Cloud_AI_Strategy.md)
 
 ---
 

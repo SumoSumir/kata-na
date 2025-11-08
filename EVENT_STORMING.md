@@ -159,7 +159,7 @@ graph TD
 **Actors:** 🟨 ML Model, Marcus (VP Fleet Operations)  
 **Trigger:** Hourly batch job  
 **Business Impact:** Reduces vehicle unavailability significantly  
-**ADRs:** [ADR-02](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md), [ADR-16](./ADR/ADR_16_MLOps_Pipeline.md)
+**ADRs:** [ADR-02](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md), [ADR-15](./ADR/ADR_15_MLOps_Pipeline.md)
 
 ---
 
@@ -284,7 +284,7 @@ graph TD
 - Real-time recalibration based on actual bookings
 - Human-in-the-loop for major events (festivals, strikes)
 
-**ADRs:** [ADR-02](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md), [ADR-16](./ADR/ADR_16_MLOps_Pipeline.md)
+**ADRs:** [ADR-02](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md), [ADR-15](./ADR/ADR_15_MLOps_Pipeline.md)
 
 ---
 
@@ -401,7 +401,7 @@ graph TB
 **When:** Failure probability exceeds threshold within defined timeframe  
 **Then:** Deactivate vehicle, create maintenance task  
 **Owner:** Operations Team  
-**ADR:** [ADR-16](./ADR/ADR_16_MLOps_Pipeline.md)
+**ADR:** [ADR-15](./ADR/ADR_15_MLOps_Pipeline.md)
 
 ---
 

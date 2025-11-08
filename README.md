@@ -177,14 +177,13 @@ kata-na/
 ├── COST_ANALYSIS.md                   # Infrastructure cost estimates (percentage-based)
 │
 ├── ADR/                               # Architecture Decision Records (19)
-│   ├── ADR_01_microservices_architecture.md  # Links to ADR-06, ADR-15
-│   ├── ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md  # Links to ADR-01, ADR-16
+│   ├── ADR_01_microservices_architecture.md  # Links to ADR-06
+│   ├── ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md  # Links to ADR-01, ADR-15
 │   ├── ADR_03_Vehicle_Telemetry.md
-│   ├── ADR_15_Cloud_Provider_Selection.md
-│   ├── ADR_16_MLOps_Pipeline.md         # Links to ADR-02, ADR-17
-│   ├── ADR_17_Data_Lakehouse_Strategy.md
-│   ├── ADR_18_Agentic_AI_Framework.md
-│   └── ADR_19_Edge_Cloud_AI_Strategy.md
+│   ├── ADR_15_MLOps_Pipeline.md         # Links to ADR-02, ADR-16
+│   ├── ADR_16_Data_Lakehouse_Strategy.md
+│   ├── ADR_17_Agentic_AI_Framework.md
+│   └── ADR_18_Edge_Cloud_AI_Strategy.md
 │   # Each ADR now links to related decisions
 │
 ├── ARCHITECTURAL_DIAGRAMS/            # Visual architecture (C4 model)
@@ -249,9 +248,8 @@ Read [PERSONAS.md](PERSONAS.md) to understand who we're building for (Sarah, Mar
 4. **Review Architecture Decisions**
 Read key ADRs in order:
 1. [ADR-01: Microservices Architecture](./ADR/ADR_01_microservices_architecture.md)
-2. [ADR-15: Cloud Provider Selection](./ADR/ADR_15_Cloud_Provider_Selection.md)
-3. [ADR-16: MLOps Pipeline](./ADR/ADR_16_MLOps_Pipeline.md)
-4. [ADR-17: Data Lakehouse](./ADR/ADR_17_Data_Lakehouse_Strategy.md)
+2. [ADR-15: MLOps Pipeline](./ADR/ADR_15_MLOps_Pipeline.md)
+3. [ADR-16: Data Lakehouse](./ADR/ADR_16_Data_Lakehouse_Strategy.md)
 
 5. **Explore Architecture**
 - **High-Level:** [System Context Diagram](ARCHITECTURAL_DIAGRAMS/C1_System_Context.md)
@@ -266,8 +264,8 @@ Read key ADRs in order:
 ### For AI/ML Engineers
 7. **Understand AI Usage**
 - [ADR-02: Dynamic Pricing](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md) - ML models and demand forecasting
-- [ADR-16: MLOps Pipeline](./ADR/ADR_16_MLOps_Pipeline.md) - Training and deployment
-- [ADR-18: Agentic AI Framework](./ADR/ADR_18_Agentic_AI_Framework.md) - Conversational AI implementation
+- [ADR-15: MLOps Pipeline](./ADR/ADR_15_MLOps_Pipeline.md) - Training and deployment
+- [ADR-17: Agentic AI Framework](./ADR/ADR_17_Agentic_AI_Framework.md) - Conversational AI implementation
 
 ### For Domain Experts
 8. **Review Domain Modeling**
@@ -285,7 +283,6 @@ Read key ADRs in order:
 
 ### 1. Cloud Provider: AWS
 **Why:** Best ML services (SageMaker), global infrastructure, cost-effective for EU deployment
-- **ADR:** [ADR-15: Cloud Provider Selection](./ADR/ADR_15_Cloud_Provider_Selection.md)
 
 ### 2. Microservices over Monolith
 **Why:** Independent scaling, fault isolation, technology flexibility
@@ -301,7 +298,7 @@ Read key ADRs in order:
 
 ### 5. Edge-Cloud Hybrid Processing
 **Why:** Low latency for critical operations, cost optimization
-- **ADR:** [ADR-19: Edge vs Cloud AI](./ADR/ADR_19_Edge_Cloud_AI_Strategy.md)
+- **ADR:** [ADR-18: Edge vs Cloud AI](./ADR/ADR_18_Edge_Cloud_AI_Strategy.md)
 
 **All ADRs:** [ADR Directory](./ADR/)
 
@@ -375,8 +372,6 @@ Read key ADRs in order:
 - **CI/CD:** GitHub Actions + AWS CodePipeline
 - **Infrastructure:** Terraform
 - **Configuration:** AWS Systems Manager Parameter Store
-
-**Detailed stack justification:** [ADR-15: Cloud Provider Selection](./ADR/ADR_15_Cloud_Provider_Selection.md)
 
 ---
 
@@ -556,7 +551,7 @@ Read key ADRs in order:
 - Traditional ML: €3K/month
 - **Savings: €924K/year by choosing the right tool**
 
-**Details:** See [ADR-02](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md), [ADR-16](./ADR/ADR_16_MLOps_Pipeline.md), and [ADR-18](./ADR/ADR_18_Agentic_AI_Framework.md)
+**Details:** See [ADR-02](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md), [ADR-15](./ADR/ADR_15_MLOps_Pipeline.md), and [ADR-17](./ADR/ADR_17_Agentic_AI_Framework.md)
 
 ---
 

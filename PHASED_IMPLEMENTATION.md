@@ -396,10 +396,10 @@ This document outlines the detailed, phased approach to migrating from MobilityC
 
 | Phase | Related ADRs |
 |-------|--------------|
-| **Phase 1** | ADR-01 (Microservices), ADR-15 (Cloud Provider) |
-| **Phase 2** | ADR-02 (AI Relocation), ADR-16 (MLOps), ADR-17 (Data Lakehouse) |
+| **Phase 1** | ADR-01 (Microservices) |
+| **Phase 2** | ADR-02 (AI Relocation), ADR-15 (MLOps), ADR-16 (Data Lakehouse) |
 | **Phase 3** | ADR-06 (Event-Driven), ADR-01 (Microservices) |
-| **Phase 4** | ADR-13 (Conversational AI), ADR-18 (Agentic AI) |
+| **Phase 4** | ADR-13 (Conversational AI), ADR-17 (Agentic AI) |
 | **Phase 5** | ADR-09 (Multi-Region), ADR-14 (Data Compliance) |
 
 ---

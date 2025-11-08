@@ -309,7 +309,7 @@ User → LangChain Agent → LLM (Bedrock) → Tool(s) → Response
 
 - **[README.md](../README.md)** - Project overview
 - **[Architecture Diagrams](../ARCHITECTURAL_DIAGRAMS/)** - Visual architecture
-- **[ADRs](../ADR/)** - Architectural decisions
+- **[ADRs](./ADR/)** - Architectural decisions
 - **[Functional Requirements](../FUNCTIONAL_REQUIREMENTS/FUNCTIONAL_REQUIREMENTS.md)**
 - **[Non-Functional Requirements](../NON_FUNCTIONAL_REQUIREMENTS/NON_FUNCTIONAL_REQUIREMENTS.md)**
 - **[Fitness Functions](../FITNESS_FUNCTIONS/FITNESS_FUNCTIONS.md)**

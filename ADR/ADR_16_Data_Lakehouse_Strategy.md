@@ -1,4 +1,4 @@
-# ADR-17: Data Lakehouse Strategy with Medallion Architecture
+# ADR-16: Data Lakehouse Strategy (Medallion Architecture)
 
 ## Status
 Accepted
@@ -324,8 +324,7 @@ Data Minimization & Retention:
 - **Overhead:** Automate with Terraform, monitoring with CloudWatch
 
 ## Related Decisions
-- **ADR-15:** Cloud Provider Selection (AWS) - Enables S3/Glue choice
-- **ADR-16:** MLOps Pipeline - Feature Store built on Silver/Gold data
+- **ADR-15:** MLOps Pipeline - Feature Store built on Silver/Gold data
 - **ADR-06:** Event-Driven Architecture - Feeds data into Bronze layer
 - **ADR-03:** Vehicle Telemetry - Major data source
 

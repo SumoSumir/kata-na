@@ -1,4 +1,4 @@
-# ADR-19: Edge vs Cloud AI Compute Strategy
+# ADR-18: Edge-Cloud AI Strategy (Hybrid Inference)
 
 ## Status
 Accepted
@@ -379,7 +379,7 @@ Total Cloud: $150,000/month
 - Test OTA update mechanism
 
 ### Phase 2: Cloud ML Platform (Months 2-4)
-- Build SageMaker pipelines (ADR-16)
+- Build SageMaker pipelines (ADR-15)
 - Deploy demand forecasting
 - Deploy dynamic pricing
 
@@ -415,10 +415,9 @@ Total Cloud: $150,000/month
 - **Edge Limits:** Regularly evaluate moving models to edge as hardware improves
 
 ## Related Decisions
-- **ADR-15:** AWS chosen - enables IoT Core + Greengrass
-- **ADR-16:** MLOps - Manages cloud ML models
-- **ADR-03:** Vehicle Telemetry - Uses IoT Core
-- **ADR-18:** Agentic AI - Runs entirely in cloud (not edge)
+- **ADR-15:** MLOps - Manages cloud ML models
+- **ADR-03:** Vehicle Telemetry - Edge data collection
+- **ADR-17:** Agentic AI - Runs entirely in cloud (not edge)
 
 ## References
 - [AWS IoT Greengrass Documentation](https://docs.aws.amazon.com/greengrass/)

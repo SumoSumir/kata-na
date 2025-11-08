@@ -591,9 +591,9 @@ This C3 diagram has been significantly enhanced to include:
 - [C1: System Context](C1_System_Context.md)
 - [C2: Container Diagram](C2_Container_UPDATED.md)
 - [C4 Diagrams Collection (Mermaid)](C4_DIAGRAMS_MERMAID.md)
-- [ADR-16: MLOps Pipeline](../ADR/ADR_16_MLOps_Pipeline.md)
-- [ADR-17: Data Lakehouse Strategy](../ADR/ADR_17_Data_Lakehouse_Strategy.md)
-- [ADR-18: Agentic AI Framework](../ADR/ADR_18_Agentic_AI_Framework.md)
-- [ADR-19: Edge vs Cloud AI Strategy](../ADR/ADR_19_Edge_Cloud_AI_Strategy.md)
+- [ADR-15: MLOps Pipeline](./ADR/ADR_15_MLOps_Pipeline.md)
+- [ADR-16: Data Lakehouse Strategy](./ADR/ADR_16_Data_Lakehouse_Strategy.md)
+- [ADR-17: Agentic AI Framework](./ADR/ADR_17_Agentic_AI_Framework.md)
+- [ADR-18: Edge vs Cloud AI Strategy](./ADR/ADR_18_Edge_Cloud_AI_Strategy.md)
 
 ---

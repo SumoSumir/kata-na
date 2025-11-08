@@ -1,4 +1,4 @@
-# ADR-20: Intelligent Notification Service
+# ADR-19: Intelligent Notification Service
 
 ## Status
 Accepted

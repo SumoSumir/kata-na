@@ -1,4 +1,4 @@
-# ADR-18: Agentic AI Framework Selection - LangChain on AWS Bedrock
+# ADR-17: Agentic AI Framework (LangChain + AWS Bedrock)
 
 ## Status
 Accepted
@@ -419,9 +419,8 @@ To reduce from $0.13 to closer to $0.02 target:
 ❌ **Latency:** Slightly slower than OpenAI
 
 ## Related Decisions
-- **ADR-15:** AWS chosen - enables Bedrock
-- **ADR-16:** MLOps - Can fine-tune models if needed
-- **ADR-17:** Data Lakehouse - Conversation logs for training
+- **ADR-15:** MLOps - Can fine-tune models if needed
+- **ADR-16:** Data Lakehouse - Conversation logs for training
 
 ## References
 - [LangChain Documentation](https://python.langchain.com/)

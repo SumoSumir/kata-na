@@ -363,8 +363,6 @@ Security investment aims to prevent data breaches, ensure regulatory compliance 
 - **[ADR-09: Multi-Region Deployment](ADR_09_MULTI_REGION.md)** - Disaster recovery, data residency
 - **[ADR-11: IoT Security & Edge Computing](ADR_11_IoT_Enabled_Vehicles.md)** - X.509 certificates, mTLS, Device Defender
 - **[ADR-14: Data Compliance](ADR_14_DATA_COMPLIANT.md)** - GDPR data residency, right-to-erasure
-- **[ADR-15: Cloud Provider Selection](ADR_15_Cloud_Provider_Selection.md)** - AWS chosen for IoT security, compliance tools
-- **[ADR-19: Payment Integration](ADR_19_Payment_Integration.md)** - PCI-DSS compliance via Stripe tokenization
 
 ---
 

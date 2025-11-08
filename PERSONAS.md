@@ -28,7 +28,7 @@ This document introduces the key people and personas that guide our architectura
 
 **How We Solve This:**
 - **[ADR-02: AI-Driven Demand Forecasting](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md)** - ML models predict demand 24 hours ahead using 150+ features (weather, events, holidays, transit disruptions)
-- **[ADR-16: MLOps Pipeline](./ADR/ADR_16_MLOps_Pipeline.md)** - Automated model training, validation, and deployment with A/B testing
+- **[ADR-15: MLOps Pipeline](./ADR/ADR_15_MLOps_Pipeline.md)** - Automated model training, validation, and deployment with A/B testing
 - **Analytics Dashboards** - Real-time KPI tracking showing retention improvements from 20% → 55%
 - **[PHASED_IMPLEMENTATION.md](PHASED_IMPLEMENTATION.md)** - €30.5M NPV business case with 8.7-month payback
 
@@ -70,7 +70,7 @@ This document introduces the key people and personas that guide our architectura
 **How We Solve This:**
 - **[ADR-02: Dynamic Relocation Incentives](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md)** - AI automatically offers users €3-5 credits to relocate vehicles, reducing manual swap costs from €15 → €6
 - **[ADR-02: AI Task Prioritization](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md)** - Prioritizes battery swaps based on predicted demand (not just current battery level)
-- **[ADR-16: Predictive Maintenance](./ADR/ADR_16_MLOps_Pipeline.md)** - Machine learning models predict battery failures and maintenance needs
+- **[ADR-15: Predictive Maintenance](./ADR/ADR_15_MLOps_Pipeline.md)** - Machine learning models predict battery failures and maintenance needs
 - **[WORKFLOWS/STAFF_WORKFLOWS.md](./WORKFLOWS/STAFF_WORKFLOWS.md)** - AI-powered task prioritization system for field operations
 - **[ADR-01: Microservices Architecture](./ADR/ADR_01_microservices_architecture.md)** - Fleet Operations Service scales independently to handle 50K+ vehicles
 - **Route Optimization** - Google Maps Directions API calculates most efficient multi-stop routes
@@ -277,8 +277,8 @@ Lisa needs a van on Saturday mornings for grocery shopping and ferrying kids to 
 **Quote:** *"I need to trust that the vehicle will be clean, charged, and reliable—my kids depend on it."*
 
 **How We Solve This:**
-- **[ADR-18: Computer Vision for Quality](./ADR/ADR_18_Agentic_AI_Framework.md)** - ResNet-50 CNN detects damage, dirt, and trash with 88% accuracy
-- **[ADR-07: Battery Health Prediction](./ADR/ADR_16_MLOps_Pipeline.md)** - ML model predicts remaining range with 95% accuracy (±2 km)
+- **[ADR-17: Computer Vision for Quality](./ADR/ADR_17_Agentic_AI_Framework.md)** - ResNet-50 CNN detects damage, dirt, and trash with 88% accuracy
+- **[ADR-07: Battery Health Prediction](./ADR/ADR_15_MLOps_Pipeline.md)** - ML model predicts remaining range with 95% accuracy (±2 km)
 - **Pre-Rental Photos** - Lisa sees timestamped photos of van interior/exterior before booking
 - **Automated Quality Scoring** - Vehicles below 7/10 cleanliness score automatically flagged for cleaning
 
@@ -324,7 +324,7 @@ Javier starts each day reviewing battery levels across 2,000 vehicles. He manual
 
 **How We Solve This:**
 - **[ADR-02: AI Task Prioritization](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md)** - Prioritizes battery swaps based on predicted demand (not just current battery level)
-- **[ADR-07: Predictive Maintenance Alerts](./ADR/ADR_16_MLOps_Pipeline.md)** - Flags vehicles needing preventive service before they fail
+- **[ADR-07: Predictive Maintenance Alerts](./ADR/ADR_15_MLOps_Pipeline.md)** - Flags vehicles needing preventive service before they fail
 - **[WORKFLOWS/STAFF_WORKFLOWS.md](WORKFLOWS/STAFF_WORKFLOWS.md)** - Detailed workflow for Javier's morning routine with AI-optimized task list
 - **Route Optimization** - Google Maps Directions API calculates most efficient multi-stop routes
 
@@ -390,7 +390,7 @@ Nina resolves disputes about fines, parking violations, and damage claims. Most 
 **Quote:** *"If the system could automatically verify returns and detect damage, I could focus on real customer issues."*
 
 **How We Solve This:**
-- **[ADR-18: Computer Vision Automation](./ADR/ADR_18_Agentic_AI_Framework.md)** - ResNet-50 CNN + AWS Rekognition for damage detection and location verification
+- **[ADR-17: Computer Vision Automation](./ADR/ADR_17_Agentic_AI_Framework.md)** - ResNet-50 CNN + AWS Rekognition for damage detection and location verification
 - **Automated Dispute Resolution** - 70% of cases auto-resolved with photo evidence + timestamps
 - **[WORKFLOWS/CUSTOMER_WORKFLOWS.md](WORKFLOWS/CUSTOMER_WORKFLOWS.md)** - Return verification workflow with AI-powered checks
 - **Audit Trail** - Immutable photo history stored in S3 with 90-day retention
@@ -480,8 +480,8 @@ This matrix shows exactly where each persona's needs are addressed in our archit
 | **David (CTO/CISO)** | Microservices + Multi-Region + Zero-Trust | [ADR-01](./ADR/ADR_01_microservices_architecture.md), [ADR-09](./ADR/ADR_09_MULTI_REGION.md), [ADR-12](./ADR/ADR_12_SECURITY_ARCHITECTURE.md) | [Event Storming](EVENT_STORMING.md) | Uptime: 99.95% SLA, Zero breaches |
 | **Emma (Commuter)** | Predictive Rebalancing | [ADR-02](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md) | [Booking Flow](WORKFLOWS/CUSTOMER_WORKFLOWS.md#workflow-vehicle-discovery-and-booking) | Availability: 75% → 95% |
 | **Alex (Tourist)** | Conversational AI | [ADR-13](./ADR/ADR_13_CONVERSATIONAL_UX_AND_AI_ASSISTANT.md) | [Customer Workflows](WORKFLOWS/CUSTOMER_WORKFLOWS.md) | Conversion: +40% |
-| **Lisa (Family User)** | Computer Vision Quality | [ADR-18](./ADR/ADR_18_Agentic_AI_Framework.md) | [Return Verification](WORKFLOWS/CUSTOMER_WORKFLOWS.md#5-return--verification) | NPS: +25 points |
-| **Nina (Support)** | Automated Dispute AI | [ADR-18](./ADR/ADR_18_Agentic_AI_Framework.md) | [Support Automation](WORKFLOWS/CUSTOMER_WORKFLOWS.md#6-payment--feedback) | Auto-resolve: 70% |
+| **Lisa (Family User)** | Computer Vision Quality | [ADR-17](./ADR/ADR_17_Agentic_AI_Framework.md) | [Return Verification](WORKFLOWS/CUSTOMER_WORKFLOWS.md#5-return--verification) | NPS: +25 points |
+| **Nina (Support)** | Automated Dispute AI | [ADR-17](./ADR/ADR_17_Agentic_AI_Framework.md) | [Support Automation](WORKFLOWS/CUSTOMER_WORKFLOWS.md#6-payment--feedback) | Auto-resolve: 70% |
 
 ---
 
@@ -516,7 +516,7 @@ Post-Rental:
 - Relocation Incentive Engine (ADR-02)
 - Booking Service (ADR-01)
 - Vehicle Telemetry (ADR-03)
-- Analytics Dashboard (ADR-17)
+- Analytics Dashboard (ADR-16)
 
 **Success Metrics:** Emma's retention → 100% | Sarah's KPI: +22% DAU | Marcus's cost: €3 AI incentive vs €15 manual
 
@@ -682,9 +682,9 @@ Data Handling Check:
 - David's compliance audit: ✅ Passed GDPR data handling review
 
 **Systems Involved:**
-- Computer Vision Service (ADR-18)
+- Computer Vision Service (ADR-17)
 - Booking Service (ADR-01)
-- Payment Service (ADR-19)
+- Payment Service (ADR-05)
 - Data Compliance (ADR-14)
 - Support Dashboard (ADR-10 observability)
 

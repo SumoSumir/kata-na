@@ -1,4 +1,4 @@
-# ADR-16: MLOps Pipeline Architecture
+# ADR-15: MLOps Pipeline Architecture
 
 ## Status
 Accepted
@@ -683,9 +683,8 @@ GitHub Actions Workflow:
 - Step-by-step pipeline execution
 
 ## Related Decisions
-- **ADR-15:** Cloud Provider Selection (AWS) - Enables SageMaker choice
-- **ADR-17:** Data Lakehouse Strategy - Feature Store integration
-- **ADR-18:** Agentic AI Framework - Model serving for LLMs
+- **ADR-16:** Data Lakehouse Strategy - Feature Store integration
+- **ADR-17:** Agentic AI Framework - Model serving for LLMs
 - **ADR-06:** Event-Driven Architecture - Triggers for retraining
 
 ## References
