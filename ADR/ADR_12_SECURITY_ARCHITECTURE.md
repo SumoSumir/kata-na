@@ -42,28 +42,11 @@ Implement a **Zero-Trust, Defense-in-Depth** security architecture on AWS with t
 - **Service-to-Service:** IAM roles attached to ECS tasks, Lambda functions (no API keys)
 - **Principle:** Least-privilege policies (e.g., `ReadOnlyAccess` for analytics, `PowerUserAccess` for engineers)
 
-**Example IAM Policy (Booking Service):**
-```json
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": [
-        "dynamodb:GetItem",
-        "dynamodb:PutItem",
-        "dynamodb:UpdateItem"
-      ],
-      "Resource": "arn:aws:dynamodb:eu-central-1:*:table/bookings"
-    },
-    {
-      "Effect": "Allow",
-      "Action": ["sns:Publish"],
-      "Resource": "arn:aws:sns:eu-central-1:*:booking-events"
-    }
-  ]
-}
-```
+**IAM Policy Pattern (Booking Service):**
+- Allows DynamoDB operations on bookings table (GetItem, PutItem, UpdateItem)
+- Allows SNS publish to booking-events topic
+- Uses temporary credentials via IAM role assumption
+- No long-lived API keys or credentials
 
 **Key Features:**
 - No long-lived credentials (IAM roles assume temporary tokens)
@@ -113,9 +96,8 @@ Access Control: IAM policies restrict key usage by service
 - **Ruleset:** AWS Managed Rules for OWASP Top 10
   - SQL injection protection
   - Cross-site scripting (XSS) prevention
-  - DDoS mitigation (rate limiting: 2,000 req/5min per IP)
+  - DDoS mitigation (rate limiting per IP)
 - **Custom Rules:** Block non-EU IP addresses (GDPR data residency)
-- **Cost:** $3,500/month (includes 10M requests)
 
 **AWS Shield Standard**
 - **DDoS Protection:** Network-layer (L3/L4) DDoS mitigation (free tier)
@@ -133,21 +115,15 @@ Access Control: IAM policies restrict key usage by service
 ### 4. IoT Security (50,000 Vehicles)
 
 **AWS IoT Core with Device Defender**
-- **Authentication:** X.509 certificate per vehicle (50K unique certificates)
+- **Authentication:** X.509 certificate per vehicle (unique certificate per device)
 - **Authorization:** IoT policies restrict each vehicle to publish only its own telemetry
 - **Transport:** mTLS (mutual TLS) for all device-to-cloud communication
 - **OTA Updates:** Signed firmware updates via AWS IoT Jobs
 
-**Example IoT Policy (Vehicle 12345):**
-```json
-{
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Effect": "Allow",
-      "Action": ["iot:Publish"],
-      "Resource": ["arn:aws:iot:eu-central-1:*:topic/vehicles/12345/telemetry"]
-    },
+**IoT Policy Pattern (per vehicle):**
+- Each vehicle restricted to publish only to its own telemetry topic
+- No permission to subscribe to other vehicles' data
+- Topic naming enforces isolation (vehicles/{vehicle_id}/telemetry)
     {
       "Effect": "Allow",
       "Action": ["iot:Subscribe", "iot:Receive"],
@@ -189,20 +165,15 @@ Access Control: IAM policies restrict key usage by service
 
 **Secrets Management**
 - **AWS Secrets Manager:** Store API keys, database passwords, Stripe keys
-- **Rotation:** Automatic rotation every 90 days
+- **Rotation:** Automatic rotation policy
 - **Access Control:** IAM policies restrict secret access by service
 - **Auditing:** CloudTrail logs all secret access (who, when, what)
 
-**Example Secret Rotation:**
-```
-Secrets:
+**Secret Rotation Pattern:**
 - stripe-api-key → Payment Service only
 - db-password-booking → Booking Service only
 - bedrock-api-key → Conversational AI Service only
-
-Rotation Schedule: Every 90 days
-Notification: SNS alert 7 days before expiration
-```
+- Automatic rotation with SNS notification before expiration
 
 ---
 
@@ -257,23 +228,15 @@ Notification: SNS alert 7 days before expiration
 - **Workflow:** Prioritize findings by severity, assign to teams, track remediation
 - **Cost:** $1,500/month
 
-**Incident Response Playbook:**
-```
+**Incident Response Process:**
 1. Detection (GuardDuty alert → SNS → PagerDuty)
-   ↓
 2. Triage (Security Hub dashboard, CloudTrail logs)
-   ↓
 3. Containment (Isolate compromised resources, revoke credentials)
-   ↓
 4. Eradication (Terminate compromised instances, rotate secrets)
-   ↓
 5. Recovery (Restore from backups, validate integrity)
-   ↓
 6. Post-Incident (Root cause analysis, update runbooks)
 
-Target MTTD (Mean Time to Detect): <24 hours
-Target MTTR (Mean Time to Respond): <4 hours
-```
+Target metrics: MTTD (Mean Time to Detect) and MTTR (Mean Time to Respond)
 
 ---
 
@@ -302,36 +265,19 @@ Target MTTR (Mean Time to Respond): <4 hours
 
 ---
 
-## Cost Breakdown (Security-by-Design)
+## Cost Considerations
 
-| Security Component | Monthly Cost | Annual Cost | ROI |
-|-------------------|-------------|-------------|-----|
-| **AWS IAM + SSO** | $0 | $0 | Free tier |
-| **AWS KMS** | $1,200 | $14,400 | Compliance requirement |
-| **AWS Secrets Manager** | $500 | $6,000 | Prevents breaches |
-| **AWS WAF** | $3,500 | $42,000 | Blocks 99% attacks |
-| **AWS GuardDuty** | $2,800 | $33,600 | MTTD <24hr |
-| **AWS Shield Standard** | $0 | $0 | Free tier |
-| **AWS Certificate Manager** | $0 | $0 | Free tier |
-| **VPC Flow Logs** | $1,500 | $18,000 | Compliance audit |
-| **IoT Device Defender** | $5,000 | $60,000 | Prevents IoT attacks |
-| **AWS CloudTrail** | $3,000 | $36,000 | GDPR/SOC 2 |
-| **AWS Config** | $2,000 | $24,000 | Automated governance |
-| **AWS Security Hub** | $1,500 | $18,000 | Unified visibility |
-| **AWS Macie** | $3,500 | $42,000 | GDPR compliance |
-| **TOTAL** | **$24,500** | **$294,000** | **6% of total spend** |
+**Security Component Portfolio:**
+Security infrastructure includes identity management (IAM, SSO), encryption services (KMS, Certificate Manager), threat detection (GuardDuty, WAF, Shield), compliance tools (CloudTrail, Config, Macie), secrets management, network security (VPC Flow Logs), and IoT device security (Device Defender, Security Hub).
 
-**Security ROI:**
-- **Prevented Breach Cost:** €500,000 (average data breach cost)
-- **Prevented GDPR Fine:** €10,000,000 (4% of annual revenue)
-- **Net ROI:** €295,000/year positive (prevented loss - security cost)
+**Investment Rationale:**
+Security investment aims to prevent data breaches, ensure regulatory compliance (GDPR, PCI-DSS, SOC 2), provide automated threat detection, and enable secure IoT fleet management. The security-by-design approach scales with fleet growth and reduces manual audit overhead.
 
 ---
 
 ## Alternatives Considered
 
 ### Alternative 1: Manual Security (No Automation)
-- **Cost:** $8,000/month (manual audits, security engineers)
 - **Pros:** Lower upfront tooling cost
 - **Cons:** 
   - High risk of human error (misconfigured security groups)
@@ -340,16 +286,14 @@ Target MTTR (Mean Time to Respond): <4 hours
 - **Rejected:** Unacceptable risk for IoT fleet + payment data
 
 ### Alternative 2: Third-Party Security Platform (e.g., Palo Alto Prisma Cloud)
-- **Cost:** $35,000/month (cloud security posture management)
 - **Pros:** Multi-cloud support, advanced threat detection
 - **Cons:** 
-  - 40% more expensive than native AWS tools
+  - Higher cost than native AWS tools
   - Vendor lock-in, integration complexity
   - Redundant with AWS-native features (GuardDuty, Config)
 - **Rejected:** AWS-native tools provide better integration, lower cost
 
 ### Alternative 3: Hybrid (Some Automation, Some Manual)
-- **Cost:** $15,000/month (partial automation + security engineers)
 - **Pros:** Balanced approach, flexibility
 - **Cons:** 
   - Inconsistent security posture (some services automated, some manual)

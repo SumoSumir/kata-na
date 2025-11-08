@@ -117,15 +117,15 @@ This data must support:
 #### 1. Storage: Amazon S3
 **Why S3:**
 - ✅ Durability: 99.999999999% (11 nines)
-- ✅ Cost: $0.023/GB/month (Standard), $0.004/GB (Glacier)
-- ✅ Scalability: Unlimited storage
+- ✅ Cost-effective tiered storage with lifecycle policies
+- ✅ Scalability: Unlimited storage capacity
 - ✅ Integration: Native with all AWS services
 - ✅ Lifecycle Policies: Auto-tiering to save costs
 - ✅ Versioning: Data recovery and audit trails
 
 **Alternatives Considered:**
 - HDFS: Too complex to manage
-- EBS: Too expensive for large data
+- EBS: Not optimized for data lake scale
 - EFS: Not optimized for data lake workloads
 
 #### 2. Table Format: Delta Lake
@@ -147,12 +147,12 @@ This data must support:
 - ✅ Serverless: No cluster management
 - ✅ Auto-Scaling: Based on job requirements
 - ✅ Catalog: Central metadata repository
-- ✅ Cost: Pay only for execution time
+- ✅ Pay-per-use pricing model
 - ✅ DPU Flex: Optimize for cost or performance
 
 **Alternatives Considered:**
 - EMR: More control but higher management overhead
-- Databricks: More expensive ($40K/month vs $8K)
+- Databricks: Higher operational costs
 - Lambda: Limited for large transformations
 
 #### 4. Query Engine: Athena + Redshift Spectrum
@@ -160,7 +160,7 @@ This data must support:
 - ✅ Serverless SQL: No infrastructure
 - ✅ Standard SQL: Easy for analysts
 - ✅ Delta Lake Support: Query Delta tables directly
-- ✅ Cost: $5/TB scanned (with partitioning = pennies)
+- ✅ Pay-per-query with partition optimization
 
 **Why Redshift Spectrum:**
 - ✅ Joins: Combine S3 data with Redshift tables
@@ -229,54 +229,31 @@ s3://mobilitycorp-datalake-bronze/
 - Computes utilization rate (bookings per available vehicle)
 - Writes to Delta Lake and syncs to Redshift for BI tools
 
-### Cost Analysis
+### Cost Considerations
 
-#### Storage Costs (Monthly, Year 1)
+**Storage Strategy:**
+- Bronze Layer: Parquet format with lifecycle policies for archival
+- Silver Layer: Delta Lake with tiered storage (hot/warm/cold)
+- Gold Layer: Aggregated tables optimized for query performance
+- Feature Store: Offline (S3) and Online (DynamoDB) storage
 
-**Bronze Layer (Parquet, 90-day retention):**
-- 5TB/month × 3 months = 15TB total
-- S3 Standard: $345/month
-- After 90 days → Glacier: $60/month
+**Processing Approach:**
+- Glue ETL Jobs: Bronze → Silver and Silver → Gold transformations
+- Athena Queries: Ad-hoc analytics with partitioning optimization
+- Redshift Spectrum: BI tool integration for federated queries
 
-**Silver Layer (Delta Lake, 2-year retention):**
-- 3TB/month × 24 months = 72TB (deduplicated, cleaned)
-- S3 Standard (last 90 days): $207/month
-- S3 IA (90d-2yr): $788/month
+**Cost Optimization:**
+- Lifecycle policies for automated data archival
+- Partition pruning reduces scan costs
+- Spot instances for non-critical ETL jobs
+- Caching frequently accessed data
 
-**Gold Layer (Aggregated, 5-year retention):**
-- 500GB/month × 12 months = 6TB
-- S3 Standard: $138/month
-
-**Feature Store (SageMaker):**
-- Offline: $46/month
-- Online (DynamoDB): $125/month
-
-**Total Storage: $1,709/month**
-
-#### Processing Costs (Monthly)
-
-**Glue ETL Jobs:**
-- Bronze → Silver: 20 DPU × 2 hrs/day × 30 days = 1,200 DPU-hours
-- Silver → Gold: 10 DPU × 1 hr/day × 30 days = 300 DPU-hours
-- Total: 1,500 DPU-hours × $0.44/DPU-hour = $660/month
-
-**Athena Queries:**
-- 10TB scanned/month × $5/TB = $50/month
-
-**Redshift Spectrum:**
-- 5TB scanned/month × $5/TB = $25/month
-
-**Total Processing: $735/month**
-
-#### Grand Total: $2,444/month (~$29K/year)
-
-**Cost Comparison:**
-- Databricks Lakehouse: ~$8,000/month
-- Snowflake Data Cloud: ~$6,000/month
-
-**AWS is 60-70% cheaper for our use case.**
+**Comparison with Alternatives:**
+AWS-based lakehouse provides cost advantages over managed platforms like Databricks or Snowflake for this use case, particularly due to granular control over storage tiers and compute resources.
 
 ### Data Governance
+
+```
 
 #### Access Control (Lake Formation)
 

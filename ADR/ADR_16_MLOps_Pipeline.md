@@ -175,30 +175,20 @@ Without a robust MLOps pipeline, we risk:
 ❌ **Debugging:** Harder to debug than self-managed
 ❌ **Flexibility:** Less flexible than custom solutions
 
-#### Cost (Monthly, Production)
+#### Cost Considerations
 
-**Model Training (Spot Instances): $8,000**
-- 10 models × 2 retrainings/month
-- ml.p3.2xlarge (GPU) for 20 hours
-  
-**Model Endpoints (Real-time): $15,000**
-  - 5 production endpoints
-  - ml.m5.xlarge × 3 instances each (HA)
-  - Auto-scaling 3-10 instances
-  
-Feature Store:                         $3,000
-  - Online: 100M requests/month
-  - Offline: 1TB storage
-  
-Model Monitor:                         $1,000
-  - Data quality checks hourly
-  - Model quality checks daily
-  
-SageMaker Pipelines:                   $1,000
-  - 50 pipeline executions/month
-────────────────────────────────────────────
-TOTAL:                                $28,000
-```
+**Infrastructure Components:**
+- Model Training: Spot instances for cost optimization, GPU instances for deep learning
+- Model Endpoints: Multi-instance deployment for high availability with auto-scaling
+- Feature Store: Online (low-latency serving) and Offline (training) storage
+- Model Monitor: Automated data quality and model quality checks
+- SageMaker Pipelines: Workflow orchestration for training and deployment
+
+**Cost Optimization Strategies:**
+- Spot instances reduce training costs significantly
+- Auto-scaling adjusts endpoint capacity based on demand
+- Feature store caching reduces redundant computations
+- Batch inference for non-real-time predictions
 
 #### Scoring (out of 10)
 - Ease of Use: 8/10
@@ -247,19 +237,18 @@ Kubernetes Cluster (EKS)
 #### Cost (Monthly, Production)
 ```
 EKS Cluster (Control Plane):          $2,160
-EC2 Instances (12 × m5.2xlarge):     $16,000
-EBS Storage (500GB):                  $1,000
-ELB Load Balancers:                     $500
-S3 Storage (artifacts):                 $500
-Engineering Time (1 FTE):            $15,000 (amortized)
-────────────────────────────────────────────
-TOTAL:                                $35,160
-```
+**Infrastructure Components:**
+- EKS Cluster: Control plane management
+- EC2 Instances: Worker nodes with appropriate instance types
+- EBS Storage: Persistent volumes for artifacts and models
+- Load Balancers: Traffic distribution
+- S3 Storage: Model artifacts and experiment tracking
+- Engineering resources for setup and maintenance
 
 #### Scoring (out of 10)
 - Ease of Use: 4/10
 - Feature Completeness: 7/10
-- Cost: 6/10 (higher with engineering time)
+- Cost: 6/10 (includes engineering overhead)
 - Flexibility: 10/10
 - **Overall: 6.8/10**
 
@@ -285,20 +274,17 @@ Databricks Workspace
 ✅ **Auto-scaling:** Clusters scale automatically
 
 #### Weaknesses
-❌ **Cost:** Most expensive option (~$40K/month)
+❌ **Cost:** Higher operational costs than AWS-native
 ❌ **Vendor Lock-in:** Databricks-specific
 ❌ **AWS Integration:** Not as tight as SageMaker
 ❌ **Feature Store:** Less mature than SageMaker
 
-#### Cost (Monthly, Production)
-```
-Databricks Workspace:                 $12,000
-Compute (for training/serving):       $20,000
-Storage (Delta Lake):                  $4,000
-MLflow Enterprise:                     $4,000
-────────────────────────────────────────────
-TOTAL:                                $40,000
-```
+#### Cost Considerations
+**Infrastructure Components:**
+- Databricks Workspace licensing
+- Compute resources for training and serving
+- Storage (Delta Lake)
+- MLflow Enterprise features
 
 #### Scoring (out of 10)
 - Ease of Use: 9/10
@@ -341,10 +327,10 @@ TOTAL:                                $40,000
 - **Ground Truth:** Data labeling for continuous improvement
 
 #### 3. Cost-Effective with Spot Instances
-- **70% savings on training:** Spot instances for all training jobs
-- **Multi-model endpoints:** Host 10+ models on one instance
+- **Training cost optimization:** Spot instances for all training jobs
+- **Multi-model endpoints:** Host multiple models on shared infrastructure
 - **Serverless inference:** Pay only for usage (batch jobs)
-- **$28K/month** vs $35K (MLflow) or $40K (Databricks)
+- **Cost advantage** vs MLflow+K8s or Databricks alternatives
 
 #### 4. AWS Ecosystem Integration
 - Native integration with S3, Glue, Redshift, Lambda
@@ -353,7 +339,7 @@ TOTAL:                                $40,000
 - CloudWatch for unified monitoring
 
 #### 5. Time to Market
-- Production-ready in **4-6 weeks** vs 3-6 months for self-managed
+- Rapid production deployment compared to self-managed solutions
 - Pre-built containers for popular frameworks (TensorFlow, PyTorch, XGBoost, LightGBM)
 - Jupyter notebooks for experimentation
 - No Kubernetes expertise required
@@ -361,21 +347,27 @@ TOTAL:                                $40,000
 ### Why Not MLflow + Kubernetes?
 
 MLflow is excellent but:
-- **3-6 months engineering time** to production-ready
+- **Longer implementation time** to production-ready state
 - **Higher operational burden:** Kubernetes cluster management
-- **More expensive:** When factoring engineering time
+- **Engineering overhead:** When factoring setup and maintenance
 - **Skills gap:** Team doesn't have deep Kubernetes expertise
 
 **MLflow would be better if:**
 - We had strong multi-cloud requirements
 - We had existing Kubernetes expertise
 - We needed extreme customization
-- We had 6+ months for platform development
+- We had extended timeline for platform development
+
+```
+
+
+
+```
 
 ### Why Not Databricks?
 
 Databricks is a great unified platform but:
-- **43% more expensive** ($40K vs $28K)
+- **Higher costs** compared to SageMaker
 - **Less AWS-native** than SageMaker
 - **Overkill for our use case:** We don't need unified data+ML workspace
 - Feature Store less mature than SageMaker
@@ -385,6 +377,32 @@ Databricks is a great unified platform but:
 - We needed tight Spark integration
 - Budget wasn't a constraint
 - We had complex data engineering + ML workflows
+
+## Implementation Details
+
+### Model Inventory
+
+| Model | Purpose | Algorithm | Retraining | Endpoint Type |
+|-------|---------|-----------|------------|---------------|
+| **Demand Forecast** | Zone-level demand prediction | LightGBM | Daily | Real-time |
+| **Dynamic Pricing** | Optimal price calculation | XGBoost | Hourly | Real-time |
+| **Battery Degradation** | RUL prediction | Random Forest | Weekly | Batch |
+| **Damage Detection** | Vehicle damage classification | ResNet-50 | Monthly | Real-time |
+| **Route Optimization** | Optimal route suggestions | Graph Neural Network | Weekly | Real-time |
+| **Customer Segmentation** | User clustering | K-Means | Monthly | Batch |
+| **Churn Prediction** | User churn probability | Logistic Regression | Weekly | Batch |
+| **Sentiment Analysis** | Feedback classification | BERT | Bi-weekly | Real-time |
+
+### Pipeline Architecture per Model
+
+#### 1. Demand Forecasting Pipeline (Daily)
+
+```
+Trigger: Daily at 2 AM UTC
+├─ Extract: Last 90 days booking data (Redshift → S3)
+├─ Feature Engineering:
+│  ├─ Time features (hour, day_of_week, month)
+````
 
 ## Implementation Details
 

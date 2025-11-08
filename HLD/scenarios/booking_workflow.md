@@ -423,22 +423,22 @@ sequenceDiagram
 
 ---
 
-## 8. Cost Implications
+## 8. Cost Considerations
 
-### 8.1 Cost per Booking Transaction
+### 8.1 Cost Structure
 
-**Infrastructure Costs (per booking):**
-- API Gateway, ECS Fargate, Aurora, Redis, Kafka, Lambda combined: ~$0.0001
+**Infrastructure Costs:**
+- API Gateway, ECS Fargate, Aurora, Redis, Kafka, Lambda for request handling
+- Relatively minimal compared to third-party service costs
 
-**Third-Party Costs (per booking):**
-- Stripe payment processing: ~$0.29 (including percentage-based fees)
+**Third-Party Costs:**
+- Payment processing (Stripe) represents majority of per-transaction costs
+- Includes percentage-based fees and fixed transaction fees
 
-**Total Cost per Booking:** ~$0.29
-
-**Monthly Costs (1M bookings):**
-- Infrastructure: ~$100
-- Stripe: ~$290,000
-- **Total:** ~$290,100/month
+**Cost Optimization Considerations:**
+- Infrastructure costs scale efficiently with volume
+- Payment processing costs are largely fixed per transaction
+- Focus optimization efforts on high-volume services
 
 ### 8.2 Optimization Opportunities
 

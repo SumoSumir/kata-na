@@ -31,7 +31,7 @@ These AI agents must:
 ### Non-Functional
 - **Latency:** P95 response time < 2 seconds
 - **Accuracy:** > 90% intent classification accuracy
-- **Cost:** < $0.05 per conversation (target: $0.02)
+- **Cost:** Cost-effective per-conversation economics
 - **Scalability:** Handle 10K concurrent conversations
 - **Reliability:** 99.9% uptime for AI services
 
@@ -159,15 +159,17 @@ Agent:
 - Streaming response support
 - Callback handlers for logging
 
+- Callback handlers for logging
+
 **AWS Bedrock:**
 - Claude 3.5 Sonnet (primary LLM)
   - 200K context window
   - Tool use native support
-  - Multilingual
-  - Cost: $3/$15 per 1M tokens (input/output)
+  - Multilingual capabilities
+  - Token-based pricing
 - Titan Embeddings (for RAG)
   - 1,536 dimensions
-  - Cost: $0.10 per 1M tokens
+  - Optimized for vector search
 - Bedrock Guardrails
   - Content filtering (hate, violence, etc.)
   - PII redaction
@@ -177,7 +179,7 @@ Agent:
 - Vector database for RAG
 - Semantic search over knowledge base
 - Auto-scaling, no cluster management
-- Cost: $0.24/OCU-hour
+- OCU-based pricing
 
 **Deployment:**
 - Lambda functions (API endpoints)
@@ -188,6 +190,7 @@ Agent:
 #### Example Architecture
 
 **LangChain Agent with Claude 3.5 on Bedrock:**
+```
 
 **Components:**
 1. **LLM:** Claude 3.5 Sonnet via AWS Bedrock
@@ -239,28 +242,21 @@ print(response["output"])
 ❌ **Limited Claude Models:** Only Claude 3.5, not GPT-4
 ❌ **Vendor Lock-in:** Bedrock-specific features
 
-#### Cost (Monthly, 100K users)
-```
-LLM Inference (Claude 3.5 Sonnet):
-  - Avg conversation: 1,500 input tokens, 500 output tokens
-  - 100K users × 10 conversations/month = 1M conversations
-  - Input: 1.5B tokens × $3/1M = $4,500
-  - Output: 500M tokens × $15/1M = $7,500
-  - Total: $12,000
+#### Cost Considerations
 
-Embeddings (Titan):
-  - Knowledge base refresh: 100K docs × 500 tokens = 50M tokens
-  - Queries: 1M × 100 tokens = 100M tokens
-  - Total: 150M tokens × $0.10/1M = $15
+**Infrastructure Components:**
+- LLM Inference (Claude 3.5 Sonnet): Token-based pricing for input/output
+- Embeddings (Titan): Vector generation for knowledge base and queries  
+- OpenSearch Serverless: Knowledge base vector storage
+- Lambda/API Gateway: Request handling and orchestration
 
-OpenSearch Serverless:
-  - 2 OCUs × 24 hours × 30 days × $0.24 = $345
+**Cost Optimization Strategies:**
+- Prompt engineering to minimize token usage
+- Caching frequently asked questions
+- Knowledge base pre-filtering to reduce LLM calls
+- Async processing for non-urgent queries
 
-Lambda/API Gateway:
-  - 1M requests × $0.20/1M = $200
-
-Total: $13,060/month ($0.13 per conversation) ⚠️ Above target
-```
+**Target:** Cost-effective per-conversation economics at scale
 
 #### Scoring (out of 10)
 - Ease of Use: 7/10

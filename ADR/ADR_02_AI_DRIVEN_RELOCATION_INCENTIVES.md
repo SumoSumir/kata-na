@@ -61,7 +61,7 @@ Implement an **AI-driven dynamic pricing and relocation incentive system** that 
 **1. Demand Forecasting Engine**
 - **ML Pipeline (AWS SageMaker):**
   - **Training:** XGBoost models trained on 6 months of historical booking data
-  - **Features:** 150+ engineered features from Silver layer (ADR-17)
+  - **Features:** 150+ engineered features from Silver layer [ADR-17](ADR_17_Data_Lakehouse_Strategy.md)
     - Historical rental patterns (time of day, day of week, seasonality)
     - Weather conditions (temperature, precipitation, wind via Weather & Events API - [ADR-04](ADR_04_EXTERNAL_APIS.md))
     - Events (concerts, sports, festivals via PredictHQ - [ADR-04](ADR_04_EXTERNAL_APIS.md))
@@ -75,10 +75,10 @@ Implement an **AI-driven dynamic pricing and relocation incentive system** that 
   - **Caching:** ElastiCache Redis stores predictions for 15 mins, reducing SageMaker calls
   - **Invocation:** Lambda function triggers predictions every 15 mins via EventBridge schedule
 - **Model retraining:**
-  - **Schedule:** Weekly automated retraining (Sundays 2 AM)
+  - **Schedule:** Weekly automated retraining
   - **Pipeline:** Step Functions orchestrates: Data prep → Training → Evaluation → Deployment
   - **Training data:** Last 180 days from Gold layer `demand_by_zone_hour` table
-  - **Cost:** $50/week for training (ml.m5.4xlarge, 2 hours)
+  - **Training infrastructure:** Appropriate compute instances for model complexity
 
 **2. Supply Tracking and Availability Prediction**
 - **Real-time inventory:** 
@@ -111,7 +111,6 @@ Implement an **AI-driven dynamic pricing and relocation incentive system** that 
 - **Storage:**
   - **DynamoDB `zone_pricing` table:** Current prices per zone (TTL = 15 mins)
   - **ElastiCache Redis:** High-frequency price lookups (<5ms latency)
-- **Cost:** ~$500/month (Lambda invocations + DynamoDB + Redis)
 
 **4. Relocation Incentive Engine**
 - **Opt-in Service:** Users can enable this while booking. Our preferred destination will be within 2 km of theirs, and they won’t be billed if going slightly past their stop to our target zone. The system checks for existing bookings and nearby riders (within 2 km) finishing trips before scheduling a pickup.

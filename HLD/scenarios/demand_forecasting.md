@@ -10,8 +10,8 @@ Demand forecasting enables MobilityCorp to proactively reposition vehicles, prev
 
 **Business Impact:**
 - **Target Improvement:** +15% vehicle utilization rate (from 40% to 46%)
-- **Revenue Impact:** $150K/month additional revenue (better vehicle placement)
-- **Cost Savings:** $50K/month reduced manual repositioning
+- **Revenue Impact:** Increased revenue through better vehicle placement
+- **Cost Savings:** Reduced manual repositioning costs
 - **Forecast Accuracy Target:** MAPE < 15% (Mean Absolute Percentage Error)
 
 ---
@@ -230,9 +230,9 @@ EventBridge triggers daily batch prediction job:
 - Operations team assigns drivers to move vehicles proactively
 
 **Repositioning Economics:**
-- Cost: $15 per repositioning (driver time + fuel)
-- Benefit: +3 rentals × $7.50 = +$22.50 revenue
-- Net benefit: $7.50 per repositioning
+- Cost per repositioning includes driver time and fuel
+- Benefit from increased rental opportunities
+- Positive net benefit justifies proactive repositioning strategy
 
 ---
 
@@ -264,6 +264,30 @@ EventBridge triggers daily batch prediction job:
 1. **Scheduled:** Every Sunday (weekly)
 2. **Performance-based:** MAPE > 20% for 3 consecutive days
 3. **Data-based:** New event types or zones added
+
+---
+
+## 6. Cost and ROI Considerations
+
+**Infrastructure Components:**
+- Feature Store (Offline): Historical training data storage
+- AWS Glue (ETL): Feature engineering and data preparation
+- SageMaker Training: Model training compute
+- SageMaker Inference (Batch): Daily forecast generation  
+- DynamoDB: Forecast storage and serving
+- Lambda: Workflow orchestration
+
+**Value Proposition:**
+- Improved vehicle placement increases revenue through better supply-demand matching
+- Reduced manual repositioning saves operational costs
+- Data-driven decisions optimize fleet utilization
+- Better customer experience through vehicle availability
+
+**ROI Drivers:**
+- Revenue increase from optimized vehicle positioning
+- Cost savings from reduced manual repositioning
+- Efficiency gains from automated decision-making
+```
 
 ---
 

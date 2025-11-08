@@ -91,52 +91,21 @@ Implement **API Gateway + Lambda orchestrators** (see ADR-05 for orchestrator pa
     - Traffic: 5-min TTL (real-time, but high query volume)
     - Directions: 1-hour TTL (routes stable unless traffic changes)
   - **Historical storage:** S3 for traffic patterns (used in demand forecasting)
-- **Cost:** $8,000/month (Google Maps) + $2,000/month (Mapbox) = $10,000/month
 
-**Unified Data Schema (JSON):**
-```json
-{
-  "external_data_type": "weather",
-  "timestamp": "2025-11-07T14:30:00Z",
-  "location": {
-    "zone_id": "89283472bffffff",  // H3 index
-    "lat": 52.5200,
-    "lon": 13.4050
-  },
-  "weather": {
-    "temperature_celsius": 18,
-    "precipitation_mm": 2.5,
-    "wind_speed_kph": 15,
-    "condition": "light_rain"
-  },
-  "events": [
-    {
-      "event_id": "evt_12345",
-      "name": "Berlin Marathon",
-      "category": "sports",
-      "attendance": 45000,
-      "start_time": "2025-11-07T09:00:00Z",
-      "impact_radius_km": 5
-    }
-  ],
-  "holidays": [
-    {
-      "date": "2025-11-07",
-      "name": "German Unity Day",
-      "type": "national"
-    }
-  ],
-  "traffic": {
-    "congestion_level": "moderate",  // low/moderate/heavy
-    "avg_speed_kph": 35,
-    "duration_in_traffic_multiplier": 1.4
-  }
-}
-```
+**Unified Data Schema:**
+External data normalized into consistent format with fields for:
+- external_data_type (weather/events/traffic)
+- timestamp and location (H3 index, lat/lon)
+- weather details (temperature, precipitation, wind, conditions)
+- events array (event details, attendance, impact radius, timing)
+- holidays array (date, name, type)
+- traffic metrics (congestion level, speeds, duration multipliers)
+
+This schema enables consistent processing across all AI/ML models and services.
 
 **Monitoring & Alerting:**
 - **CloudWatch Metrics:** API response times, error rates, cost per provider
-- **CloudWatch Alarms:** Alert if provider error rate > 5% for 10 mins
+- **CloudWatch Alarms:** Alert if provider error rate exceeds threshold
 - **Cost tracking:** CloudWatch Logs Insights queries aggregate API costs daily
 - **SNS notifications:** Alerts sent to #engineering-ops Slack channel
 

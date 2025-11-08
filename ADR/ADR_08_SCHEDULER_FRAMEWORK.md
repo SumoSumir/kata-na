@@ -39,100 +39,15 @@ Adopt **AWS Step Functions** as the primary orchestration framework, with **Even
   - **Error handling:** Automatic retries, catch blocks, fallback states
   - **Service integrations:** Native SDK for SageMaker, Glue, Lambda, DynamoDB, SNS, SQS
   - **Monitoring:** CloudWatch metrics, X-Ray distributed tracing
-- **Example workflow:** ML Model Retraining Pipeline
-  ```json
-  {
-    "Comment": "Weekly demand forecast model retraining",
-    "StartAt": "PrepareTrainingData",
-    "States": {
-      "PrepareTrainingData": {
-        "Type": "Task",
-        "Resource": "arn:aws:states:::glue:startJobRun.sync",
-        "Parameters": {
-          "JobName": "prepare-training-data-demand-forecast"
-        },
-        "Next": "TrainModel",
-        "Catch": [{
-          "ErrorEquals": ["States.ALL"],
-          "Next": "NotifyFailure"
-        }],
-        "Retry": [{
-          "ErrorEquals": ["States.ALL"],
-          "IntervalSeconds": 60,
-          "MaxAttempts": 3,
-          "BackoffRate": 2.0
-        }]
-      },
-      "TrainModel": {
-        "Type": "Task",
-        "Resource": "arn:aws:states:::sagemaker:createTrainingJob.sync",
-        "Parameters": {
-          "TrainingJobName.$": "$.TrainingJobName",
-          "AlgorithmSpecification": {
-            "TrainingImage": "683313688378.dkr.ecr.eu-central-1.amazonaws.com/sagemaker-xgboost:1.7-1",
-            "TrainingInputMode": "File"
-          },
-          "RoleArn": "arn:aws:iam::ACCOUNT:role/SageMakerRole",
-          "InputDataConfig": [...],
-          "OutputDataConfig": {...},
-          "ResourceConfig": {
-            "InstanceType": "ml.m5.4xlarge",
-            "InstanceCount": 1,
-            "VolumeSizeInGB": 50
-          },
-          "StoppingCondition": {
-            "MaxRuntimeInSeconds": 7200
-          }
-        },
-        "Next": "EvaluateModel"
-      },
-      "EvaluateModel": {
-        "Type": "Task",
-        "Resource": "arn:aws:states:::lambda:invoke",
-        "Parameters": {
-          "FunctionName": "evaluate-model-metrics",
-          "Payload": {
-            "model_uri.$": "$.ModelArtifacts.S3ModelArtifacts"
-          }
-        },
-        "Next": "CheckMetrics"
-      },
-      "CheckMetrics": {
-        "Type": "Choice",
-        "Choices": [{
-          "Variable": "$.Payload.mape",
-          "NumericLessThan": 15,
-          "Next": "DeployModel"
-        }],
-        "Default": "NotifyPoorPerformance"
-      },
-      "DeployModel": {
-        "Type": "Task",
-        "Resource": "arn:aws:states:::sagemaker:createEndpoint",
-        "Parameters": {...},
-        "Next": "NotifySuccess"
-      },
-      "NotifySuccess": {
-        "Type": "Task",
-        "Resource": "arn:aws:states:::sns:publish",
-        "Parameters": {
-          "TopicArn": "arn:aws:sns:eu-central-1:ACCOUNT:ml-ops-notifications",
-          "Message": "Model retraining succeeded"
-        },
-        "End": true
-      },
-      "NotifyFailure": {
-        "Type": "Task",
-        "Resource": "arn:aws:states:::sns:publish",
-        "Parameters": {
-          "TopicArn": "arn:aws:sns:eu-central-1:ACCOUNT:ml-ops-critical",
-          "Message": "Model retraining failed"
-        },
-        "End": true
-      }
-    }
-  }
-  ```
+- **ML Model Retraining Pipeline Workflow:**
+  1. **PrepareTrainingData:** AWS Glue job for data preparation with retry logic
+  2. **TrainModel:** SageMaker training job with XGBoost on ml.m5.4xlarge
+  3. **EvaluateModel:** Lambda function evaluates model metrics
+  4. **CheckMetrics:** Conditional logic checks if MAPE < threshold
+  5. **DeployModel:** SageMaker endpoint creation if metrics pass
+  6. **NotifySuccess/NotifyFailure:** SNS notifications to ml-ops channels
+  - Error handling includes automatic retries, catch blocks, and fallback states
+  - All steps include CloudWatch logging and X-Ray tracing
 - **Triggers:**
   - **EventBridge schedule:** Weekly retraining (Sundays 2 AM)
   - **EventBridge rule:** Model drift detected → trigger retraining
@@ -148,23 +63,13 @@ Adopt **AWS Step Functions** as the primary orchestration framework, with **Even
   - **Flexible schedules:** Cron expressions, rate expressions, one-time executions
   - **Target integrations:** Lambda, Step Functions, SageMaker, ECS tasks, API Gateway
   - **Retry policies:** Configurable retry attempts with exponential backoff
-- **Example:** Daily demand forecast batch inference
-  ```json
-  {
-    "Name": "daily-demand-forecast-batch",
-    "ScheduleExpression": "cron(0 6 * * ? *)",
-    "FlexibleTimeWindow": {"Mode": "OFF"},
-    "Target": {
-      "Arn": "arn:aws:states:eu-central-1:ACCOUNT:stateMachine:demand-forecast-batch",
-      "RoleArn": "arn:aws:iam::ACCOUNT:role/EventBridgeSchedulerRole",
-      "RetryPolicy": {
-        "MaximumRetryAttempts": 2,
-        "MaximumEventAge": 3600
-      }
-    }
-  }
-  ```
-- **Cost:** $1 per 1M invocations (typically <$10/month)
+- **Daily Demand Forecast Batch Inference Schedule:**
+  - Cron expression for daily execution (morning hours)
+  - Invokes Step Functions state machine for batch processing
+  - FlexibleTimeWindow disabled for precise scheduling
+  - Retry policy with maximum retry attempts and event age limits
+  - IAM role for EventBridge Scheduler execution
+- **Cost:** Minimal (per-invocation pricing)
 
 **3. AWS MWAA (Managed Airflow) - Optional for Complex DAGs**
 - **Use cases:** Complex data pipelines with 20+ interdependent tasks
