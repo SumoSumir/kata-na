@@ -93,76 +93,21 @@ sequenceDiagram
 
 ## 4. Detailed Flow
 
-### 4.1 Phase 1: Data Collection (Continuous)
-
-**Bronze Layer Ingestion:**
-```python
-# AWS Glue ETL: Bronze layer ingestion
-# Runs: Every hour (append-only)
-import sys
-from awsglue.context import GlueContext
-from pyspark.context import SparkContext
-from pyspark.sql import functions as F
-
-glueContext = GlueContext(SparkContext.getOrCreate())
-
-# Read raw telemetry from IoT → Kafka → S3
-telemetry_df = glueContext.create_dynamic_frame.from_catalog(
-    database="mobility_bronze",
-    table_name="vehicle_telemetry",
-    transformation_ctx="telemetry"
-).toDF()
-
-# Read booking events
-bookings_df = glueContext.create_dynamic_frame.from_catalog(
-    database="mobility_bronze",
-    table_name="bookings",
-    transformation_ctx="bookings"
-).toDF()
-
-# Read weather data (third-party API → S3)
-weather_df = glueContext.create_dynamic_frame.from_catalog(
-    database="mobility_bronze",
-    table_name="weather",
-    transformation_ctx="weather"
-).toDF()
-
-# Write to Bronze layer (Parquet, partitioned by date)
-telemetry_df.write.mode("append").partitionBy("date").parquet("s3://mobility-lake/bronze/telemetry/")
-bookings_df.write.mode("append").partitionBy("date").parquet("s3://mobility-lake/bronze/bookings/")
-weather_df.write.mode("append").partitionBy("date").parquet("s3://mobility-lake/bronze/weather/")
-```
-
-**Data Volume:**
-- Telemetry: 4.3B events/day → 100 GB/day (compressed Parquet)
-- Bookings: 1M bookings/day → 500 MB/day
-- Weather: 10 cities × 24 hours × 365 days = 87K records/year → 50 MB/year
-
----
-
-### 4.2 Phase 2: Feature Engineering (Daily 2 AM)
-
-**Silver Layer Transformation:**
-```python
-# AWS Glue ETL: Feature engineering (Bronze → Silver)
-# Runs: Daily at 2 AM (batch job)
-from pyspark.sql import Window
-
-
-## 4. Detailed Flow
 
 ### 4.1 Phase 1: Data Collection (Continuous)
 
 **Bronze Layer Ingestion:**
+
+AWS Glue ETL jobs handle raw data ingestion:
 - Raw telemetry data flows continuously from vehicles via IoT → Kafka → S3
 - Booking events captured and stored in append-only format
 - Third-party weather data ingested hourly
 - All data stored in Parquet format, partitioned by date for efficient querying
 
 **Data Volume:**
-- Telemetry: 4.3B events/day → 100 GB/day (compressed)
+- Telemetry: 4.3B events/day → 100 GB/day (compressed Parquet)
 - Bookings: 1M bookings/day → 500 MB/day
-- Weather: 87K records/year → 50 MB/year
+- Weather: 10 cities × 24 hours × 365 days = 87K records/year → 50 MB/year
 
 ### 4.2 Phase 2: Feature Engineering (Daily 2 AM)
 
@@ -198,7 +143,7 @@ AWS Glue ETL jobs transform raw data into ML-ready features:
 **Model Configuration:**
 - Algorithm: LightGBM (gradient boosting)
 - Objective: Poisson regression (optimized for count data)
-- Training Instance: ml.m5.4xlarge with Spot instances (70% cost savings)
+- Training Instance: ml.m5.4xlarge with Spot instances for cost optimization
 - Training Time: ~30 minutes
 - Model Size: 15 MB
 
