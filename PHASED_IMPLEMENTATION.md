@@ -228,7 +228,7 @@ This document outlines the detailed, phased approach to migrating from MobilityC
 **Cumulative Savings by Month 14:** €375K/month × 5 months = €1.875M  
 **ROI:** (€1.875M - €540K) / €540K = **247%**
 
-**David's (CTO) Reaction:** *"We just deployed a critical pricing fix in 2 hours without a maintenance window. This is what modern architecture feels like."*
+**David's (CTO/CISO) Reaction:** *"We just deployed a critical pricing fix in 2 hours without a maintenance window. This is what modern architecture feels like."*
 
 ---
 
@@ -437,12 +437,13 @@ This document outlines the detailed, phased approach to migrating from MobilityC
 
 ### Marcus (VP Operations)
 **Before:** "My team spends €1.2M/year driving inefficiently between vehicles, swapping batteries on low-demand scooters."  
-**After (Phase 2):** "Our AI system prioritizes swaps based on demand forecasts. Ops costs down 43%, and my team actually gets to go home on time."  
+**After (Phase 2):** "### Marcus (VP Fleet Operations)
+**Before:** "Our AI system prioritizes swaps based on demand forecasts. Ops costs down 43%, and my team actually gets to go home on time.""  
 **Impact:** Operational cost per vehicle reduced from €40/month → €18/month.
 
 ---
 
-### David (CTO)
+### David (CTO/CISO)
 **Before:** "Every deployment is a 3-hour maintenance window. We can't scale during events, and troubleshooting is a nightmare."  
 **After (Phase 3):** "We deploy 6x/week with zero downtime. When an issue occurs, our observability stack pinpoints it in seconds, not hours."  
 **Impact:** MTTR reduced from 4 hours → 28 minutes. Deployment frequency: 1/month → 6/week.

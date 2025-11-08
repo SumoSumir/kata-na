@@ -14,9 +14,8 @@ MobilityCorp handles sensitive data across 50,000 IoT-enabled vehicles, millions
 - Zero-trust architecture (no implicit trust, verify everything)
 
 **Persona Drivers:**
-- **Raj Patel (CISO):** "Security isn't a feature you bolt on—it must be architected from day one. Every API call, every data store, every IoT message needs encryption and authentication."
-- **David Park (CTO):** "I need an architecture that fails gracefully and isolates security breaches—one compromised service shouldn't take down the entire platform."
-- **Marcus Weber (VP Ops):** "Security shouldn't slow us down—I need automated compliance checks, not manual audits every quarter."
+- **David Park (CTO/CISO):** "Security isn't a feature you bolt on—it must be architected from day one. Every API call, every data store, every IoT message needs encryption and authentication. I need an architecture that fails gracefully and isolates security breaches—one compromised service shouldn't take down the entire platform."
+- **Marcus Weber (VP Fleet Operations):** "Security shouldn't slow us down—I need automated compliance checks, not manual audits every quarter."
 
 ---
 
@@ -372,4 +371,4 @@ Security investment aims to prevent data breaches, ensure regulatory compliance 
 **Document Version:** 1.0  
 **Last Updated:** November 8, 2025  
 **Status:** Production-Ready  
-**Owner:** Security Team (Raj Patel - CISO)
+**Owner:** David Park (CTO/CISO)
