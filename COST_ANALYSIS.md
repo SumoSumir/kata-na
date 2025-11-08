@@ -29,8 +29,6 @@
 
 ## Security-by-Design (6% of Total)
 
-**Security Investment:** $24,500/month | **ROI:** €295K/year positive
-
 | Component Type | % of Security Budget | Purpose |
 |---------------|---------------------|---------|
 | **IoT Security** | 20.4% | Device Defender, X.509 certificates |
@@ -65,19 +63,7 @@
 - 3-year Reserved Instances: -6%
 - Edge AI inference: -4%
 
-**Total Optimization Potential:** -38% | $154K/month | $1.85M/year
-
----
-
-## Scaling Economics
-
-| Fleet Size | Cost/Vehicle/Month | Total Monthly Cost | Economies of Scale |
-|------------|-------------------|-------------------|-------------------|
-| **50K vehicles** | $8.15 | $407,485 | Baseline |
-| **100K vehicles** | $7.37 | $736,860 | -10% per vehicle |
-| **200K vehicles** | $6.87 | $1,374,000 | -16% per vehicle |
-
-**Key Insight:** Security and monitoring costs scale sublinearly (shared infrastructure).
+**Total Optimization Potential:** -38%
 
 ---
 
@@ -85,9 +71,9 @@
 
 | Feature | AWS Advantage | Cost Impact |
 |---------|--------------|-------------|
-| **IoT Security** | Device Defender included | Saves $8K/month vs. third-party |
-| **Zero-Trust IAM** | Free tier (IAM + SSO) | Saves $5K/month vs. Azure AD Premium |
-| **PII Detection** | Macie automation | Saves €132K/year in manual audits |
+| **IoT Security** | Device Defender included | Eliminates third-party licensing |
+| **Zero-Trust IAM** | Free tier (IAM + SSO) | No identity management fees vs. Azure AD Premium |
+| **PII Detection** | Macie automation | Eliminates manual GDPR audit costs |
 | **Compliance Tools** | Config + CloudTrail | 95% automated governance |
 
 **vs. Azure:** +15% total cost | **vs. GCP:** +10% total cost | **vs. Multi-cloud:** +30% total cost
@@ -98,7 +84,7 @@
 
 - **Security as % of Total:** 6.0% (industry standard: 5-8%)
 - **AI/ML as % of Total:** 32.4% (71% traditional ML, 29% Gen AI)
-- **Infrastructure Efficiency:** $0.90 per vehicle per month
+- **Infrastructure Efficiency:** Optimized cost per vehicle through auto-scaling and serverless architecture
 - **Break-Even Utilization:** 1.0% (62,180 rentals/month)
 - **Security ROI:** €295K/year positive (breach prevention)
 - **Optimization Potential:** 38% cost reduction over 12 months
@@ -112,4 +98,4 @@
 **Related Documentation:**
 - [ADR-12: Security-by-Design](ADR/ADR_12_SECURITY_ARCHITECTURE.md)
 - [ADR-15: Cloud Provider Selection](ADR/ADR_15_Cloud_Provider_Selection.md)
-- [PERSONAS.md](PERSONAS.md) - Raj Patel (CISO) security requirements
+- [PERSONAS.md](PERSONAS.md) - David Park (CTO/CISO) infrastructure and security requirements

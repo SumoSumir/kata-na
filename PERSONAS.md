@@ -37,67 +37,133 @@ This document introduces the key people and personas that guide our architectura
 
 ---
 
-### Marcus Weber - VP of Operations
-**Background:** 15 years in fleet management, previously optimized delivery operations for a major logistics company.
+### Marcus Weber - VP of Fleet Operations
+**Background:** 15 years in fleet management, previously optimized delivery operations for a major logistics company. Rose from field coordinator managing 12-person teams to VP level, bringing hands-on operational expertise to strategic leadership.
 
-**Goals:**
+**Current Role:**
+- Age: 47, oversees fleet operations across all EU cities
+- Direct reports: 8 regional operations managers, 120+ field staff total
+- Manages: 50,000 vehicles across Amsterdam, Barcelona, Madrid, Copenhagen, Munich
+
+**Strategic Goals:**
 - Reduce manual battery swap costs from €15/swap to under €6
 - Improve fleet utilization from 45% to 75%
 - Cut vehicle downtime by 40%
+- Scale operations to support 5 new cities by 2026
 
-**Pain Points:**
+**Daily Operational Challenges:**
 - "Staff spend 60% of their time driving between locations inefficiently"
 - "We're swapping batteries on vehicles that won't be used for hours"
 - "Reactive maintenance is 3x more expensive than preventive"
+- "I waste 2 hours every morning reviewing reports from regional managers"
+- "By the time field teams reach vehicles, they're already rented—we need predictive intelligence"
 
 **Success Metrics:**
 - Cost per vehicle operation
 - Fleet utilization rate
 - Mean time between failures (MTBF)
+- Field staff productivity (tasks completed per shift)
+- Planning time reduction
 
-**Quote:** *"Show me which vehicles need attention RIGHT NOW and optimize my team's routes. Every wasted trip costs us money."*
+**Quote:** *"Show me which vehicles need attention RIGHT NOW and optimize my team's routes. Every wasted trip costs us money. I need AI to tell my field managers exactly where to send their teams and why."*
 
 **How We Solve This:**
 - **[ADR-02: Dynamic Relocation Incentives](ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md)** - AI automatically offers users €3-5 credits to relocate vehicles, reducing manual swap costs from €15 → €6
+- **[ADR-02: AI Task Prioritization](ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md)** - Prioritizes battery swaps based on predicted demand (not just current battery level)
 - **[ADR-07: Predictive Maintenance](ADR/ADR_07_PREDICTIVE_MAINTENANCE.md)** - Random Forest models predict battery failures 7 days ahead with 92% accuracy
-- **[WORKFLOWS/STAFF_WORKFLOWS.md](WORKFLOWS/STAFF_WORKFLOWS.md)** - Javier's AI-powered task prioritization system (see below for detailed workflow)
+- **[WORKFLOWS/STAFF_WORKFLOWS.md](WORKFLOWS/STAFF_WORKFLOWS.md)** - AI-powered task prioritization system for field operations
 - **[ADR-01: Microservices Architecture](ADR/ADR_01_microservices_architecture.md)** - Fleet Operations Service scales independently to handle 50K+ vehicles
+- **Route Optimization** - Google Maps Directions API calculates most efficient multi-stop routes
 
-**Business Impact:**
-> *"€11.176M annual savings from relocation automation + predictive maintenance. Fleet utilization improved from 45% → 75%."*
+**Marcus's AI-Powered Morning Workflow:**
+```
+6:00 AM: Marcus reviews consolidated dashboard across all cities
+  ↓ [AI analyzes 50,000 vehicles across 5 cities]
+  ↓ [Predictive model identifies critical tasks per region]
+
+AI Task List for Madrid Region (Prioritized by Urgency × Impact):
+┌─────────────────────────────────────────────────────────────┐
+│ 1. Priority: CRITICAL - Battery Swap                        │
+│    Vehicle: E-SCOOT-1247 (Salamanca district)              │
+│    Reason: 15% battery, HIGH demand predicted 8-9 AM        │
+│    Impact: €45 lost revenue if unavailable                  │
+│    Assigned to: Carlos (2.3 km away, ETA 8 min)            │
+├─────────────────────────────────────────────────────────────┤
+│ 2. Priority: HIGH - Preventive Maintenance                  │
+│    Vehicle: E-BIKE-0893 (Retiro Park)                      │
+│    Reason: Brake sensor anomaly detected, 7-day failure     │
+│             prediction with 92% confidence                   │
+│    Impact: Safety risk + €200 reactive repair cost          │
+│    Assigned to: Maria (1.8 km away, ETA 12 min)            │
+├─────────────────────────────────────────────────────────────┤
+│ 3. Priority: MEDIUM - Relocation                            │
+│    Vehicle: E-CAR-0456 (low-demand suburb)                  │
+│    Reason: Move to city center, €8 manual cost vs €3 AI     │
+│             incentive offered to user (no takers yet)        │
+│    Impact: €5 cost savings if AI incentive works            │
+│    Status: Wait 2 hours, escalate if no user accepts        │
+└─────────────────────────────────────────────────────────────┘
+
+6:15 AM: Marcus approves AI task lists, regional managers notified
+9:30 AM: All priority tasks completed, vehicles available for peak demand
+```
+
+**Operational & Business Impact:**
+- **Planning Time:** 2 hours → 15 minutes (88% reduction)
+- **Wasted Trips:** 40% → 8% (vehicles already rented before team arrives)
+- **Cost Savings:** €15/swap manual → €6/swap AI-optimized
+- **Annual Savings:** €11.176M from relocation automation + predictive maintenance
+- **Fleet Utilization:** 45% → 75% (+30 percentage points)
 
 ---
 
-### David Park - Head of Technology
-**Background:** Ex-AWS solutions architect with expertise in scalable cloud platforms. Brought in to modernize MobilityCorp's tech stack.
+### David Park - Chief Technology & Security Officer (CTO/CISO)
+**Background:** Ex-AWS solutions architect with 18 years spanning cloud platforms and cybersecurity. Previously CISO at a fintech company before joining MobilityCorp to modernize tech stack and establish security-first architecture.
 
 **Goals:**
-- Achieve 99.95% system uptime
+- Achieve 99.95% system uptime with zero security incidents
 - Scale infrastructure cost-effectively as fleet grows
 - Implement AI/ML capabilities without vendor lock-in
+- Ensure ISO 27001, SOC 2 Type II, and GDPR/PCI-DSS compliance
+- Secure IoT fleet against unauthorized access (50,000+ devices)
 
 **Pain Points:**
 - "Our monolithic architecture can't handle peak demand during events"
 - "We lack observability—troubleshooting takes hours"
-- "Current infrastructure costs don't justify the business value"
+- "50,000 IoT devices are potential attack vectors if not properly secured"
+- "One data breach destroys our brand and costs millions in fines"
+- "GDPR right-to-erasure requests are manual and error-prone"
 
 **Success Metrics:**
-- System availability (SLA compliance)
-- P95 API response time
+- System availability (99.95% SLA compliance)
+- P95 API response time (<200ms)
 - Infrastructure cost per transaction
+- Zero security incidents or data breaches
+- <24 hour mean time to detect (MTTD) threats
+- 100% IoT device certificate rotation compliance
 
-**Quote:** *"I need an architecture that scales independently per service, fails gracefully, and provides full visibility into system health."*
+**Quote:** *"I need an architecture that scales independently per service, fails gracefully, and embeds security from day one—not as an afterthought. Every API call, every data store, every IoT message needs encryption and authentication."*
 
 **How We Solve This:**
+
+**Infrastructure & Scalability:**
 - **[ADR-01: Microservices Architecture](ADR/ADR_01_microservices_architecture.md)** - 8 independently scalable services on AWS ECS Fargate (Telemetry, Booking, Payment, Fleet Ops, Pricing, Analytics, Notification, User/KYC)
 - **[ADR-09: Multi-Region Deployment](ADR/ADR_09_Multi_Region_Deployment.md)** - Active-passive setup in eu-central-1 (Frankfurt) + eu-west-1 (Ireland) with 99.95% uptime SLA
 - **[ADR-10: Observability Stack](ADR/ADR_10_Monitoring_and_Metrics.md)** - VictoriaMetrics, Grafana, Loki for unified metrics, logs, and traces
 - **[ADR-06: Event-Driven Architecture](ADR/ADR_06_EVENT_DRIVEN_ARCHITECTURE.md)** - Kafka topics isolate failures, prevent cascading outages
 
+**Security & Compliance:**
+- **[ADR-12: Security-by-Design Architecture](ADR/ADR_12_SECURITY_ARCHITECTURE.md)** - Comprehensive zero-trust model with AWS IAM, Secrets Manager, KMS encryption
+- **[ADR-14: Data Compliance](ADR/ADR_14_DATA_COMPLIANT.md)** - GDPR data residency (EU regions only), automated right-to-erasure
+- **[ADR-11: IoT Security](ADR/ADR_11_IoT_Enabled_Vehicles.md)** - X.509 certificates for 50K devices, AWS IoT Core mutual TLS (mTLS)
+- **[COST_ANALYSIS.md](COST_ANALYSIS.md)** - Security ROI: €295K/year positive ROI (breach prevention)
+
 **Architecture Highlights:**
 - **Independent Scaling:** Telemetry (10 tasks, 2 vCPU) vs. Booking (20 tasks peak) vs. Analytics (4 vCPU, 8GB RAM)
 - **Fault Isolation:** Booking failure doesn't disrupt vehicle tracking
 - **Cost Efficiency:** $45K/month infrastructure for 50K vehicles (~$0.90 per vehicle/month)
+- **Zero-Trust Security:** Multi-layered defense with network isolation, IAM roles, encryption at rest/in transit
+- **Compliance Readiness:** GDPR, PCI-DSS Level 1, ISO 27001, SOC 2 Type II (in progress)
 
 ---
 
@@ -360,111 +426,7 @@ Nina's dashboard: ✅ Auto-resolved in 2 seconds
 
 ---
 
-### Raj Patel - Chief Information Security Officer (CISO)
-**Profile:**
-- Age: 42, Security Architect
-- Location: Amsterdam HQ
-- Background: 18 years in cybersecurity, previously CISO at a fintech company
-
-**Scenario:**
-Raj is responsible for ensuring MobilityCorp's platform complies with GDPR, PCI-DSS, and EU cybersecurity regulations. He must protect customer PII, payment data, and IoT device communications across 50,000 vehicles.
-
-**Goals:**
-- Achieve ISO 27001 and SOC 2 Type II compliance
-- Zero data breaches or security incidents
-- Implement zero-trust architecture
-- Secure IoT fleet against unauthorized access
-
-**Pain Points:**
-- "We store payment data and PII for millions of users—one breach destroys our brand"
-- "50,000 IoT devices are potential attack vectors if not properly secured"
-- "GDPR right-to-erasure requests are manual and error-prone"
-- "Third-party APIs (payment, maps, weather) create security dependencies"
-
-**Success Metrics:**
-- Zero security incidents or data breaches
-- 100% GDPR compliance (audited)
-- <24 hour mean time to detect (MTTD) threats
-- 100% IoT device certificate rotation compliance
-
-**Quote:** *"Security isn't a feature you bolt on—it must be architected from day one. Every API call, every data store, every IoT message needs encryption and authentication."*
-
-**Security Requirements:**
-- **Data Protection:** Encryption at rest (AES-256) and in transit (TLS 1.3)
-- **Identity & Access:** Zero-trust with multi-factor authentication (MFA)
-- **IoT Security:** Certificate-based device authentication, secure OTA updates
-- **Compliance:** GDPR data residency, PCI-DSS Level 1 for payments
-- **Monitoring:** Real-time threat detection with SIEM integration
-- **Incident Response:** Automated alerting and 24/7 SOC coverage
-
-**How We Solve This:**
-- **[ADR-12: Security-by-Design Architecture](ADR/ADR_12_SECURITY_ARCHITECTURE.md)** - Comprehensive zero-trust model with AWS IAM, Secrets Manager, KMS encryption
-- **[ADR-14: Data Compliance](ADR/ADR_14_DATA_COMPLIANT.md)** - GDPR data residency (EU regions only), automated right-to-erasure
-- **[ADR-11: IoT Security](ADR/ADR_11_IoT_Enabled_Vehicles.md)** - X.509 certificates for 50K devices, AWS IoT Core mutual TLS (mTLS)
-- **[ADR-19: Payment Security](ADR/ADR_19_Payment_Integration.md)** - PCI-DSS Level 1 via Stripe, tokenized payments, no raw card storage
-- **[COST_ANALYSIS.md](COST_ANALYSIS.md)** - Security ROI: €295K/year positive ROI (breach prevention)
-
-**Security Architecture Highlights:**
-```
-┌─────────────────────────────────────────────────────────────┐
-│ Layer 1: Network Security                                   │
-├─────────────────────────────────────────────────────────────┤
-│ • AWS VPC with private subnets for all services            │
-│ • WAF rules block SQL injection, XSS, DDoS attacks         │
-│ • TLS 1.3 for all API communication                         │
-│ • IoT devices use mTLS with X.509 certificates             │
-└─────────────────────────────────────────────────────────────┘
-┌─────────────────────────────────────────────────────────────┐
-│ Layer 2: Identity & Access Management (Zero-Trust)          │
-├─────────────────────────────────────────────────────────────┤
-│ • AWS IAM roles with least-privilege policies              │
-│ • MFA required for all admin access                        │
-│ • Service-to-service auth via IAM roles (no API keys)      │
-│ • User authentication via OAuth 2.0 + JWT tokens           │
-└─────────────────────────────────────────────────────────────┘
-┌─────────────────────────────────────────────────────────────┐
-│ Layer 3: Data Protection                                    │
-├─────────────────────────────────────────────────────────────┤
-│ • AES-256 encryption for all data at rest (S3, RDS, DDB)   │
-│ • AWS KMS manages encryption keys with auto-rotation        │
-│ • PII data encrypted with separate customer-managed keys    │
-│ • Payment data tokenized via Stripe (PCI-DSS compliant)    │
-│ • GDPR right-to-erasure: Automated deletion within 30 days │
-└─────────────────────────────────────────────────────────────┘
-┌─────────────────────────────────────────────────────────────┐
-│ Layer 4: Monitoring & Incident Response                     │
-├─────────────────────────────────────────────────────────────┤
-│ • CloudWatch Logs capture all API calls, auth events       │
-│ • VictoriaMetrics tracks security metrics (failed logins)  │
-│ • Automated alerts for suspicious activity (5+ failed MFA) │
-│ • Mean Time to Detect (MTTD): <24 hours target             │
-│ • Incident playbooks for data breach, DDoS, IoT compromise │
-└─────────────────────────────────────────────────────────────┘
-```
-
-**Compliance Audit Results:**
-- ✅ **GDPR:** Data residency in eu-central-1, consent management, right-to-erasure automated
-- ✅ **PCI-DSS Level 1:** Stripe handles card data, quarterly ASV scans, annual audit
-- ✅ **ISO 27001:** Information security policies, risk assessments, access controls
-- 🔄 **SOC 2 Type II:** In progress (expected Q2 2026)
-
-**Real-World Security Scenario:**
-```
-Incident: Suspicious login attempt from non-EU IP address
-  ↓ [CloudWatch detects 5 failed MFA attempts in 2 minutes]
-  ↓ [Automated alert sent to Raj's SOC team]
-  ↓ [Account temporarily locked, user notified via email]
-  ↓ [Raj reviews logs, identifies credential stuffing attack]
-  ↓ [WAF rule updated to block attacker's IP range]
-  ↓ [Incident resolved in 18 minutes (MTTD target: <24 hours)]
-
-Post-Incident:
-• User account secured with password reset
-• Security awareness training triggered for affected user
-• Threat intelligence shared with AWS Shield
-```
-
-**Raj's Quote:** *"We detected and blocked the attack before any data was compromised. That's zero-trust working as designed."*
+## 📊 How Personas Drive Architecture
 
 ---
 
@@ -473,13 +435,11 @@ Post-Incident:
 | Persona | Key Need | Architectural Solution |
 |---------|----------|------------------------|
 | **Sarah (CPO)** | Predictive demand insights | ML demand forecasting + analytics dashboards |
-| **Marcus (VP Ops)** | Efficient resource allocation | AI route optimization + battery prioritization |
-| **David (CTO)** | Scalable, resilient infrastructure | Microservices + multi-region deployment |
-| **Raj (CISO)** | Zero-trust security & compliance | Encryption, mTLS, IAM, GDPR compliance |
+| **Marcus (VP Fleet Ops)** | Efficient resource allocation | AI route optimization + battery prioritization |
+| **David (CTO/CISO)** | Scalable, resilient, secure infrastructure | Microservices + multi-region + zero-trust security |
 | **Emma (Commuter)** | Reliable availability | Predictive rebalancing + pre-booking |
 | **Alex (Tourist)** | On-demand discovery | Real-time availability + conversational AI |
 | **Lisa (Family User)** | Vehicle quality assurance | Computer vision damage detection |
-| **Javier (Field Ops)** | Smart task management | AI-powered work order system |
 | **Nina (Support)** | Automated verification | Vision AI + automated dispute resolution |
 
 ---
@@ -500,11 +460,10 @@ Throughout our documentation, we reference these personas to illustrate:
 ## 💡 Design Principles from Personas
 
 1. **Reliability First** (Emma, Lisa) → 99.95% uptime, predictive maintenance
-2. **Operational Efficiency** (Marcus, Javier) → AI-driven automation, cost reduction
-3. **Scalability** (David, Sarah) → Microservices, multi-region deployment
-4. **Security & Compliance** (Raj) → Zero-trust, encryption, GDPR/PCI-DSS compliance
-5. **User Experience** (Alex, Nina) → Conversational AI, automated verification
-6. **Data-Driven Decisions** (Sarah, Marcus) → Real-time analytics, ML insights
+2. **Operational Efficiency** (Marcus) → AI-driven automation, cost reduction
+3. **Scalability & Security** (David) → Microservices, multi-region, zero-trust architecture
+4. **User Experience** (Alex, Nina) → Conversational AI, automated verification
+5. **Data-Driven Decisions** (Sarah, Marcus) → Real-time analytics, ML insights
 
 These personas guide every architectural decision, ensuring we solve real problems for real people.
 
@@ -517,13 +476,11 @@ This matrix shows exactly where each persona's needs are addressed in our archit
 | Persona | Core Solution | Primary ADR | Workflow | Business Metric |
 |---------|---------------|-------------|----------|-----------------|
 | **Sarah (CPO)** | ML Demand Forecasting | [ADR-02](ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md) | [Customer Discovery](WORKFLOWS/CUSTOMER_WORKFLOWS.md) | Retention: 20% → 55% |
-| **Marcus (VP Ops)** | AI Relocation Incentives | [ADR-02](ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md) | [Staff Workflows](WORKFLOWS/STAFF_WORKFLOWS.md) | Cost: €15 → €6/swap |
-| **David (CTO)** | Microservices + Multi-Region | [ADR-01](ADR/ADR_01_microservices_architecture.md), [ADR-09](ADR/ADR_09_Multi_Region_Deployment.md) | [Event Storming](EVENT_STORMING.md) | Uptime: 99.95% SLA |
-| **Raj (CISO)** | Zero-Trust Security | [ADR-12](ADR/ADR_12_SECURITY_ARCHITECTURE.md), [ADR-14](ADR/ADR_14_DATA_COMPLIANT.md) | [Compliance Docs](ADR/ADR_14_DATA_COMPLIANT.md) | Zero breaches |
+| **Marcus (VP Fleet Ops)** | AI Relocation Incentives | [ADR-02](ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md) | [Staff Workflows](WORKFLOWS/STAFF_WORKFLOWS.md) | Cost: €15 → €6/swap |
+| **David (CTO/CISO)** | Microservices + Multi-Region + Zero-Trust | [ADR-01](ADR/ADR_01_microservices_architecture.md), [ADR-09](ADR/ADR_09_Multi_Region_Deployment.md), [ADR-12](ADR/ADR_12_SECURITY_ARCHITECTURE.md) | [Event Storming](EVENT_STORMING.md) | Uptime: 99.95% SLA, Zero breaches |
 | **Emma (Commuter)** | Predictive Rebalancing | [ADR-02](ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md) | [Booking Flow](WORKFLOWS/CUSTOMER_WORKFLOWS.md#workflow-vehicle-discovery-and-booking) | Availability: 75% → 95% |
 | **Alex (Tourist)** | Conversational AI | [ADR-13](ADR/ADR_13_CONVERSATIONAL_UX_AND_AI_ASSISTANT.md) | [Customer Workflows](WORKFLOWS/CUSTOMER_WORKFLOWS.md) | Conversion: +40% |
 | **Lisa (Family User)** | Computer Vision Quality | [ADR-18](ADR/ADR_18_AI_VISION_AND_AUTOMATION.md) | [Return Verification](WORKFLOWS/CUSTOMER_WORKFLOWS.md#5-return--verification) | NPS: +25 points |
-| **Javier (Field Ops)** | AI Task Prioritization | [ADR-02](ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md), [ADR-07](ADR/ADR_07_PREDICTIVE_MAINTENANCE.md) | [Staff Morning Routine](WORKFLOWS/STAFF_WORKFLOWS.md) | Planning: 2hr → 15min |
 | **Nina (Support)** | Automated Dispute AI | [ADR-18](ADR/ADR_18_AI_VISION_AND_AUTOMATION.md) | [Support Automation](WORKFLOWS/CUSTOMER_WORKFLOWS.md#6-payment--feedback) | Auto-resolve: 70% |
 
 ---
@@ -532,7 +489,7 @@ This matrix shows exactly where each persona's needs are addressed in our archit
 
 ### Use Case 1: Emma's Morning Commute (Predictive Rebalancing)
 
-**Actors:** Emma (Commuter), Sarah (CPO tracking retention), Javier (Field Ops executing AI tasks)
+**Actors:** Emma (Commuter), Sarah (CPO tracking retention), Marcus (VP Fleet Ops executing AI tasks)
 
 **Scenario Timeline:**
 ```
@@ -608,13 +565,13 @@ Port Vell. Pre-book an eBike tonight—better for longer distances."
 
 ---
 
-### Use Case 3: Javier's AI-Optimized Morning (Operational Efficiency)
+### Use Case 3: Marcus's AI-Optimized Morning (Operational Efficiency)
 
-**Actors:** Javier (Field Ops Manager), Marcus (VP Ops tracking costs)
+**Actors:** Marcus (VP Fleet Operations)
 
 **Before AI (Manual Process):**
 ```
-6:00 AM: Javier reviews spreadsheet of 2,000 vehicles
+6:00 AM: Marcus reviews spreadsheet of 2,000 vehicles (Madrid region)
 6:30 AM: Manually identifies 50 vehicles needing attention
 7:00 AM: Assigns tasks based on staff proximity (rough estimates)
 8:00 AM: Team deployed, but 15 vehicles already rented (wasted trips)
@@ -626,7 +583,7 @@ Efficiency: 40% wasted trips, 2 hours planning time
 
 **After AI (Automated Prioritization):**
 ```
-6:00 AM: Javier opens AI-powered dashboard
+6:00 AM: Marcus opens AI-powered dashboard
 6:05 AM: AI task list ready (prioritized by urgency × impact)
 
 Top Priority Tasks:
@@ -647,7 +604,7 @@ Top Priority Tasks:
    • Status: Wait 2 hours before manual intervention
    • Cost Savings: €5 (€8 manual - €3 AI incentive)
 
-6:15 AM: Javier approves, team dispatched with optimized routes
+6:15 AM: Marcus approves, team dispatched with optimized routes
 9:30 AM: All critical tasks completed, zero wasted trips
 
 Cost: €6 per AI-optimized swap × 35 vehicles = €210/day
@@ -670,7 +627,7 @@ Efficiency: 8% wasted trips, 15 min planning time
 
 ### Use Case 4: Lisa's Family Rental (Quality Assurance)
 
-**Actors:** Lisa (Family User), Nina (Support Agent), Raj (CISO auditing data handling)
+**Actors:** Lisa (Family User), Nina (Support Agent), David (CTO/CISO auditing data handling)
 
 **Booking Journey:**
 ```
@@ -709,7 +666,7 @@ Action: Automated task assigned to cleaning crew
 Status: ✅ No customer dispute (AI auto-resolved with photo evidence)
 ```
 
-**Raj's Security Audit:**
+**David's Security Audit:**
 ```
 Data Handling Check:
 • Photos stored in S3 with AES-256 encryption ✅
@@ -722,7 +679,7 @@ Data Handling Check:
 - Lisa's NPS: 9/10 ("Finally, a rental I can trust with kids")
 - Nina's workload: 0 tickets from this rental (AI handled everything)
 - Damage dispute cost: €0 (auto-resolved with photo evidence)
-- Raj's compliance audit: ✅ Passed GDPR data handling review
+- David's compliance audit: ✅ Passed GDPR data handling review
 
 **Systems Involved:**
 - Computer Vision Service (ADR-18)
@@ -733,9 +690,9 @@ Data Handling Check:
 
 ---
 
-### Use Case 5: Raj's Security Incident Response (Zero-Trust in Action)
+### Use Case 5: David's Security Incident Response (Zero-Trust in Action)
 
-**Actors:** Raj (CISO), David (CTO monitoring system resilience)
+**Actors:** David (CTO/CISO), Operations Team
 
 **Incident Timeline:**
 ```
@@ -744,7 +701,7 @@ Monday 2:14 AM: Suspicious activity detected
   ↓ [VictoriaMetrics: Login attempts for admin account "fleet-ops-admin"]
   ↓ [Automated Response: Account temporarily locked after 3rd failure]
 
-2:15 AM: Raj's SOC team receives PagerDuty alert
+2:15 AM: David's SOC team receives PagerDuty alert
   ↓ [On-call engineer reviews CloudWatch logs]
   ↓ [Identifies credential stuffing attack (leaked password database)]
   ↓ [Attacker attempted 47 passwords in 2 minutes]
@@ -760,7 +717,7 @@ Monday 2:14 AM: Suspicious activity detected
   ↓ [No data exfiltrated (attacker never reached API layer)]
 
 Tuesday 9:00 AM: Post-Incident Review
-  ↓ [Raj presents incident report to David]
+  ↓ [David presents incident report to executive team]
   ↓ [MTTD: 1 minute (alarm triggered immediately)]
   ↓ [MTTR: 11 minutes (attacker blocked, user secured)]
   ↓ [Root Cause: Employee password leaked in 3rd-party breach]
@@ -782,7 +739,7 @@ Security Posture:
 • Incident Response Time: 11 minutes (target: <24 hours)
 ```
 
-**Raj's Compliance Report:**
+**David's Compliance Report:**
 ```
 ISO 27001 Audit Trail:
 ✅ Incident detected within SLA (<24 hours MTTD)
@@ -804,7 +761,7 @@ SOC 2 Type II Evidence:
 - Compliance Status: ✅ Maintained (GDPR, ISO 27001, SOC 2)
 - Customer Trust: Preserved (zero users affected)
 
-**Raj's Quote:** *"This is why we invested in zero-trust. The attacker never got past the front door."*
+**David's Quote:** *"This is why we invested in zero-trust. The attacker never got past the front door."*
 
 **Systems Involved:**
 - Zero-Trust Architecture (ADR-12)

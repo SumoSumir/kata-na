@@ -9,12 +9,11 @@
 ## 📋 Table of Contents
 
 - [Executive Summary](#executive-summary)
-- [Meet the People](#meet-the-people)
+- [Meet the Personas](#meet-the-personas)
 - [Problem Statement](#problem-statement)
 - [Solution Overview](#solution-overview)
 - [Architecture Highlights](#architecture-highlights)
 - [Repository Structure](#repository-structure)
-- [Quick Start Guide](#quick-start-guide)
 - [Key Architectural Decisions](#key-architectural-decisions)
 - [Technology Stack](#technology-stack)
 - [Documentation](#documentation)
@@ -29,13 +28,11 @@
 Our solution addresses real problems for real people. Meet the stakeholders who guide our decisions:
 
 - **Sarah Chen (CPO):** Needs to increase customer retention from 20% to 55% within 18 months
-- **Marcus Weber (VP Operations):** Must reduce battery swap costs by 50%-60%
-- **David Park (CTO):** Requires 99.95% uptime with cost-effective scaling
-- **Raj Patel (CISO):** Ensures zero-trust security and GDPR/PCI-DSS compliance
+- **Marcus Weber (VP Fleet Operations):** Must reduce battery swap costs by 50%-60% and improve fleet utilization
+- **David Park (CTO/CISO):** Requires 99.95% uptime with cost-effective scaling and zero-trust security compliance
 - **Emma Thompson (Commuter):** Wants reliable scooter availability for her daily 8:15 AM commute
 - **Alex Kumar (Tourist):** Needs conversational AI to discover vehicles and explore Barcelona
 - **Lisa Müller (Family User):** Requires quality assurance—clean vehicles, reliable battery range
-- **Javier Rodriguez (Field Ops Manager):** Needs AI to prioritize which vehicles need attention
 - **Nina Petersen (Support Agent):** Wants automated dispute resolution with photo evidence
 
 
@@ -44,9 +41,9 @@ These personas inform every architectural decision, ensuring we solve business p
 **See personas in action:**
 - [Emma's predictive rebalancing journey](PERSONAS.md#use-case-1-emmas-morning-commute-predictive-rebalancing)
 - [Alex's conversational AI experience](PERSONAS.md#use-case-2-alexs-tourist-experience-conversational-ai)
-- [Javier's AI-optimized morning routine](PERSONAS.md#use-case-3-javiers-ai-optimized-morning-operational-efficiency)
+- [Marcus's AI-optimized morning routine](PERSONAS.md#use-case-3-marcuss-ai-optimized-morning-operational-efficiency)
 - [Lisa's quality assurance workflow](PERSONAS.md#use-case-4-lisas-family-rental-quality-assurance)
-- [Raj's security incident response](PERSONAS.md#use-case-5-rajs-security-incident-response-zero-trust-in-action)
+- [David's security incident response](PERSONAS.md#use-case-5-davids-security-incident-response-zero-trust-in-action)
 
 ---
 
@@ -55,7 +52,7 @@ These personas inform every architectural decision, ensuring we solve business p
 MobilityCorp operates a multi-modal last-mile transportation platform across EU cities, providing electric scooters, eBikes, cars, and vans. This architecture addresses three critical business challenges:
 
 1. **Vehicle Availability Crisis** - 15-25% of potential bookings lost due to demand-supply mismatch
-2. **Battery Management Inefficiency** - Manual processes cost €10-15 per relocation
+2. **Battery Management Inefficiency** - Reactive maintenance and manual relocation operations create significant operational overhead
 3. **Low Customer Retention** - Most users rely on ad-hoc trips rather than regular commutes
 
 ### Our Solution
@@ -235,23 +232,6 @@ kata-na/
 └── ROLLOUT_STRATEGY/
     └── ROLLOUT_STRATEGY.md            # Original phased deployment
 ```
-
----
-
-## 🚀 Quick Start Guide
-
-**Choose your reading path based on your role:**
-
-### 📖 Quick Reference by Role
-**[→ QUICK_REFERENCE.md](QUICK_REFERENCE.md)** - Navigate documentation by role (CTO, CFO, CPO, Engineer, etc.)
-
-**Time-based paths:**
-- **10 minutes:** Executive summary + personas
-- **30 minutes:** Add AI transparency + core ADR
-- **1 hour:** Add phased implementation + event storming
-- **2+ hours:** Deep dive into all ADRs and scenarios
-
----
 
 ### For Everyone
 1. **Understand the Problem**
@@ -635,7 +615,7 @@ This architecture is designed for O'Reilly Architectural Katas Q4 2025. For ques
 
 - **Issues:** [GitHub Issues](https://github.com/SumoSumir/kata-na/issues)
 - **Discussions:** [GitHub Discussions](https://github.com/SumoSumir/kata-na/discussions)
-- **Email:** [team@kata-na.com](mailto:team@kata-na.com)
+- **Email:** [kata-na@googlegroups.com](mailto:kata-na@googlegroups.com)
 
 ---
 
@@ -664,5 +644,3 @@ This architectural documentation is provided under MIT License for educational p
 - **Reviewers** - For feedback and insights
 
 ---
-
-**Built with ❤️ by Team kata-na for O'Reilly Architectural Katas Q4 2025**
