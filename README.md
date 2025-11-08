@@ -248,10 +248,10 @@ Read [PERSONAS.md](PERSONAS.md) to understand who we're building for (Sarah, Mar
 ### For Technical Leaders (CTO, Architects)
 4. **Review Architecture Decisions**
 Read key ADRs in order:
-1. [ADR-01: Microservices Architecture](ADR/ADR_01_microservices_architecture.md)
-2. [ADR-15: Cloud Provider Selection](ADR/ADR_15_Cloud_Provider_Selection.md)
-3. [ADR-16: MLOps Pipeline](ADR/ADR_16_MLOps_Pipeline.md)
-4. [ADR-17: Data Lakehouse](ADR/ADR_17_Data_Lakehouse_Strategy.md)
+1. [ADR-01: Microservices Architecture](./ADR/ADR_01_microservices_architecture.md)
+2. [ADR-15: Cloud Provider Selection](./ADR/ADR_15_Cloud_Provider_Selection.md)
+3. [ADR-16: MLOps Pipeline](./ADR/ADR_16_MLOps_Pipeline.md)
+4. [ADR-17: Data Lakehouse](./ADR/ADR_17_Data_Lakehouse_Strategy.md)
 
 5. **Explore Architecture**
 - **High-Level:** [System Context Diagram](ARCHITECTURAL_DIAGRAMS/C1_System_Context.md)
@@ -265,9 +265,9 @@ Read key ADRs in order:
 
 ### For AI/ML Engineers
 7. **Understand AI Usage**
-- [ADR-02: Dynamic Pricing](ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md) - ML models and demand forecasting
-- [ADR-16: MLOps Pipeline](ADR/ADR_16_MLOps_Pipeline.md) - Training and deployment
-- [ADR-18: Agentic AI Framework](ADR/ADR_18_Agentic_AI_Framework.md) - Conversational AI implementation
+- [ADR-02: Dynamic Pricing](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md) - ML models and demand forecasting
+- [ADR-16: MLOps Pipeline](./ADR/ADR_16_MLOps_Pipeline.md) - Training and deployment
+- [ADR-18: Agentic AI Framework](./ADR/ADR_18_Agentic_AI_Framework.md) - Conversational AI implementation
 
 ### For Domain Experts
 8. **Review Domain Modeling**
@@ -285,25 +285,25 @@ Read key ADRs in order:
 
 ### 1. Cloud Provider: AWS
 **Why:** Best ML services (SageMaker), global infrastructure, cost-effective for EU deployment
-- **ADR:** [ADR-15: Cloud Provider Selection](ADR/ADR_15_Cloud_Provider_Selection.md)
+- **ADR:** [ADR-15: Cloud Provider Selection](./ADR/ADR_15_Cloud_Provider_Selection.md)
 
 ### 2. Microservices over Monolith
 **Why:** Independent scaling, fault isolation, technology flexibility
-- **ADR:** [ADR-01: Microservices Architecture](ADR/ADR_01_microservices_architecture.md)
+- **ADR:** [ADR-01: Microservices Architecture](./ADR/ADR_01_microservices_architecture.md)
 
 ### 3. AI-Driven Relocation Incentives
 **Why:** Reduce manual relocation costs by 40-50%, improve fleet utilization
-- **ADR:** [ADR-02: AI-Driven Relocation](ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md)
+- **ADR:** [ADR-02: AI-Driven Relocation](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md)
 
 ### 4. Event-Driven Architecture
 **Why:** Loose coupling, scalability, real-time processing
-- **ADR:** [ADR-06: Event-Driven Architecture](ADR/ADR_06_EVENT_DRIVEN_ARCHITECTURE.md)
+- **ADR:** [ADR-06: Event-Driven Architecture](./ADR/ADR_06_EVENT_DRIVEN_ARCHITECTURE.md)
 
 ### 5. Edge-Cloud Hybrid Processing
 **Why:** Low latency for critical operations, cost optimization
-- **ADR:** [ADR-19: Edge vs Cloud AI](ADR/ADR_19_Edge_Cloud_AI_Strategy.md)
+- **ADR:** [ADR-19: Edge vs Cloud AI](./ADR/ADR_19_Edge_Cloud_AI_Strategy.md)
 
-**All ADRs:** [ADR Directory](ADR/)
+**All ADRs:** [ADR Directory](./ADR/)
 
 ---
 
@@ -361,7 +361,7 @@ Read key ADRs in order:
 - **Threat Detection:** AWS GuardDuty, Security Hub, Macie
 - **IoT Security:** X.509 certificates, mTLS, IoT Device Defender
 - **Compliance:** AWS Config, CloudTrail (GDPR, PCI-DSS, ISO 27001)
-- **ADR:** [ADR-12: Security-by-Design Architecture](ADR/ADR_12_SECURITY_ARCHITECTURE.md)
+- **ADR:** [ADR-12: Security-by-Design Architecture](./ADR/ADR_12_SECURITY_ARCHITECTURE.md)
 - **Network:** VPC, Security Groups, NACLs
 - **Compliance:** AWS Config, CloudTrail
 
@@ -376,14 +376,14 @@ Read key ADRs in order:
 - **Infrastructure:** Terraform
 - **Configuration:** AWS Systems Manager Parameter Store
 
-**Detailed stack justification:** [ADR-15: Cloud Provider Selection](ADR/ADR_15_Cloud_Provider_Selection.md)
+**Detailed stack justification:** [ADR-15: Cloud Provider Selection](./ADR/ADR_15_Cloud_Provider_Selection.md)
 
 ---
 
 ## 📚 Documentation
 
 ### Architecture Documentation
-- **ADRs (19):** [ADR Directory](ADR/) - All architectural decisions with rationale
+- **ADRs (19):** [ADR Directory](./ADR/) - All architectural decisions with rationale
 - **Diagrams:** [ARCHITECTURAL_DIAGRAMS](ARCHITECTURAL_DIAGRAMS/) - C4 model diagrams
 - **HLD:** [HLD Directory](HLD/) - Detailed scenario walkthroughs ⭐ NEW
 - **Glossary:** [GLOSSARY.md](GLOSSARY.md) - Domain terminology ⭐ NEW
@@ -514,7 +514,7 @@ Read key ADRs in order:
 **Security Cost:** $24,500/month (6% of total spend, industry standard 5-8%)  
 **Security ROI:** €295K/year positive ROI (breach prevention - security cost)
 
-**Detailed Security Architecture:** [ADR-12: Security-by-Design](ADR/ADR_12_SECURITY_ARCHITECTURE.md)
+**Detailed Security Architecture:** [ADR-12: Security-by-Design](./ADR/ADR_12_SECURITY_ARCHITECTURE.md)
 
 **Details:** [THREAT_MODEL.md](THREAT_MODEL/THREAT_MODEL.md)
 
@@ -556,7 +556,7 @@ Read key ADRs in order:
 - Traditional ML: €3K/month
 - **Savings: €924K/year by choosing the right tool**
 
-**Details:** See [ADR-02](ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md), [ADR-16](ADR/ADR_16_MLOps_Pipeline.md), and [ADR-18](ADR/ADR_18_Agentic_AI_Framework.md)
+**Details:** See [ADR-02](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md), [ADR-16](./ADR/ADR_16_MLOps_Pipeline.md), and [ADR-18](./ADR/ADR_18_Agentic_AI_Framework.md)
 
 ---
 
@@ -590,7 +590,7 @@ Every ADR includes:
 - ✅ **Trade-offs documented** (pros/cons with business context)
 - ✅ **Rejection rationale** (why alternatives don't meet requirements)
 
-**Example:** [ADR-01 (Microservices)](ADR/ADR_01_microservices_architecture.md) compares against monolith and service-based architecture with specific cost/scaling implications.
+**Example:** [ADR-01 (Microservices)](./ADR/ADR_01_microservices_architecture.md) compares against monolith and service-based architecture with specific cost/scaling implications.
 
 ---
 
@@ -631,7 +631,7 @@ This architectural documentation is provided under MIT License for educational p
 1. **[PERSONAS.md](PERSONAS.md)** - Meet Sarah, Marcus, David, Emma, and the people driving our decisions
 2. **[EVENT_STORMING.md](EVENT_STORMING.md)** - Domain events, bounded contexts, and business rules
 3. **[PHASED_IMPLEMENTATION.md](PHASED_IMPLEMENTATION.md)** - Migration plan with timelines, costs, and ROI
-4. **[ADR Directory](ADR/)** - All architectural decisions with alternatives and trade-offs
+4. **[ADR Directory](./ADR/)** - All architectural decisions with alternatives and trade-offs
 
 **Architecture is:** *"One foot in business, one foot in technology"* - O'Reilly Architectural Katas Judges
 

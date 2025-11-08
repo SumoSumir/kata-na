@@ -96,6 +96,6 @@
 **Owner:** Platform Engineering + Security Teams
 
 **Related Documentation:**
-- [ADR-12: Security-by-Design](ADR/ADR_12_SECURITY_ARCHITECTURE.md)
-- [ADR-15: Cloud Provider Selection](ADR/ADR_15_Cloud_Provider_Selection.md)
+- [ADR-12: Security-by-Design](./ADR/ADR_12_SECURITY_ARCHITECTURE.md)
+- [ADR-15: Cloud Provider Selection](./ADR/ADR_15_Cloud_Provider_Selection.md)
 - [PERSONAS.md](PERSONAS.md) - David Park (CTO/CISO) infrastructure and security requirements

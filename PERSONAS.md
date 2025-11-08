@@ -27,8 +27,8 @@ This document introduces the key people and personas that guide our architectura
 **Quote:** *"I need data-driven insights to position vehicles where customers actually need them, not where we guess they'll be."*
 
 **How We Solve This:**
-- **[ADR-02: AI-Driven Demand Forecasting](ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md)** - ML models predict demand 24 hours ahead using 150+ features (weather, events, holidays, transit disruptions)
-- **[ADR-16: MLOps Pipeline](ADR/ADR_16_MLOps_Pipeline.md)** - Automated model training, validation, and deployment with A/B testing
+- **[ADR-02: AI-Driven Demand Forecasting](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md)** - ML models predict demand 24 hours ahead using 150+ features (weather, events, holidays, transit disruptions)
+- **[ADR-16: MLOps Pipeline](./ADR/ADR_16_MLOps_Pipeline.md)** - Automated model training, validation, and deployment with A/B testing
 - **Analytics Dashboards** - Real-time KPI tracking showing retention improvements from 20% → 55%
 - **[PHASED_IMPLEMENTATION.md](PHASED_IMPLEMENTATION.md)** - €30.5M NPV business case with 8.7-month payback
 
@@ -68,11 +68,11 @@ This document introduces the key people and personas that guide our architectura
 **Quote:** *"Show me which vehicles need attention RIGHT NOW and optimize my team's routes. Every wasted trip costs us money. I need AI to tell my field managers exactly where to send their teams and why."*
 
 **How We Solve This:**
-- **[ADR-02: Dynamic Relocation Incentives](ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md)** - AI automatically offers users €3-5 credits to relocate vehicles, reducing manual swap costs from €15 → €6
-- **[ADR-02: AI Task Prioritization](ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md)** - Prioritizes battery swaps based on predicted demand (not just current battery level)
-- **[ADR-07: Predictive Maintenance](ADR/ADR_07_PREDICTIVE_MAINTENANCE.md)** - Random Forest models predict battery failures 7 days ahead with 92% accuracy
-- **[WORKFLOWS/STAFF_WORKFLOWS.md](WORKFLOWS/STAFF_WORKFLOWS.md)** - AI-powered task prioritization system for field operations
-- **[ADR-01: Microservices Architecture](ADR/ADR_01_microservices_architecture.md)** - Fleet Operations Service scales independently to handle 50K+ vehicles
+- **[ADR-02: Dynamic Relocation Incentives](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md)** - AI automatically offers users €3-5 credits to relocate vehicles, reducing manual swap costs from €15 → €6
+- **[ADR-02: AI Task Prioritization](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md)** - Prioritizes battery swaps based on predicted demand (not just current battery level)
+- **[ADR-16: Predictive Maintenance](./ADR/ADR_16_MLOps_Pipeline.md)** - Machine learning models predict battery failures and maintenance needs
+- **[WORKFLOWS/STAFF_WORKFLOWS.md](./WORKFLOWS/STAFF_WORKFLOWS.md)** - AI-powered task prioritization system for field operations
+- **[ADR-01: Microservices Architecture](./ADR/ADR_01_microservices_architecture.md)** - Fleet Operations Service scales independently to handle 50K+ vehicles
 - **Route Optimization** - Google Maps Directions API calculates most efficient multi-stop routes
 
 **Marcus's AI-Powered Morning Workflow:**
@@ -147,16 +147,16 @@ AI Task List for Madrid Region (Prioritized by Urgency × Impact):
 **How We Solve This:**
 
 **Infrastructure & Scalability:**
-- **[ADR-01: Microservices Architecture](ADR/ADR_01_microservices_architecture.md)** - 8 independently scalable services on AWS ECS Fargate (Telemetry, Booking, Payment, Fleet Ops, Pricing, Analytics, Notification, User/KYC)
-- **[ADR-09: Multi-Region Deployment](ADR/ADR_09_Multi_Region_Deployment.md)** - Active-passive setup in eu-central-1 (Frankfurt) + eu-west-1 (Ireland) with 99.95% uptime SLA
-- **[ADR-10: Observability Stack](ADR/ADR_10_Monitoring_and_Metrics.md)** - VictoriaMetrics, Grafana, Loki for unified metrics, logs, and traces
-- **[ADR-06: Event-Driven Architecture](ADR/ADR_06_EVENT_DRIVEN_ARCHITECTURE.md)** - Kafka topics isolate failures, prevent cascading outages
+- **[ADR-01: Microservices Architecture](./ADR/ADR_01_microservices_architecture.md)** - 8 independently scalable services on AWS ECS Fargate (Telemetry, Booking, Payment, Fleet Ops, Pricing, Analytics, Notification, User/KYC)
+- **[ADR-09: Multi-Region Deployment](./ADR/ADR_09_MULTI_REGION.md)** - Active-passive setup in eu-central-1 (Frankfurt) + eu-west-1 (Ireland) with 99.95% uptime SLA
+- **[ADR-10: Observability Stack](./ADR/ADR_10_Monitoring_and_Metrics.md)** - VictoriaMetrics, Grafana, Loki for unified metrics, logs, and traces
+- **[ADR-06: Event-Driven Architecture](./ADR/ADR_06_EVENT_DRIVEN_ARCHITECTURE.md)** - Kafka topics isolate failures, prevent cascading outages
 
 **Security & Compliance:**
-- **[ADR-12: Security-by-Design Architecture](ADR/ADR_12_SECURITY_ARCHITECTURE.md)** - Comprehensive zero-trust model with AWS IAM, Secrets Manager, KMS encryption
-- **[ADR-14: Data Compliance](ADR/ADR_14_DATA_COMPLIANT.md)** - GDPR data residency (EU regions only), automated right-to-erasure
-- **[ADR-11: IoT Security](ADR/ADR_11_IoT_Enabled_Vehicles.md)** - X.509 certificates for 50K devices, AWS IoT Core mutual TLS (mTLS)
-- **[COST_ANALYSIS.md](COST_ANALYSIS.md)** - Security ROI: €295K/year positive ROI (breach prevention)
+- **[ADR-12: Security-by-Design Architecture](./ADR/ADR_12_SECURITY_ARCHITECTURE.md)** - Comprehensive zero-trust model with AWS IAM, Secrets Manager, KMS encryption
+- **[ADR-14: Data Compliance](./ADR/ADR_14_DATA_COMPLIANT.md)** - GDPR data residency (EU regions only), automated right-to-erasure
+- **[ADR-11: IoT Security](./ADR/ADR_11_IoT_Enabled_Vehicles.md)** - X.509 certificates for 50K devices, AWS IoT Core mutual TLS (mTLS)
+- **[COST_ANALYSIS.md](./COST_ANALYSIS.md)** - Security ROI: €295K/year positive ROI (breach prevention)
 
 **Architecture Highlights:**
 - **Independent Scaling:** Telemetry (10 tasks, 2 vCPU) vs. Booking (20 tasks peak) vs. Analytics (4 vCPU, 8GB RAM)
@@ -191,7 +191,7 @@ Emma leaves for work at 8:15 AM every weekday. She needs a scooter within 100m o
 **Quote:** *"I want to delete Uber and just use MobilityCorp, but I can't risk being late to work."*
 
 **How We Solve This:**
-- **[ADR-02: Predictive Rebalancing](ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md)** - ML model predicts Emma's 8:15 AM demand and triggers relocation incentives the night before
+- **[ADR-02: Predictive Rebalancing](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md)** - ML model predicts Emma's 8:15 AM demand and triggers relocation incentives the night before
 - **Pre-Booking Feature** - Emma reserves her scooter at 11:00 PM for next morning (30-minute advance booking)
 - **[WORKFLOWS/CUSTOMER_WORKFLOWS.md](WORKFLOWS/CUSTOMER_WORKFLOWS.md)** - Step-by-step booking, unlock, and return process with AI verification
 - **Dynamic Pricing Transparency** - Real-time surge/discount indicators in-app
@@ -233,8 +233,8 @@ Alex wants to explore Barcelona's beaches and Gothic Quarter. He needs on-demand
 **Quote:** *"Make it as easy as Google Maps—I shouldn't need to think about logistics."*
 
 **How We Solve This:**
-- **[ADR-13: Conversational AI Assistant](ADR/ADR_13_CONVERSATIONAL_UX_AND_AI_ASSISTANT.md)** - Claude 3.7 Sonnet LLM with multilingual support (English, Spanish, German, French)
-- **[ADR-04: External APIs](ADR/ADR_04_EXTERNAL_APIS.md)** - Google Maps integration for route planning and parking zone detection
+- **[ADR-13: Conversational AI Assistant](./ADR/ADR_13_CONVERSATIONAL_UX_AND_AI_ASSISTANT.md)** - Claude 3.7 Sonnet LLM with multilingual support (English, Spanish, German, French)
+- **[ADR-04: External APIs](./ADR/ADR_04_EXTERNAL_APIS.md)** - Google Maps integration for route planning and parking zone detection
 - **Real-Time Telemetry** - Vehicle availability updated every 30 seconds via IoT Core
 - **[WORKFLOWS/CUSTOMER_WORKFLOWS.md](WORKFLOWS/CUSTOMER_WORKFLOWS.md)** - Visual parking verification with AI-powered location checks
 
@@ -277,8 +277,8 @@ Lisa needs a van on Saturday mornings for grocery shopping and ferrying kids to 
 **Quote:** *"I need to trust that the vehicle will be clean, charged, and reliable—my kids depend on it."*
 
 **How We Solve This:**
-- **[ADR-18: Computer Vision for Quality](ADR/ADR_18_AI_VISION_AND_AUTOMATION.md)** - ResNet-50 CNN detects damage, dirt, and trash with 88% accuracy
-- **[ADR-07: Battery Health Prediction](ADR/ADR_07_PREDICTIVE_MAINTENANCE.md)** - ML model predicts remaining range with 95% accuracy (±2 km)
+- **[ADR-18: Computer Vision for Quality](./ADR/ADR_18_Agentic_AI_Framework.md)** - ResNet-50 CNN detects damage, dirt, and trash with 88% accuracy
+- **[ADR-07: Battery Health Prediction](./ADR/ADR_16_MLOps_Pipeline.md)** - ML model predicts remaining range with 95% accuracy (±2 km)
 - **Pre-Rental Photos** - Lisa sees timestamped photos of van interior/exterior before booking
 - **Automated Quality Scoring** - Vehicles below 7/10 cleanliness score automatically flagged for cleaning
 
@@ -323,8 +323,8 @@ Javier starts each day reviewing battery levels across 2,000 vehicles. He manual
 **Quote:** *"Give me a smart system that tells my team exactly where to go and why—don't make me guess."*
 
 **How We Solve This:**
-- **[ADR-02: AI Task Prioritization](ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md)** - Prioritizes battery swaps based on predicted demand (not just current battery level)
-- **[ADR-07: Predictive Maintenance Alerts](ADR/ADR_07_PREDICTIVE_MAINTENANCE.md)** - Flags vehicles needing preventive service before they fail
+- **[ADR-02: AI Task Prioritization](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md)** - Prioritizes battery swaps based on predicted demand (not just current battery level)
+- **[ADR-07: Predictive Maintenance Alerts](./ADR/ADR_16_MLOps_Pipeline.md)** - Flags vehicles needing preventive service before they fail
 - **[WORKFLOWS/STAFF_WORKFLOWS.md](WORKFLOWS/STAFF_WORKFLOWS.md)** - Detailed workflow for Javier's morning routine with AI-optimized task list
 - **Route Optimization** - Google Maps Directions API calculates most efficient multi-stop routes
 
@@ -390,7 +390,7 @@ Nina resolves disputes about fines, parking violations, and damage claims. Most 
 **Quote:** *"If the system could automatically verify returns and detect damage, I could focus on real customer issues."*
 
 **How We Solve This:**
-- **[ADR-18: Computer Vision Automation](ADR/ADR_18_AI_VISION_AND_AUTOMATION.md)** - ResNet-50 CNN + AWS Rekognition for damage detection and location verification
+- **[ADR-18: Computer Vision Automation](./ADR/ADR_18_Agentic_AI_Framework.md)** - ResNet-50 CNN + AWS Rekognition for damage detection and location verification
 - **Automated Dispute Resolution** - 70% of cases auto-resolved with photo evidence + timestamps
 - **[WORKFLOWS/CUSTOMER_WORKFLOWS.md](WORKFLOWS/CUSTOMER_WORKFLOWS.md)** - Return verification workflow with AI-powered checks
 - **Audit Trail** - Immutable photo history stored in S3 with 90-day retention
@@ -475,13 +475,13 @@ This matrix shows exactly where each persona's needs are addressed in our archit
 
 | Persona | Core Solution | Primary ADR | Workflow | Business Metric |
 |---------|---------------|-------------|----------|-----------------|
-| **Sarah (CPO)** | ML Demand Forecasting | [ADR-02](ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md) | [Customer Discovery](WORKFLOWS/CUSTOMER_WORKFLOWS.md) | Retention: 20% → 55% |
-| **Marcus (VP Fleet Ops)** | AI Relocation Incentives | [ADR-02](ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md) | [Staff Workflows](WORKFLOWS/STAFF_WORKFLOWS.md) | Cost: €15 → €6/swap |
-| **David (CTO/CISO)** | Microservices + Multi-Region + Zero-Trust | [ADR-01](ADR/ADR_01_microservices_architecture.md), [ADR-09](ADR/ADR_09_Multi_Region_Deployment.md), [ADR-12](ADR/ADR_12_SECURITY_ARCHITECTURE.md) | [Event Storming](EVENT_STORMING.md) | Uptime: 99.95% SLA, Zero breaches |
-| **Emma (Commuter)** | Predictive Rebalancing | [ADR-02](ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md) | [Booking Flow](WORKFLOWS/CUSTOMER_WORKFLOWS.md#workflow-vehicle-discovery-and-booking) | Availability: 75% → 95% |
-| **Alex (Tourist)** | Conversational AI | [ADR-13](ADR/ADR_13_CONVERSATIONAL_UX_AND_AI_ASSISTANT.md) | [Customer Workflows](WORKFLOWS/CUSTOMER_WORKFLOWS.md) | Conversion: +40% |
-| **Lisa (Family User)** | Computer Vision Quality | [ADR-18](ADR/ADR_18_AI_VISION_AND_AUTOMATION.md) | [Return Verification](WORKFLOWS/CUSTOMER_WORKFLOWS.md#5-return--verification) | NPS: +25 points |
-| **Nina (Support)** | Automated Dispute AI | [ADR-18](ADR/ADR_18_AI_VISION_AND_AUTOMATION.md) | [Support Automation](WORKFLOWS/CUSTOMER_WORKFLOWS.md#6-payment--feedback) | Auto-resolve: 70% |
+| **Sarah (CPO)** | ML Demand Forecasting | [ADR-02](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md) | [Customer Discovery](WORKFLOWS/CUSTOMER_WORKFLOWS.md) | Retention: 20% → 55% |
+| **Marcus (VP Fleet Ops)** | AI Relocation Incentives | [ADR-02](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md) | [Staff Workflows](WORKFLOWS/STAFF_WORKFLOWS.md) | Cost: €15 → €6/swap |
+| **David (CTO/CISO)** | Microservices + Multi-Region + Zero-Trust | [ADR-01](./ADR/ADR_01_microservices_architecture.md), [ADR-09](./ADR/ADR_09_MULTI_REGION.md), [ADR-12](./ADR/ADR_12_SECURITY_ARCHITECTURE.md) | [Event Storming](EVENT_STORMING.md) | Uptime: 99.95% SLA, Zero breaches |
+| **Emma (Commuter)** | Predictive Rebalancing | [ADR-02](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md) | [Booking Flow](WORKFLOWS/CUSTOMER_WORKFLOWS.md#workflow-vehicle-discovery-and-booking) | Availability: 75% → 95% |
+| **Alex (Tourist)** | Conversational AI | [ADR-13](./ADR/ADR_13_CONVERSATIONAL_UX_AND_AI_ASSISTANT.md) | [Customer Workflows](WORKFLOWS/CUSTOMER_WORKFLOWS.md) | Conversion: +40% |
+| **Lisa (Family User)** | Computer Vision Quality | [ADR-18](./ADR/ADR_18_Agentic_AI_Framework.md) | [Return Verification](WORKFLOWS/CUSTOMER_WORKFLOWS.md#5-return--verification) | NPS: +25 points |
+| **Nina (Support)** | Automated Dispute AI | [ADR-18](./ADR/ADR_18_Agentic_AI_Framework.md) | [Support Automation](WORKFLOWS/CUSTOMER_WORKFLOWS.md#6-payment--feedback) | Auto-resolve: 70% |
 
 ---
 
@@ -779,7 +779,7 @@ SOC 2 Type II Evidence:
 - **[PHASED_IMPLEMENTATION.md](PHASED_IMPLEMENTATION.md)** - €30.5M NPV migration plan with persona success stories
 - **[EVENT_STORMING.md](EVENT_STORMING.md)** - Domain events and bounded contexts derived from persona workflows
 - **[QUICK_REFERENCE.md](QUICK_REFERENCE.md)** - Navigation guide by role (CTO, CFO, CPO, Engineers)
-- **[ADR/](ADR/)** - 19 Architecture Decision Records with persona-driven rationale
+- **[ADR/](./ADR/)** - 19 Architecture Decision Records with persona-driven rationale
 
 ---
 
