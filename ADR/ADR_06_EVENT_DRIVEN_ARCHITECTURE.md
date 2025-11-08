@@ -31,7 +31,20 @@ Key requirements include:
 - **Rejected:** Kafka’s log-based architecture better suits real-time workloads  
 
 ## Decision
-Implement an **event-driven architecture** using **Apache Kafka** as the central event bus.
+Implement an **event-driven architecture** using **Apache Kafka on AWS MSK (Managed Streaming for Kafka)** as the central event bus.
+
+**Kafka Configuration:**
+- **Cluster:** 3 brokers (kafka.m5.2xlarge) in eu-central-1
+- **Partitions:** 50 partitions per topic (1K vehicles/partition)
+- **Replication Factor:** 3 (high availability)
+- **Retention:** 7 days (balance cost vs. replay capability)
+- **Compression:** LZ4 (4× compression ratio)
+- **Storage:** 2 TB EBS (gp3) per broker
+
+**Schema Management:**
+- **AWS Glue Schema Registry** for Avro schemas (free, AWS-native alternative to Confluent Schema Registry)
+- Schema evolution with backward compatibility
+- Automatic schema validation on publish
 
 ### Core Event Topics
 - `bookings.created` – New booking initiated  
@@ -49,13 +62,24 @@ Implement an **event-driven architecture** using **Apache Kafka** as the central
 - Timestamp all events with **event time** (not processing time)
 
 ### Processing Patterns
-- Real-time stream processing using **Kafka Streams**  
-- **Event sourcing** for audit trail  
-- **CQRS** pattern for read-optimized views  
+- Real-time stream processing using **AWS Lambda** (event-driven, serverless)
+- **Kafka Streams** for stateful processing (when Lambda insufficient)
+- **Event sourcing** for audit trail (Aurora PostgreSQL event store)
+- **CQRS** pattern for read-optimized views (Aurora write, Redis/DynamoDB read)
 
 ### Event Flow
-`Producer → Kafka Topic → Multiple Consumers`  
+```
+Producer (Microservice) 
+  → AWS MSK (Kafka Topic, 50 partitions) 
+  → Multiple Consumers:
+      ├─ Lambda (real-time processing, anomaly detection)
+      ├─ Kinesis Firehose (S3 archival, Bronze layer)
+      ├─ SageMaker (ML model retraining)
+      └─ Microservices (async updates)
+```
 (asynchronous, parallel processing)
+
+**Cost:** ~$5,000/month (MSK cluster + data transfer)
 
 ## Consequences
 

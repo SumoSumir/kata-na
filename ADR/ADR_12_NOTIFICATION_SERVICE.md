@@ -32,10 +32,17 @@ Implement an **AI-powered, event-driven Notification Service** that delivers per
 - **API endpoints:** Direct triggers for feedback follow-ups and nearest station queries
 
 **2. Notification Orchestrator**
-- **Event router:** Maps events to notification types with priority (Critical/High/Medium/Low)
-- **User preferences:** Manages quiet hours, channel preferences (push, SMS, email), and opt-outs
-- **Rate limiter:** Prevents notification fatigue (max N per hour/day, critical notifications bypass)
-- **Deduplication:** Prevents redundant notifications for same event
+- **Event router:** AWS Lambda triggered by Kafka (MSK) events, maps to notification types with priority (Critical/High/Medium/Low)
+  - Lambda: Node.js 20.x, 512 MB RAM, 5s timeout (avg 300ms execution)
+  - DLQ (Dead Letter Queue) for failed routing to SQS
+- **User preferences:** DynamoDB table `user_notification_preferences` (on-demand, single-digit ms latency)
+  - Attributes: `user_id`, `quiet_hours`, `channel_preferences`, `opt_outs`, `notification_limits`
+  - GSI on `notification_type` for bulk operations
+- **Rate limiter:** ElastiCache Redis with sliding window algorithm
+  - Prevents notification fatigue (max 10/hour, 50/day per user, critical notifications bypass)
+  - TTL-based key expiry: `user:{user_id}:limit:{window}`
+- **Deduplication:** ElastiCache Redis with 15-min TTL for event hash
+  - Prevents redundant notifications for same event (e.g., multiple `battery_low` events)
 
 **3. AI-Driven Personalization (ADR-05, ADR-13)**
 
@@ -71,11 +78,20 @@ e) **Feedback Follow-Up**
 - **Task assignments:** Optimized route updates pushed to staff dashboard
 
 **5. Delivery Channels**
-- Push notifications (FCM/APNs) for mobile app
-- SMS (Twilio) for critical alerts
-- Email (SendGrid) for receipts and compliance
-- In-app messages for contextual prompts
-- Voice notifications (future) for accessibility
+- **Push notifications:** Amazon SNS mobile push (iOS/Android) with FCM/APNs endpoints
+  - SNS topic per notification type: `sns:mobility:notification:critical`, `sns:mobility:notification:promo`
+  - Lambda fanout to 50K+ devices/sec
+- **SMS:** Amazon SNS SMS (critical alerts) via AWS SMS routes (0.0047 USD/message in EU)
+  - Delivery receipts via CloudWatch Events
+  - Fallback to Twilio for non-AWS-covered regions
+- **Email:** Amazon SES (Simple Email Service) for transactional emails
+  - Sender reputation > 95% with DKIM/SPF/DMARC
+  - Bounce and complaint handling via SNS topics
+  - Cost: $0.10 per 1,000 emails
+- **In-app messages:** Real-time via WebSocket (API Gateway + Lambda + ElastiCache Redis pub/sub)
+  - WebSocket connections persist for instant delivery
+  - Fallback to polling for low-battery devices
+- **Voice notifications (future):** Amazon Polly text-to-speech for accessibility
 
 **6. Analytics & Feedback Loop**
 - Track delivery metrics (sent, opened, clicked, dismissed)

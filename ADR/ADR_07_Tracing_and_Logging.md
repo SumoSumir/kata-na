@@ -18,15 +18,58 @@ Requirements include:
 - Vendor-neutral and future-proof.
 
 ## Decision
-We will adopt **OpenTelemetry** as the basis for our tracing and logging system.
+We will adopt **OpenTelemetry** as the observability framework with **AWS CloudWatch** and **AWS X-Ray** as the backend for logs, metrics, and distributed tracing.
+
+**Architecture:**
+
+1. **OpenTelemetry Instrumentation**
+   - OpenTelemetry SDKs in all microservices (Python, Node.js, Java)
+   - Auto-instrumentation for frameworks (FastAPI, Express, Spring Boot)
+   - Custom spans for business-critical operations (booking creation, payment processing)
+   - Baggage for cross-service context propagation (user_id, request_id, trace_id)
+
+2. **AWS X-Ray (Distributed Tracing)**
+   - OpenTelemetry Collector exports traces to X-Ray via OTLP → X-Ray exporter
+   - Service map visualization showing all microservices and dependencies
+   - Trace retention: 30 days
+   - Sampling strategy: 100% for errors, 5% for successful requests (cost optimization)
+   - Cost: $5 per 1 million traces recorded + $0.50 per 1 million traces retrieved
+   - Example: 10M requests/day → ~$150/month for X-Ray
+
+3. **AWS CloudWatch Logs (Centralized Logging)**
+   - OpenTelemetry Logs API → CloudWatch Logs via AWS for Fluent Bit sidecar
+   - Log groups per microservice: `/ecs/mobility-corp/booking-service`
+   - Structured JSON logs with trace context (trace_id, span_id injected)
+   - Log retention: 7 days (hot), 90 days (cold archive to S3 via Kinesis Firehose)
+   - CloudWatch Logs Insights for querying (SQL-like syntax)
+   - Cost: $0.50/GB ingested + $0.03/GB stored + $0.005/GB scanned
+   - Example: 500 GB/day → ~$7,500/month
+
+4. **AWS CloudWatch Metrics (Application Metrics)**
+   - OpenTelemetry Metrics SDK → CloudWatch Metrics via EMF (Embedded Metric Format)
+   - Custom metrics: booking_latency_p99, vehicle_availability_ratio, payment_success_rate
+   - High-resolution metrics (1s granularity) for critical SLIs
+   - CloudWatch Alarms for SLO violations (e.g., booking_latency_p99 > 500ms)
+   - Cost: $0.30 per custom metric + $0.10 per alarm
+
+5. **OpenTelemetry Collector Deployment**
+   - ECS Fargate sidecar pattern: 256 CPU, 512 MB RAM per collector
+   - Batch processor: 5s flush interval, 10K spans/batch
+   - Memory limiter: 400 MiB soft limit, 500 MiB hard limit
+   - Exporters: AWS X-Ray, CloudWatch Logs, CloudWatch EMF
+   - High availability: Multi-AZ deployment with auto-scaling
+
+6. **Grafana for Visualization (Optional)**
+   - Amazon Managed Grafana workspace
+   - Unified dashboards combining X-Ray traces, CloudWatch metrics, and logs
+   - Cost: $9/workspace/month + $9/editor user/month
 
 **Justification:**
-- It is the industry standard for open, vendor-neutral observability.
-- It unifies previous standards (OpenTracing, OpenCensus), promoting simplicity and compatibility.
-- Wide ecosystem support and active development.
-- Facilitates seamless integration with existing tracing systems (Jaeger, Zipkin) and commercial services (Datadog, AWS X-Ray, etc).
-- Modular architecture allows for incremental adoption and future extensibility.
-- Rich support for metrics, logs, and traces in distributed environments.
+- **OpenTelemetry** provides vendor-neutral instrumentation (can switch backends if needed)
+- **AWS X-Ray** offers native service map and deep AWS service integration (RDS, DynamoDB, Lambda)
+- **CloudWatch** is cost-effective for AWS-native workloads and has native ECS/Fargate integration
+- **Unified observability:** Trace IDs link logs, metrics, and traces for root cause analysis
+- **Cost optimization:** X-Ray sampling reduces trace ingestion by 95% for normal operations
 
 ## Consequences
 

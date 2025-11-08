@@ -49,33 +49,59 @@ Implement an **AI-driven dynamic pricing and relocation incentive system** that 
 ### Architecture Components
 
 **1. Demand Forecasting Engine**
-- **Real-time prediction:** Forecast demand at 15-minute intervals for each 500m grid cell in each city
-- **Input features:**
-  - Historical rental patterns (time of day, day of week, seasonality)
-  - Weather conditions (temperature, precipitation, wind via Weather & Events API - [ADR-04](ADR_04_EXTERNAL_APIS.md))
-  - Events (concerts, sports, festivals via PredictHQ - [ADR-04](ADR_04_EXTERNAL_APIS.md))
-  - Public holidays and school schedules (via Calendarific API - [ADR-04](ADR_04_EXTERNAL_APIS.md))
-  - Transit disruptions (metro closures, traffic accidents, grid lock via Map API - [ADR-04](ADR_04_EXTERNAL_APIS.md))
-- **Model:** Gradient boosting (XGBoost) or deep learning (LSTM) trained on historical data
-- **Output:** Predicted demand probability distribution per location and time window
+- **ML Pipeline (AWS SageMaker):**
+  - **Training:** XGBoost models trained on 6 months of historical booking data
+  - **Features:** 150+ engineered features from Silver layer (ADR-17)
+    - Historical rental patterns (time of day, day of week, seasonality)
+    - Weather conditions (temperature, precipitation, wind via Weather & Events API - [ADR-04](ADR_04_EXTERNAL_APIS.md))
+    - Events (concerts, sports, festivals via PredictHQ - [ADR-04](ADR_04_EXTERNAL_APIS.md))
+    - Public holidays and school schedules (via Calendarific API - [ADR-04](ADR_04_EXTERNAL_APIS.md))
+    - Transit disruptions (metro closures, traffic accidents via Map API - [ADR-04](ADR_04_EXTERNAL_APIS.md))
+  - **Output:** Predicted demand per 500m grid cell, 15-min intervals, 4-hour forecast horizon
+  - **Model performance:** MAPE < 15% (Mean Absolute Percentage Error)
+- **Real-time inference:**
+  - **SageMaker real-time endpoint:** ml.m5.xlarge instance (2 endpoints for HA)
+  - **Latency:** <200ms per prediction (batch predictions for all zones)
+  - **Caching:** ElastiCache Redis stores predictions for 15 mins, reducing SageMaker calls
+  - **Invocation:** Lambda function triggers predictions every 15 mins via EventBridge schedule
+- **Model retraining:**
+  - **Schedule:** Weekly automated retraining (Sundays 2 AM)
+  - **Pipeline:** Step Functions orchestrates: Data prep → Training → Evaluation → Deployment
+  - **Training data:** Last 180 days from Gold layer `demand_by_zone_hour` table
+  - **Cost:** $50/week for training (ml.m5.4xlarge, 2 hours)
 
 **2. Supply Tracking and Availability Prediction**
-- **Real-time inventory:** Current vehicle locations from GPS telemetry (ADR-03, ADR-06)
-- **Availability forecasting:** Predict when rented vehicles will return based on:
-  - Historical trip duration distributions
-  - Current trip progress (distance traveled, time elapsed)
-  - Destination prediction models
-- **Supply score:** Calculate available capacity per location considering in-transit returns
+- **Real-time inventory:** 
+  - **Source:** Vehicle locations from DynamoDB `vehicle_status` table (updated via IoT Core - ADR-11)
+  - **Query:** DynamoDB GSI on `zone_id` for sub-10ms lookups
+  - **Caching:** ElastiCache Redis maintains zone-level vehicle counts with 30s TTL
+- **Availability forecasting:**
+  - **Trip duration prediction:** Lightweight XGBoost model (<5MB) on Lambda
+  - **Features:** Historical trip durations, distance, vehicle type, time of day
+  - **Output:** Predicted return time for all active bookings
+  - **Execution:** Lambda triggered on `bookings.started` Kafka event
+- **Supply score calculation:**
+  - **Formula:** `available_vehicles + predicted_returns_next_30min - predicted_demand_next_30min`
+  - **Update frequency:** Every 5 mins via Lambda + EventBridge
+  - **Storage:** DynamoDB `zone_supply_scores` table
 
 **3. Dynamic Pricing Engine**
-- **Pricing zones:** Divide cities into 500m grid cells with zone-specific pricing
-- **Pricing algorithm:**
-  - **Base price:** Standard rate per vehicle type and city
-  - **Demand multiplier:** Increase price in high-demand, low-supply zones (up to 2.5x base)
-  - **Supply multiplier:** Decrease price in low-demand, high-supply zones (down to 0.5x base)
-  - **Elasticity modeling:** Adjust multipliers based on observed price sensitivity per customer segment
-- **Price caps:** Maximum surge limits to maintain customer trust and regulatory compliance
-- **Transparency:** Display dynamic pricing clearly in app with explanations ("High demand in this area")
+- **Architecture:** Lambda functions triggered by EventBridge (every 5 mins) + Kafka events (real-time)
+- **Pricing zones:** Cities divided into 500m H3 hexagonal grid cells (Uber's H3 library)
+- **Pricing algorithm (Python Lambda, 1GB RAM, 30s timeout):**
+  - **Base price:** DynamoDB `base_prices` table (per vehicle_type, city)
+  - **Demand multiplier:** `1.0 + (predicted_demand / avg_demand) * 0.5` (capped at 2.5x)
+  - **Supply multiplier:** `1.0 - (supply_score / avg_supply) * 0.3` (floored at 0.5x)
+  - **Final price:** `base_price * demand_multiplier * supply_multiplier * vehicle_coefficient`
+  - **Elasticity modeling:** Per-customer segment price sensitivity from A/B test results
+- **Price caps:** Regulatory compliance (max 2.5x surge in EU cities per consumer law)
+- **Transparency:** Pricing metadata published to Kafka `pricing.updated` topic
+  - Includes: `zone_id`, `price`, `surge_multiplier`, `reason` ("High demand", "Special event")
+  - Consumed by: Booking Service (displays to users), Analytics (tracks effectiveness)
+- **Storage:**
+  - **DynamoDB `zone_pricing` table:** Current prices per zone (TTL = 15 mins)
+  - **ElastiCache Redis:** High-frequency price lookups (<5ms latency)
+- **Cost:** ~$500/month (Lambda invocations + DynamoDB + Redis)
 
 **4. Relocation Incentive Engine**
 - **Opt-in Service:** Users can enable this while booking. Our preferred destination will be within 2 km of theirs, and they won’t be billed if going slightly past their stop to our target zone. The system checks for existing bookings and nearby riders (within 2 km) finishing trips before scheduling a pickup.

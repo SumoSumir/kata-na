@@ -84,17 +84,64 @@ Adopt a **hybrid edge-cloud vehicle telemetry architecture** with intelligent wo
 
 **3. Predictive Maintenance (Local Aggregation + Cloud Training)**
 
-- **Edge aggregation:** Vehicles continuously collect, compress & stream minimal sensor data at short intervals:
+**Edge Processing & Data Collection:**
+- **AWS IoT Greengrass v2** on vehicle (see ADR-11 for edge hardware specs)
+- **Local aggregation:** Vehicles continuously collect and compress sensor data
   - Battery: voltage curves, temperature profiles, charging cycles, degradation rate
-  - Operational: error codes, usage intensity, environmental conditions (temperature, humidity), GPS.
-- **Periodic uploads:** Compressed, anonymized telemetry aggregates sent to cloud every couple of hours or when on WiFi.
-  - E.g. Mechanical: vibration spectra (FFT), brake wear indicators, suspension stress
-- **Cloud-based training:** Fleet-wide models trained on aggregated data to predict:
-  - Battery failure (7-14 day advance warning)
-  - Brake replacement needs (distance-based prediction)
-  - Component degradation patterns (personalized maintenance schedules)
-- **Model deployment:** Updated predictive models pushed to vehicles via OTA updates (staged canary rollout)
-- **Model specs:** Time-series forecasting (LSTM/Transformer), anomaly detection (Isolation Forest), fleet-level ensemble models
+  - Mechanical: vibration spectra (FFT), brake wear indicators, suspension stress
+  - Operational: error codes, usage intensity, environmental conditions, GPS
+- **Edge preprocessing:** Greengrass Lambda functions compute rolling statistics
+  - Example: 5-min battery voltage mean/std, vibration peak frequency
+  - Compression: 10MB raw → 100KB aggregated metrics
+
+**Cloud Data Pipeline:**
+- **Periodic uploads:** Compressed telemetry sent every 2 hours (WiFi preferred) or 6 hours (cellular)
+  - Protocol: MQTT over TLS 1.3 to AWS IoT Core
+  - Payload: Protobuf-serialized metrics (~50KB per upload)
+- **AWS IoT Core → Kinesis Data Firehose → S3 (Bronze Layer)**
+  - IoT Rules route telemetry to Firehose: `SELECT * FROM 'vehicle/+/telemetry/maintenance'`
+  - Firehose batches 128MB or 60s, converts to Parquet, writes to S3
+  - Partitioning: `/year/month/day/vehicle_type/`
+- **Data Lakehouse (ADR-17):** Bronze → Silver → Gold transformation
+  - Silver: Deduplicated, validated, enriched with vehicle metadata
+  - Gold: Aggregated to `battery_health_weekly`, `maintenance_predictions_daily`
+
+**ML Training Pipeline (AWS SageMaker):**
+- **Training data:** 6 months of fleet-wide telemetry from Silver layer
+  - ~50K vehicles × 4 uploads/day × 180 days = 36M records
+  - Feature engineering: Time-series features (lag, rolling windows, Fourier transforms)
+- **Models:**
+  - **Battery failure prediction:** LSTM with 14-day forecast horizon
+    - Features: voltage curves, temperature, cycle count, age
+    - Target: Battery capacity < 60% within 14 days (binary classification)
+    - SageMaker training job: ml.p3.2xlarge, 4 hours, ~$15/run
+  - **Brake wear prediction:** XGBoost with distance-based regression
+    - Features: braking frequency, deceleration patterns, terrain (GPS elevation)
+    - Target: Miles until brake replacement needed
+  - **Anomaly detection:** Isolation Forest on vibration/error code patterns
+    - Detects unusual patterns indicating component failure
+- **Model deployment:** SageMaker Model Registry → S3 → Greengrass component update
+  - OTA updates via Greengrass component deployment (phased rollout: 1% → 10% → 100%)
+  - Edge inference: TensorFlow Lite models (<10MB), <50ms latency
+
+**Inference & Alerting:**
+- **Edge inference:** Greengrass Lambda runs predictions hourly on local data
+  - Battery health score computed locally (0-100)
+  - High-risk predictions (score < 30) → immediate alert to cloud
+- **Cloud aggregation:** Daily SageMaker batch transform jobs on all vehicles
+  - Input: Yesterday's telemetry from Gold layer
+  - Output: Maintenance predictions stored in `maintenance_predictions_daily` table
+- **Fleet Operations Dashboard:** QuickSight dashboard showing:
+  - Vehicles needing maintenance (7-day window)
+  - Predicted battery replacements (14-day window)
+  - Maintenance priority heat map by zone
+
+**Cost Estimate:**
+- IoT Core messages: 50K vehicles × 4 uploads/day × $1/million = $200/month
+- Kinesis Firehose: 300GB/day × $0.029/GB = $8,700/month
+- SageMaker training: Weekly retraining × 4 models × $15 = $240/month
+- SageMaker batch inference: Daily jobs × $0.0043/min × 60 min = $258/month
+- **Total predictive maintenance pipeline: ~$9,400/month**
 
 ### Operational Practices
 
