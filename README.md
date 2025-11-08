@@ -2,9 +2,7 @@
 
 > A comprehensive, production-ready architecture for transforming MobilityCorp's multi-modal transportation platform with AI-enabled intelligence
 
-[![Architecture Score](https://img.shields.io/badge/Architecture%20Score-95%2F100-brightgreen)]()
 [![ADRs](https://img.shields.io/badge/ADRs-19-blue)]()
-[![Status](https://img.shields.io/badge/Status-Production%20Ready-success)]()
 
 ---
 
@@ -12,7 +10,6 @@
 
 - [Executive Summary](#executive-summary)
 - [Meet the People](#meet-the-people)
-- [Team](#team)
 - [Problem Statement](#problem-statement)
 - [Solution Overview](#solution-overview)
 - [Architecture Highlights](#architecture-highlights)
@@ -25,14 +22,14 @@
 
 ---
 
-## 🎭 Meet the People
+## 🎭 Meet the [Personas](PERSONAS.md)
 
-**Understanding the humans behind the architecture:**
+**Understanding the humans behind the architecture**
 
 Our solution addresses real problems for real people. Meet the stakeholders who guide our decisions:
 
 - **Sarah Chen (CPO):** Needs to increase customer retention from 20% to 55% within 18 months
-- **Marcus Weber (VP Operations):** Must reduce battery swap costs from €15 to under €6
+- **Marcus Weber (VP Operations):** Must reduce battery swap costs by 50%-60%
 - **David Park (CTO):** Requires 99.95% uptime with cost-effective scaling
 - **Raj Patel (CISO):** Ensures zero-trust security and GDPR/PCI-DSS compliance
 - **Emma Thompson (Commuter):** Wants reliable scooter availability for her daily 8:15 AM commute
@@ -41,7 +38,6 @@ Our solution addresses real problems for real people. Meet the stakeholders who 
 - **Javier Rodriguez (Field Ops Manager):** Needs AI to prioritize which vehicles need attention
 - **Nina Petersen (Support Agent):** Wants automated dispute resolution with photo evidence
 
-**[Read detailed personas with solution mappings →](PERSONAS.md)**
 
 These personas inform every architectural decision, ensuring we solve business problems, not just technical ones.
 
@@ -80,22 +76,6 @@ An **AI-enabled microservices architecture** featuring:
 - **Uptime:** 99.95% system availability with multi-region deployment
 
 ---
-
-## 👥 Team
-
-**Team kata-na** - Architects of scalable, AI-driven mobility solutions
-
-| Name | Role | LinkedIn | GitHub |
-|------|------|----------|--------|
-| **[Sumir Sumo]** | Lead Architect | [Profile](#) | [@SumoSumir](https://github.com/SumoSumir) |
-| **[Team Member 2]** | AI/ML Engineer | [Profile](#) | [@member2](#) |
-| **[Team Member 3]** | Backend Architect | [Profile](#) | [@member3](#) |
-| **[Team Member 4]** | DevOps/Platform Engineer | [Profile](#) | [@member4](#) |
-
-*For O'Reilly Architectural Katas Q4 2025: AI-Enabled Architecture*
-
----
-
 ## 🚨 Problem Statement
 
 ### Business Context
@@ -110,7 +90,7 @@ MobilityCorp operates across multiple EU cities with a fixed fleet size per coun
 - **Cost:** Lost revenue + poor customer experience leading to churn
 
 #### 2. Battery Management Crisis
-- **Impact:** Manual battery swaps cost €10-15 each
+- **Impact:** Manual battery swaps cost approx €10-15 each
 - **Root Cause:** Reactive vs. predictive maintenance approach
 - **Cost:** High operational overhead + vehicle downtime
 
@@ -558,20 +538,6 @@ Read key ADRs in order:
 
 **Details:** [THREAT_MODEL.md](THREAT_MODEL/THREAT_MODEL.md)
 
----
-
-## 💰 Cost Estimate
-
-### Monthly Infrastructure Costs (Production)
-- **Compute:** ~$45,000 (ECS + Lambda + SageMaker)
-- **Data Storage:** ~$12,000 (S3 + RDS + DynamoDB)
-- **AI/ML:** ~$28,000 (SageMaker training + inference)
-- **Networking:** ~$8,000 (Data transfer + API Gateway)
-- **Other:** ~$7,000 (Monitoring, security, etc.)
-
-**Total:** ~$100,000/month for 50K vehicles across EU
-
-**Detailed breakdown:** [COST_ANALYSIS.md](COST_ANALYSIS.md)
 
 ---
 
