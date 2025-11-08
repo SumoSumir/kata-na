@@ -575,7 +575,7 @@ This glossary defines key terms, acronyms, and concepts used throughout the Mobi
 ## Related Documentation
 
 - **[README.md](README.md)** - Project overview and navigation
-- **[COMPARATIVE_ANALYSIS.md](COMPARATIVE_ANALYSIS.md)** - Comparison with other solutions
+- **[COST_ANALYSIS.md](COST_ANALYSIS.md)** - Cost breakdown (percentage-based)
 - **[ADRs](ADR/)** - All architectural decisions
 - **[Functional Requirements](FUNCTIONAL_REQUIREMENTS/FUNCTIONAL_REQUIREMENTS.md)**
 - **[Non-Functional Requirements](NON_FUNCTIONAL_REQUIREMENTS/NON_FUNCTIONAL_REQUIREMENTS.md)**

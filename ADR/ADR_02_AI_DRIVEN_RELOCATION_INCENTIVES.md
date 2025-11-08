@@ -3,6 +3,16 @@
 ## Status
 Accepted  
 
+## Prerequisites
+This ADR builds upon foundational architectural decisions:
+- **[ADR-01](ADR_01_microservices_architecture.md):** Microservices architecture enables independent scaling of the Pricing Service
+- **[ADR-03](ADR_03_Vehicle_Telemetry.md):** Real-time vehicle location data is critical for supply tracking
+- **[ADR-06](ADR_06_EVENT_DRIVEN_ARCHITECTURE.md):** Event-driven architecture propagates pricing updates to consumers
+
+**Read this after:** [ADR-16 (MLOps Pipeline)](ADR_16_MLOps_Pipeline.md) for model training/deployment details
+
+---
+
 ## Context
 MobilityCorp operates multi-modal vehicle fleets (bikes, scoopers, cars, vans) across multiple EU cities. A critical operational challenge is **vehicle imbalance**: popular pickup locations become depleted while low-demand areas accumulate excess vehicles, leading to:
 
