@@ -10,7 +10,7 @@ Predictive maintenance reduces unplanned downtime, extends vehicle lifespan, and
 
 **Business Impact:**
 - **Downtime Reduction:** -35% (from 12% to 7.8% average downtime)
-- **Maintenance Cost Savings:** $120K/month (reduced emergency repairs)
+- **Maintenance Cost Savings:** Significant reduction in emergency repairs
 - **Customer Satisfaction:** +8 NPS points (fewer in-trip breakdowns)
 - **Vehicle Lifespan Extension:** +18 months average (better upkeep)
 
@@ -158,16 +158,18 @@ sequenceDiagram
 - Publishes alerts via SNS for critical anomalies
 - Updates vehicle health score in DynamoDB
 
+
 **Performance:**
 - Processing latency: ~200ms (includes model inference)
 - Throughput: 5,000 vehicles/second (parallel Lambda invocations)
-- Cost: $0.0002/vehicle/day
+- Cost-effective per-vehicle processing
 
 ### 5.2 Daily Battery Health Prediction (Batch)
 
 **Batch Prediction Process:**
 1. **Data Collection:** Query Timestream for last 30 days of battery telemetry
 2. **Feature Engineering:** Calculate charge cycles, voltage statistics, deep discharge count
+```
 3. **ML Inference:** SageMaker Batch Transform with LightGBM model
 4. **RUL Prediction:** Predicts Remaining Useful Life (days until battery replacement)
 5. **Alert Generation:** Vehicles with RUL < 30 days trigger maintenance alerts
@@ -200,6 +202,28 @@ sequenceDiagram
 - Last anomaly: Motor bearing issue (2 days ago)  
 - Location: Frankfurt Hauptbahnhof
 - Action Required: Schedule maintenance by 2025-01-17
+```
+
+---
+
+## 7. Cost and ROI Considerations
+
+**Infrastructure Components:**
+- Timestream: Time-series data storage and queries
+- Lambda: Real-time anomaly detection
+- SageMaker: Batch inference for predictive models
+- DynamoDB: Health score storage and retrieval
+- SNS: Alert notifications
+
+**Value Proposition:**
+- Significant reduction in emergency repair costs
+- Improved fleet availability and uptime
+- Preventive maintenance scheduling optimization
+- Data-driven maintenance decisions
+- Strong positive ROI from avoided breakdowns
+
+
+````
 ```
 
 ---

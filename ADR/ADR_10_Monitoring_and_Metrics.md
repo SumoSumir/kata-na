@@ -27,8 +27,7 @@ We will use **Amazon CloudWatch** as the primary metrics and monitoring platform
      - Example metrics: `booking_latency_p99`, `vehicle_availability_ratio`, `payment_success_rate`
    - **High-resolution metrics:** 1-second granularity for critical SLIs (vs. 1-min standard)
    - **Metric retention:** 15 months by default
-   - **Cost:** $0.30/custom metric/month + $0.10/alarm + $0.01/1000 GetMetricStatistics requests
-   - **Example cost:** 500 custom metrics + 100 alarms = $150/month
+   - **Pricing:** Per custom metric, per alarm, and per API request
 
 2. **CloudWatch Alarms & Anomaly Detection**
    - **Static alarms:** SLO violations (e.g., `booking_latency_p99 > 500ms` for 2 consecutive minutes)
@@ -41,10 +40,10 @@ We will use **Amazon CloudWatch** as the primary metrics and monitoring platform
    - **Use case:** Store 2+ years of metrics for capacity planning and compliance
    - **Data flow:** CloudWatch → Lambda → VictoriaMetrics remote write API
    - **Deployment:** ECS Fargate, 4 vCPU, 16 GB RAM, gp3 SSD storage
-   - **Storage optimization:** 10x compression vs. Prometheus (100 GB → 10 GB)
+   - **Storage optimization:** 10x compression vs. Prometheus
    - **PromQL queries:** Grafana can query VictoriaMetrics for historical analysis
-   - **Cost:** ~$500/month (compute + storage) vs. $5,000/month for 2-year CloudWatch retention
-   - **Justification:** CloudWatch charges for long retention; VictoriaMetrics reduces cost by 90%
+   - **Cost advantage:** Significant savings vs extended CloudWatch retention
+   - **Justification:** Reduces long-term storage costs dramatically
 
 4. **Amazon Managed Grafana (Visualization)**
    - **Grafana workspace** with CloudWatch and VictoriaMetrics data sources
@@ -54,21 +53,20 @@ We will use **Amazon CloudWatch** as the primary metrics and monitoring platform
      - Business KPIs: Active bookings, revenue/hour, vehicle utilization
      - AI model performance: Inference latency, prediction accuracy, cost per request
    - **Alerting:** Grafana alerts → SNS → PagerDuty (alternative to CloudWatch Alarms)
-   - **Cost:** $9/workspace/month + $9/editor user/month (5 editors = $54/month)
+   - **Pricing:** Workspace and per-editor user pricing
 
 5. **Amazon Timestream (Optional for IoT Telemetry Metrics)**
    - **Use case:** Store high-frequency vehicle telemetry metrics (battery, GPS, speed)
    - **Time-series optimized:** 1/10 cost of relational DB for time-series data
    - **Retention:** 7 days in memory, 90 days in magnetic storage
    - **Query:** SQL-like syntax for time-series analysis
-   - **Cost:** $0.036/GB data scanned + $0.50/million writes
-   - **Example:** 50K vehicles × 10 metrics/min → ~$3,000/month
+   - **Pricing:** Based on data scanned and writes
 
 6. **PagerDuty Integration (Incident Management)**
    - **On-call rotation:** Primary/secondary engineers for critical alerts
    - **Escalation policy:** Critical → Page immediately, High → Slack + Page after 5 min
    - **Incident timeline:** All alerts, CloudWatch graphs, and X-Ray traces linked
-   - **Cost:** $21/user/month (10 engineers = $210/month)
+   - **Pricing:** Per user subscription
 
 7. **Monitoring Agents & Instrumentation**
    - **OpenTelemetry Collector:** ECS Fargate sidecar exports metrics to CloudWatch EMF
@@ -90,19 +88,24 @@ We will use **Amazon CloudWatch** as the primary metrics and monitoring platform
 - **AI-specific metrics:**
   - Model inference latency (P99 < 200ms)
   - Prediction accuracy (monitored via A/B testing)
-  - Cost per inference ($0.005 target for Bedrock)
+  - Cost per inference optimization targets
 
-**Total Monitoring Costs:**
-- CloudWatch (metrics + alarms + logs): ~$8,000/month (see ADR-07 for detailed breakdown)
-- Amazon Managed Grafana: $54/month
-- VictoriaMetrics (optional long-term storage): $500/month
-- PagerDuty: $210/month
-- **Total:** ~$8,800/month
+**Monitoring Infrastructure Costs:**
+- CloudWatch: Metrics, alarms, and logs (see ADR-07 for details)
+- Amazon Managed Grafana: Workspace and user licensing
+- VictoriaMetrics: Optional long-term storage with cost optimization
+- PagerDuty: Incident management platform
+
+**Cost Considerations:**
+- CloudWatch provides native AWS integration
+- VictoriaMetrics significantly reduces long-term storage costs vs CloudWatch alone
+- Grafana enables superior visualization and cross-source querying
 
 **Justification:**
 - **CloudWatch** provides zero-config integration with all AWS services (ECS, Aurora, MSK, Lambda)
-- **VictoriaMetrics** reduces long-term storage costs by 90% vs. CloudWatch alone
+- **VictoriaMetrics** reduces long-term storage costs significantly
 - **Grafana** offers superior visualization and cross-source querying (CloudWatch + VictoriaMetrics)
+```
 - **PagerDuty** ensures < 5 min response time for critical incidents (99.9% uptime SLA)
 
 ## Consequences

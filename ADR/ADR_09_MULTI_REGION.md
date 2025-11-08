@@ -84,13 +84,18 @@ Adopt a **multi-region active-active deployment architecture** with **region-awa
    - **Compliance exceptions:** If primary region unavailable, secondary region logs compliance override
    - **Data consistency:** Aurora cross-region replication ensures < 1s lag
 
-**Cost Estimate (Multi-Region):**
-- Cross-region data transfer: ~$0.02/GB (inter-region)
-- Aurora Global Database: +20% over single-region Aurora ($4,800/month base → $5,760/month)
-- DynamoDB Global Tables: +2x write capacity costs
-- S3 CRR: $0.02/GB replicated
-- Route 53: $0.50/million queries ($100/month for 200M queries)
-- **Total multi-region overhead:** ~$15,000-20,000/month additional
+**Cost Considerations (Multi-Region):**
+- Cross-region data transfer incurs additional costs
+- Aurora Global Database adds overhead compared to single-region deployment
+- DynamoDB Global Tables increase write capacity costs
+- S3 Cross-Region Replication charges apply per GB replicated
+- Route 53 geolocation routing adds query costs
+- Multi-region architecture adds operational overhead
+
+**Trade-offs:**
+- Higher infrastructure costs vs. improved compliance and performance
+- Operational complexity vs. fault tolerance benefits
+- Cost increase justified by regulatory requirements and user experience improvements
 
 **Model Provider Strategy:**
 - **EU regions (eu-central-1, eu-west-1):** AWS Bedrock (Claude 3.5 Sonnet) - GDPR compliant, data stays in EU
