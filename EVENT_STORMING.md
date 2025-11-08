@@ -405,24 +405,6 @@ graph TB
 
 ---
 
-## 📈 Event Volume Estimates (50K Vehicles)
-
-| Event | Frequency | Daily Volume | Monthly Volume |
-|-------|-----------|--------------|----------------|
-| Location Updated | 1/min per vehicle | 72M | 2.16B |
-| Battery Level Updated | 1/30sec per vehicle | 144M | 4.32B |
-| Booking Created | 20 per vehicle/month | 33K | 1M |
-| Trip Started | Same as bookings | 33K | 1M |
-| Trip Ended | Same as bookings | 33K | 1M |
-| Demand Forecast Generated | Hourly per zone (100 zones) | 2.4K | 72K |
-| Price Updated | Per forecast + supply change | 5K | 150K |
-| Battery Swap Task Created | 10% vehicles/day | 5K | 150K |
-| Maintenance Predicted | 2% vehicles/month | 33 | 1K |
-
-**Peak Load:** Monday 8-9 AM, Friday 5-6 PM (3x avg)
-
----
-
 ## 🚀 Event Sourcing vs Event-Driven
 
 ### Event-Driven Architecture (Chosen)
