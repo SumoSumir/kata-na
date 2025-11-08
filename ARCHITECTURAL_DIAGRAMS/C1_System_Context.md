@@ -107,66 +107,69 @@ The MobilityCorp Platform handles:
 - Data lakehouse (Bronze/Silver/Gold medallion)
 - MLOps pipeline (training, deployment, monitoring)
 
-## Mermaid Diagram (C4 Context)
+## C4 Diagram
+[![](https://img.plantuml.biz/plantuml/svg/ZLR1RkCs4BtxAwOvR1siirwWsKjH5ElOsIHed7XZfK5F0IsDPIAKA92K4-_Nzv6KR3dnjhdO56czUJFpvj5VhHF6rONg_IBBLDKPqn_Zq-7uz76iIySlxizUpqcdcEORwxYWPfjEQAeNKact6MjJqKm9jzIcwFL-fHaRgqjBmf7JLIy-zjFQEbsm6T3Hk5aUOHrGc4HLKMtPq4Bh9rdc9CeC6twrvfLC5LlgV_dy-I-QZEwFZuvRLD1VBW4pzzyUxxPY8vpqyHsBWWfHYjp3B1MpexKKb0cxMcXXiXsCo0fPuksH__OmJRPXNre7I6ti3YpLvLBcTOoqWyc44pQLNAOCZ0cUQ1uVAG6PaEyrSGaCnXjDWjzOkDgWmeZ18N74GrWS5JfZPH40PPrYZspaXLNAQ8JfHQBzggb_Mz7NVGcXPMeqQhoMAQhvaKPNGx3vIETPpkXhKTNEnyJ66jWd4oFnJIEJhgJZr5Fyr7ArlzCLmYibS_oKRhIJIvd6kWzeiYb58LEQ6Pa2SU15iqQ-uLme1AR-6MT6fq_7WnWUHFfpiMItEHaRwO2bS3IjbPCdTvpZFUgVXyQZ4kSloDm3nMe4fIsqWwQQSZpY5tsf7PA-qWdztIZ85-4B91Iby2pT2XfHNB0pcm5TpEOTCgUVVZiZzeMmmqniVEGETYKs1Ow0DuihkX2EdyKcn9Wx8okcFl8lXDaWaL6sGIdxtuHI2u6izz4AKLdV7r7Hl6cFXxdGEiTeJCCfFXVwXVgfjevqvMGXVuHwli9wHeDMOSeUuee-n7vQ6iskR3CYPNC8r07Qn9bCtUNtVII8iBGov5Wl5DgPn8qjJkmE98fE-8m98YozRFTnKYXBIH5dOhnz0AzHdKaNCftCxhpeqwSW5-7tmn04xNTxMbeCNOIwQjTRGcCb9DJmWTP2oQoTpSxhkT5rcJbJkvLlayXvAfvGeekmZmHnq0of7sLIOi4g9WJPtR6A2b_9oi80uLUKIOFHYB9U2uFCK6WC72tOGQJUA9pHgeTt7oVwkMk3dP4zYwOteBfK60gSjVfQCcTUCPxLPPBCviDec63a8U-hpkHt77OEtJagzySIJ7K1s5YPKB5PRLV3-NJk4znIR3ormoyHzYcQ7qTQ1Rp8SHcghtHkT_GUU768M-lJ8yN6WOkmLkQb1yD38sVE27rm_0PjHwtnwGwrngWjoeqA0YpS8aLUU9QwbF1Kty3_uzTU07TSwK1mUqbuie7qprdjsNw7sojZJp7NTX0zVMln7XNw7OumZgKuH6t_Ke4qCGGoNxajbFSlcTe6oJCxarjkEvpeXqbhUDIVVa-IZl_6ksP0jyc8wWfHOoFyhuRUHN6VUDaTn7xhXnNS7UdkrJwoEmZGME2T3dVGW7BMgSxU-_PRq_D56qJ_3kjtmUmShxKwcwuugt5r3Dv8C-8SGFcPtvbMMj7UziVcFrWTzhoEnRq7PD_valR_HInJiBatP7hNetzkxvF7v7RsEBbzkEaVjpiFLydbu_NvnVdD19kzhx0K_8Fy5m00)](https://editor.plantuml.com/uml/ZLR1RkCs4BtxAwOvR1siirwWsKjH5ElOsIHed7XZfK5F0IsDPIAKA92K4-_Nzv6KR3dnjhdO56czUJFpvj5VhHF6rONg_IBBLDKPqn_Zq-7uz76iIySlxizUpqcdcEORwxYWPfjEQAeNKact6MjJqKm9jzIcwFL-fHaRgqjBmf7JLIy-zjFQEbsm6T3Hk5aUOHrGc4HLKMtPq4Bh9rdc9CeC6twrvfLC5LlgV_dy-I-QZEwFZuvRLD1VBW4pzzyUxxPY8vpqyHsBWWfHYjp3B1MpexKKb0cxMcXXiXsCo0fPuksH__OmJRPXNre7I6ti3YpLvLBcTOoqWyc44pQLNAOCZ0cUQ1uVAG6PaEyrSGaCnXjDWjzOkDgWmeZ18N74GrWS5JfZPH40PPrYZspaXLNAQ8JfHQBzggb_Mz7NVGcXPMeqQhoMAQhvaKPNGx3vIETPpkXhKTNEnyJ66jWd4oFnJIEJhgJZr5Fyr7ArlzCLmYibS_oKRhIJIvd6kWzeiYb58LEQ6Pa2SU15iqQ-uLme1AR-6MT6fq_7WnWUHFfpiMItEHaRwO2bS3IjbPCdTvpZFUgVXyQZ4kSloDm3nMe4fIsqWwQQSZpY5tsf7PA-qWdztIZ85-4B91Iby2pT2XfHNB0pcm5TpEOTCgUVVZiZzeMmmqniVEGETYKs1Ow0DuihkX2EdyKcn9Wx8okcFl8lXDaWaL6sGIdxtuHI2u6izz4AKLdV7r7Hl6cFXxdGEiTeJCCfFXVwXVgfjevqvMGXVuHwli9wHeDMOSeUuee-n7vQ6iskR3CYPNC8r07Qn9bCtUNtVII8iBGov5Wl5DgPn8qjJkmE98fE-8m98YozRFTnKYXBIH5dOhnz0AzHdKaNCftCxhpeqwSW5-7tmn04xNTxMbeCNOIwQjTRGcCb9DJmWTP2oQoTpSxhkT5rcJbJkvLlayXvAfvGeekmZmHnq0of7sLIOi4g9WJPtR6A2b_9oi80uLUKIOFHYB9U2uFCK6WC72tOGQJUA9pHgeTt7oVwkMk3dP4zYwOteBfK60gSjVfQCcTUCPxLPPBCviDec63a8U-hpkHt77OEtJagzySIJ7K1s5YPKB5PRLV3-NJk4znIR3ormoyHzYcQ7qTQ1Rp8SHcghtHkT_GUU768M-lJ8yN6WOkmLkQb1yD38sVE27rm_0PjHwtnwGwrngWjoeqA0YpS8aLUU9QwbF1Kty3_uzTU07TSwK1mUqbuie7qprdjsNw7sojZJp7NTX0zVMln7XNw7OumZgKuH6t_Ke4qCGGoNxajbFSlcTe6oJCxarjkEvpeXqbhUDIVVa-IZl_6ksP0jyc8wWfHOoFyhuRUHN6VUDaTn7xhXnNS7UdkrJwoEmZGME2T3dVGW7BMgSxU-_PRq_D56qJ_3kjtmUmShxKwcwuugt5r3Dv8C-8SGFcPtvbMMj7UziVcFrWTzhoEnRq7PD_valR_HInJiBatP7hNetzkxvF7v7RsEBbzkEaVjpiFLydbu_NvnVdD19kzhx0K_8Fy5m00)
 
-```mermaid
-C4Context
-    title System Context - MobilityCorp Platform
+## Key Metrics & Scale
 
-    Person(customer, "Customer", "Mobile app user booking and using vehicles (500K DAU)")
-    Person(staff, "Staff", "Operations team managing fleet via dashboard")
-    Person(admin, "Admin", "System administrators managing configuration")
-    Person(datascience, "Data Science Team", "ML engineers using Feature Store and training models")
+| Metric | Value | Details |
+|--------|-------|---------|
+| **Daily Active Users** | 500,000 | Peak usage during commute hours (7-9 AM, 5-7 PM) |
+| **Fleet Size** | 50,000 vehicles | Mixed fleet: eBikes (40%), eScooters (35%), eCars (20%), eVans (5%) |
+| **Geographic Coverage** | 25 EU cities | Primary: Frankfurt, Paris, Amsterdam, Berlin, Dublin |
+| **Telemetry Volume** | 4.3B events/day | Real-time GPS, battery, IMU data @ 1Hz-100Hz |
+| **Daily Bookings** | 500,000 transactions | Average trip duration: 18 minutes |
+| **Availability SLA** | 99.9% uptime | <43 minutes downtime/month |
+| **API Request Volume** | 10,000 req/sec | Peak: 15,000 req/sec during events |
+| **ML Models in Production** | 14 models | 11 cloud + 3 edge models |
+| **Edge Devices** | 50,000 IoT Greengrass | Real-time safety-critical inference |
+| **Multi-Region** | 2 active regions | Frankfurt (primary), Ireland (secondary) |
+| **Data Lakehouse** | 2.5 PB | Bronze (raw) → Silver (clean) → Gold (aggregated) |
+| **Event Streaming** | 130B MQTT msg/month | Kafka MSK: 3 brokers, 50 partitions/topic |
 
-    System(platform, "MobilityCorp Platform", "Microservices + AI/ML + Edge Computing + Event-Driven Architecture. Features: Intelligent Notifications, Dynamic Pricing, Conversational AI (Bedrock), Edge ML (Safety-Critical), Multi-Region (EU)")
+## Architecture Characteristics
 
-    System_Ext(iot, "IoT Vehicles", "50K fleet with telemetry, GPS, Edge ML (4.3B events/day)")
-    System_Ext(payment, "Payment Gateways", "Stripe (Primary), Adyen (Fallback)")
-    System_Ext(maps, "Map Services", "Google Maps, Mapbox (cost optimization)")
-    System_Ext(weather, "Weather & Events APIs", "OpenWeatherMap, PredictHQ")
-    System_Ext(transit, "Public Transit APIs", "Multi-modal trip planning")
-    System_Ext(compliance, "Compliance & Audit", "GDPR tracking, audit trails")
-    System_Ext(insurance, "Insurance APIs", "Claims & validation")
-    System_Ext(groundtruth, "SageMaker Ground Truth", "ML data labeling")
+### Quality Attributes
 
-    Rel(customer, platform, "Booking, unlock, payment, feedback", "HTTPS/Mobile")
-    Rel(platform, customer, "Smart notifications, recommendations", "Push/SMS")
-    
-    Rel(staff, platform, "Task management, maintenance logs", "HTTPS/Web")
-    Rel(platform, staff, "Alerts, assignments, optimized routes", "HTTPS/Web")
-    
-    Rel(admin, platform, "System settings, user mgmt, monitoring", "HTTPS/Web")
-    Rel(platform, admin, "Reports, dashboards, alerts", "HTTPS/Web")
-    
-    Rel(datascience, platform, "Feature Store access, model training", "API/Athena")
-    Rel(platform, datascience, "ML insights, model metrics", "API")
+| Attribute | Requirement | Implementation |
+|-----------|-------------|----------------|
+| **Scalability** | Handle 3x traffic spikes during events | Auto-scaling ECS/Lambda, ElastiCache, multi-region |
+| **Reliability** | 99.9% uptime | Multi-AZ, multi-region, circuit breakers |
+| **Performance** | API p99 <500ms, ML inference <200ms | Feature Store caching, SageMaker endpoints |
+| **Security** | GDPR compliant, zero-trust | OAuth2/JWT, encryption at rest/transit, audit logs |
+| **Observability** | Full distributed tracing | OpenTelemetry, CloudWatch, Grafana, PagerDuty |
+| **Cost Efficiency** | <$0.15 per trip | Spot instances, serverless, multi-provider optimization |
+| **Maintainability** | Independent service deployments | Microservices, CI/CD, feature flags |
+| **Evolvability** | Add new ML models without downtime | MLOps pipelines, canary deployments |
 
-    BiRel(platform, iot, "Telemetry (MQTT), Edge ML models, OTA updates", "MQTT/IoT Core")
-    BiRel(platform, payment, "Payment processing", "HTTPS/API")
-    BiRel(platform, maps, "Routing, geocoding", "HTTPS/API")
-    BiRel(platform, weather, "Weather data, event data", "HTTPS/API")
-    BiRel(platform, transit, "Transit schedules, routes", "HTTPS/API")
-    Rel(platform, compliance, "Compliance reports, audit logs", "HTTPS/API")
-    BiRel(platform, insurance, "Insurance validation", "HTTPS/API")
-    BiRel(platform, groundtruth, "Training data, labels", "HTTPS/API")
+### Technology Stack Summary
 
-    UpdateLayoutConfig($c4ShapeInRow="4", $c4BoundaryInRow="1")
-```
+| Layer | Technologies |
+|-------|-------------|
+| **Frontend** | React Native (mobile), React (web dashboards) |
+| **API Gateway** | AWS API Gateway, Kong (hybrid) |
+| **Compute** | ECS Fargate, AWS Lambda, EC2 (ML training) |
+| **Event Streaming** | Apache Kafka (MSK), AWS EventBridge |
+| **Databases** | Aurora PostgreSQL, DynamoDB, ElastiCache Redis, TimescaleDB |
+| **Data Lake** | S3 + Delta Lake (Bronze/Silver/Gold) |
+| **ML Platform** | SageMaker (training, endpoints, pipelines, Feature Store) |
+| **AI/LLM** | AWS Bedrock (Claude 3.5 Sonnet), OpenAI GPT-4o (fallback) |
+| **Edge Computing** | AWS IoT Greengrass v2, TensorFlow Lite |
+| **Observability** | OpenTelemetry, VictoriaMetrics, Grafana, CloudWatch |
+| **Orchestration** | Step Functions, Airflow (MWAA), Temporal |
+| **CI/CD** | GitHub Actions, AWS CodePipeline, ArgoCD |
 
-## Key Metrics & Scale:
+## Related Documents
 
-- **Customers:** 500K daily active users
-- **Fleet:** 50,000 vehicles across EU cities
-- **Telemetry:** 4.3 billion events/day
-- **Bookings:** 500K transactions/day
-- **Regions:** 2 active (Frankfurt, Ireland)
-- **Availability SLA:** 99.9% uptime
-- **AI Models:** 10+ production models
-- **Edge Devices:** 50K IoT Greengrass instances
-
-## Related Documents:
-- [C2: Container Diagram](C2_Container.md)
-- [C3: AI/ML Component Diagram](C3_Component_AIML.md)
+- [C2: Container Diagram](C2_Container_UPDATED.md) - Detailed service architecture
+- [C3: AI/ML Component Diagram](C3_Component_AIML_UPDATED.md) - ML model architecture
 - [ADR-01: Microservices Architecture](../ADR/ADR_01_microservices_architecture.md)
 - [ADR-09: Multi-Region Deployment](../ADR/ADR_09_MULTI_REGION.md)
+- [ADR-15: Cloud Provider Selection](../ADR/ADR_15_Cloud_Provider_Selection.md)
 - [ADR-19: Edge vs Cloud AI Strategy](../ADR/ADR_19_Edge_Cloud_AI_Strategy.md)
+
+---
+
+**Document Version:** 2.0  
+**Last Updated:** November 8, 2025  
+**Status:** Final - Production Architecture
