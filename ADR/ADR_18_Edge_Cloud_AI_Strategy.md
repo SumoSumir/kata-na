@@ -423,7 +423,3 @@ Total Cloud: $150,000/month
 - [AWS IoT Greengrass Documentation](https://docs.aws.amazon.com/greengrass/)
 - [SageMaker Neo (Edge Optimization)](https://docs.aws.amazon.com/sagemaker/latest/dg/neo.html)
 - [TensorFlow Lite for Microcontrollers](https://www.tensorflow.org/lite/microcontrollers)
-
-## Revision History
-- **2025-11-07:** Initial decision - Edge-Cloud Hybrid
-- **Next Review:** 2026-05-07 - After full fleet deployment
