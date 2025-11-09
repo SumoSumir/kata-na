@@ -74,6 +74,8 @@ Adopt AWS-native MLOps using **Apache Airflow** (orchestration) and **Amazon Sag
 ## Alternatives Considered
 **MLflow + Kubernetes** — Rejected: High ops overhead, longer time-to-prod, deep K8s expertise required from ML team as well
 
+**Generative AI (GenAI/LLMs)** — Rejected: Our use cases (demand forecasting, dynamic pricing, predictive maintenance, risk scoring) require deterministic, interpretable predictions with quantifiable accuracy metrics. GenAI excels at content generation and natural language tasks but lacks the precision, explainability, and cost-efficiency needed for structured prediction problems where traditional ML models consistently outperform while maintaining regulatory compliance and audit trails.
+
 ## ML Use Case: Dynamic Insurance Pricing
 - Insurance tiers: Basic (minimal coverage), Standard (balanced), Premium (comprehensive).
 - Telemetry (speed, braking, acceleration) is used to compute driving risk scores via ML.
