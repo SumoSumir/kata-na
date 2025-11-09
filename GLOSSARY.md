@@ -123,10 +123,6 @@ This glossary defines key terms, acronyms, and concepts used throughout the Mobi
 - Max speed: ~25 km/h (EU regulation)
 - Battery-powered, requires manual battery swaps
 
-**ECS (Elastic Container Service)**
-- AWS container orchestration service
-- Fargate mode: serverless containers
-- Used for all microservices
 
 **Edge Computing**
 - Processing data on device (vehicle) instead of cloud
@@ -147,10 +143,6 @@ This glossary defines key terms, acronyms, and concepts used throughout the Mobi
 
 ## F
 
-**Fargate**
-- AWS serverless container platform
-- No EC2 instances to manage
-- Pay per vCPU/GB used
 
 **Feature Store**
 - Repository of ML features for training and serving
@@ -218,7 +210,7 @@ This glossary defines key terms, acronyms, and concepts used throughout the Mobi
 **IoT Core (AWS IoT Core)**
 - AWS managed MQTT broker
 - Handles 50K+ vehicle connections
-- Routes telemetry to Kafka and Lambda
+- Routes telemetry to Kafka
 
 
 ---
@@ -458,13 +450,9 @@ This glossary defines key terms, acronyms, and concepts used throughout the Mobi
 
 **Time-Series Database**
 - Database optimized for time-stamped data
-- AWS Timestream used for vehicle telemetry
+- TimescaleDB used for vehicle telemetry
 - Efficient queries on time ranges
 
-**Timestream (Amazon Timestream)**
-- AWS managed time-series database
-- Serverless, auto-scaling
-- Used for high-frequency telemetry
 
 ---
 

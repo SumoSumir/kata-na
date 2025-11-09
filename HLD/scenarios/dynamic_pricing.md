@@ -18,7 +18,7 @@ Dynamic pricing maximizes revenue by adjusting prices in real-time based on mark
 
 ## 2. Actors
 
-- Pricing Service (ECS Fargate)
+- Pricing Service (EKS auto scaling with KEDA)
 - SageMaker Inference Endpoint (XGBoost model)
 - Feature Store (Online)
 - ElastiCache Redis (Price cache)
@@ -145,7 +145,7 @@ EventBridge triggers automatic repricing for all zones and vehicle types
 - SageMaker Inference Endpoint: $400
 - Feature Store (Online): $350
 - Redis Cache: $329
-- Lambda (Event triggers): $20
+- Autoscaling EKS (KEDA) (Event triggers): $20
 - **Total:** $1,099/month
 
 **ROI:**

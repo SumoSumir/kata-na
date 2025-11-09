@@ -27,7 +27,7 @@ End-to-end user journey from searching for a vehicle to completing a rental.
 **Key Components:**
 - Mobile App (React Native)
 - API Gateway
-- Booking Service (ECS Fargate)
+- Booking Service
 - Fleet Service
 - Payment Service (Stripe integration)
 - Notification Service
@@ -43,11 +43,11 @@ End-to-end user journey from searching for a vehicle to completing a rental.
 ML pipeline predicting vehicle demand by zone, time, and vehicle type.
 
 **Key Components:**
-- AWS Glue (ETL)
+- Apache Beam (ETL)
 - SageMaker (Training & Inference)
 - Feature Store
 - S3 Data Lake (Medallion Architecture)
-- Lambda (Scheduled Predictions)
+- Apache Airflow (Scheduled Predictions)
 - DynamoDB (Forecast Storage)
 
 **Flow:** Historical Data → Feature Engineering → Model Training → Batch Prediction → Operational Integration
@@ -59,7 +59,7 @@ ML pipeline predicting vehicle demand by zone, time, and vehicle type.
 Real-time pricing adjustments based on demand, supply, weather, and events.
 
 **Key Components:**
-- Pricing Service (ECS Fargate)
+- Pricing Service (EKS auto scaling with KEDA)
 - SageMaker Inference Endpoint (XGBoost)
 - Feature Store (Online)
 - ElastiCache (Redis Cache)
@@ -76,10 +76,10 @@ Proactive vehicle maintenance scheduling using ML models on telemetry data.
 
 **Key Components:**
 - AWS IoT Core (Telemetry Ingestion)
-- Kafka/MSK (Event Streaming)
-- Timestream (Time-Series Storage)
+- Kafka (Event Streaming)
+- TimescaleDB (Time-Series Storage)
 - SageMaker (Health Prediction)
-- Lambda (Alert Processing)
+- Apache Airflow (Alert Processing)
 - SNS (Maintenance Alerts)
 
 **Flow:** Telemetry → Anomaly Detection → Health Prediction → Alert Generation → Maintenance Scheduling
@@ -92,13 +92,12 @@ High-throughput ingestion and processing of vehicle telemetry (GPS, battery, sen
 
 **Key Components:**
 - AWS IoT Core (MQTT)
-- Kafka/MSK
-- Lambda (Stream Processing)
-- Timestream (Hot Storage)
+- Kafka
+- Apache Airflow+BEAM (Stream Processing)
+- TimescaleDB (Hot Storage)
 - S3 (Cold Storage)
-- Glue (Batch Processing)
 
-**Flow:** Vehicle → IoT Core → Kafka → Lambda → Timestream/S3 → Analytics
+**Flow:** Vehicle → IoT Core → Kafka → Apache Airflow+BEAM → TimescaleDB/S3 → Analytics
 
 ---
 
@@ -205,8 +204,7 @@ User → LangChain Agent → LLM (Bedrock) → Tool(s) → Response
 | Component | Type | Purpose | Scaling Strategy |
 |-----------|------|---------|------------------|
 | **API Gateway** | AWS Managed | API routing, throttling | Auto-scales |
-| **ECS Fargate** | Compute | Microservices | Horizontal (tasks) |
-| **Lambda** | Serverless | Event processing | Auto-scales |
+| **EKS** | Compute | Microservices | Horizontal (tasks) |
 | **Aurora PostgreSQL** | RDBMS | Transactional data | Read replicas |
 | **DynamoDB** | NoSQL | Operational data | On-demand |
 | **ElastiCache** | Cache | Hot data, sessions | Sharding |
@@ -215,7 +213,7 @@ User → LangChain Agent → LLM (Bedrock) → Tool(s) → Response
 | **SageMaker** | ML Platform | Training, inference | Add endpoints |
 | **Bedrock** | LLM | Agentic AI | Auto-scales |
 | **IoT Core** | IoT | Vehicle telemetry | Auto-scales |
-| **Timestream** | Time-Series | Telemetry storage | Auto-scales |
+| **TimescaleDB** | Time-Series | Telemetry storage | Auto-scales |
 | **Redshift** | Data Warehouse | Analytics | Add nodes |
 | **Glue** | ETL | Data transformation | Add DPUs |
 | **OpenSearch** | Vector DB | RAG knowledge base | Add shards |
@@ -297,8 +295,8 @@ User → LangChain Agent → LLM (Bedrock) → Tool(s) → Response
 | **Booking Workflow** | $25,000 | $0.025 (per booking) | ECS, Aurora, Stripe |
 | **Demand Forecasting** | $30,000 | N/A (batch) | SageMaker, Glue |
 | **Dynamic Pricing** | $15,000 | $0.000015 (per query) | SageMaker, Redis |
-| **Predictive Maintenance** | $18,000 | $0.36 (per alert) | Timestream, SageMaker |
-| **Telemetry Processing** | $71,335 | $0.000017 (per message) | IoT Core, Lambda |
+| **Predictive Maintenance** | $18,000 | $0.36 (per alert) | TimescaleDB, SageMaker |
+| **Telemetry Processing** | $71,335 | $0.000017 (per message) | IoT Core |
 | **Total** | **$159,335** | - | - |
 
 **Reference:** [Cost Analysis](../COST_ANALYSIS.md)

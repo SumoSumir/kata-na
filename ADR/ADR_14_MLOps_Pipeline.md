@@ -50,7 +50,7 @@ Adopt AWS-native MLOps using **Apache Airflow** (orchestration) and **Amazon Sag
 │     ├─ SageMaker Model Monitor → CloudWatch (drift detection)  │
 │     ├─ CloudWatch → YACE exporter → Victoria Metrics           │
 │     ├─ OpenTelemetry: Custom spans for SageMaker invocations   │
-│     ├─ Logs: CloudWatch → Firehose → OpenSearch               │
+│     ├─ Logs: CloudWatch → YACE exporter → OpenSearch               │
 │     └─ Alerts: Victoria Metrics → PagerDuty                    │
 │                                                                  │
 └─────────────────────────────────────────────────────────────────┘

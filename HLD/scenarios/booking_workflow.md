@@ -430,7 +430,7 @@ sequenceDiagram
 ### 8.1 Cost Structure
 
 **Infrastructure Costs:**
-- API Gateway, EKS, Postgres, Redis, Kafka, Lambda for request handling
+- API Gateway, EKS, Postgres, Redis, Kafka for request handling
 - Relatively minimal compared to third-party service costs
 
 **Third-Party Costs:**

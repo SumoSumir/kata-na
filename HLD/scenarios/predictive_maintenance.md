@@ -19,9 +19,9 @@ Predictive maintenance reduces unplanned downtime, extends vehicle lifespan, and
 ## 2. Actors
 
 - AWS IoT Core (Telemetry ingestion)
-- Kafka/MSK (Event streaming)
+- Kafka (Event streaming)
 - Lambda (Anomaly detection, alert processing)
-- Timestream (Time-series telemetry storage)
+- TimescaleDB (Time-series telemetry storage)
 - SageMaker (Health prediction models)
 - SNS (Maintenance alerts to operations team)
 - DynamoDB (Vehicle health scores)
@@ -70,7 +70,7 @@ Predictive maintenance reduces unplanned downtime, extends vehicle lifespan, and
 - Anomaly detection accuracy: 92%
 - False positive rate: 5%
 
-**Inference:** Real-time streaming (Lambda processes IMU data every 10 seconds).
+**Inference:** Real-time streaming (processes IMU data every 10 seconds).
 
 **Alert Trigger:** Anomaly detected → Immediate SNS alert.
 
@@ -103,7 +103,7 @@ sequenceDiagram
     participant IoT as AWS IoT Core
     participant Kafka as Kafka
     participant L1 as Lambda (Anomaly Detector)
-    participant TS as Timestream
+    participant TS as TimescaleDB
     participant L2 as Lambda (Daily Health Job)
     participant SM as SageMaker
     participant DB as DynamoDB
@@ -167,7 +167,7 @@ sequenceDiagram
 ### 5.2 Daily Battery Health Prediction (Batch)
 
 **Batch Prediction Process:**
-1. **Data Collection:** Query Timestream for last 30 days of battery telemetry
+1. **Data Collection:** Query TimescaleDB for last 30 days of battery telemetry
 2. **Feature Engineering:** Calculate charge cycles, voltage statistics, deep discharge count
 ```
 3. **ML Inference:** SageMaker Batch Transform with LightGBM model
@@ -209,7 +209,7 @@ sequenceDiagram
 ## 7. Cost and ROI Considerations
 
 **Infrastructure Components:**
-- Timestream: Time-series data storage and queries
+- TimescaleDB: Time-series data storage and queries
 - Lambda: Real-time anomaly detection
 - SageMaker: Batch inference for predictive models
 - DynamoDB: Health score storage and retrieval
@@ -231,7 +231,7 @@ sequenceDiagram
 ## 7. Cost Analysis
 
 **Monthly Costs:**
-- Timestream (Storage + Queries): $9,400
+- TimescaleDB (Storage + Queries): $9,400
 - Lambda (Anomaly detection): $3,000
 - SageMaker (Batch inference): $8
 - DynamoDB (Health scores): $50

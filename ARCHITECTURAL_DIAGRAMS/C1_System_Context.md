@@ -93,7 +93,7 @@ The MobilityCorp Platform handles:
 |-------|-------------|
 | **Frontend** | React Native (mobile), React (web dashboards) |
 | **API Gateway** | AWS API Gateway, Kong (hybrid) |
-| **Compute** | EKS, AWS Lambda, EC2 (ML training) |
+| **Compute** | EKS, EC2 (ML training) |
 | **Event Streaming** | Apache Kafka, EKS |
 | **Databases** | PostgreSQL, DynamoDB, ElastiCache Redis, TimescaleDB |
 | **Data Lake** | S3 + Delta Lake (Bronze/Silver/Gold) |

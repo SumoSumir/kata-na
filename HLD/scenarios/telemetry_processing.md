@@ -33,12 +33,11 @@ Telemetry is the foundation of all real-time operations: fleet tracking, demand 
 
 - Vehicle (IoT Agent on Raspberry Pi / Jetson)
 - AWS IoT Core (MQTT broker)
-- Kafka/MSK (Event streaming backbone)
+- Kafka (Event streaming backbone)
 - Lambda (Stream processing, transformations)
-- Timestream (Hot storage, time-series queries)
-- S3 (Cold storage, data lake Bronze layer)
-- AWS Glue (Batch ETL for Silver/Gold layers)
-- Kinesis Data Firehose (S3 archival)
+- TimescaleDB (Hot storage, time-series queries)
+- S3 (data lake Bronze/Silver/Gold layer)
+- Apache Airflow + BEAM (ETL)
 
 ---
 
@@ -49,14 +48,14 @@ Vehicle (50K)
     ↓ MQTT (1 msg/sec per vehicle)
 AWS IoT Core (MQTT broker)
     ↓ IoT Rule (route to Kafka + Lambda)
-    ├──→ Kafka/MSK (real-time streaming)
+    ├──→ Kafka (real-time streaming)
     │       ↓ (consumers)
     │       ├──→ Lambda (real-time processing)
-    │       │       ├──→ Timestream (hot storage, 3 days)
+    │       │       ├──→ TimescaleDB (hot storage, 3 days)
     │       │       └──→ DynamoDB (vehicle status updates)
-    │       └──→ Kinesis Firehose (batching)
+    │       └──→ Apache BEAM (batching)
     │               └──→ S3 (Bronze layer, 90 days)
-    │                       └──→ Glue (ETL)
+    │                       └──→ Apache BEAM (ETL)
     │                               └──→ S3 (Silver/Gold layers)
     └──→ Lambda (anomaly detection, real-time alerts)
 ```
@@ -72,8 +71,8 @@ sequenceDiagram
     participant Kafka as Kafka/MSK
     participant L1 as Lambda (Enrichment)
     participant L2 as Lambda (Anomaly Detection)
-    participant TS as Timestream
-    participant KF as Kinesis Firehose
+    participant TS as TimescaleDB
+    participant KF as Apache BEAM
     participant S3 as S3 (Data Lake)
     participant Glue as AWS Glue
 
@@ -86,7 +85,7 @@ sequenceDiagram
         IoT->>Kafka: Publish to "vehicle-telemetry" topic
         Kafka->>L1: Consume event (Lambda triggered by Kafka)
         L1->>L1: Enrich: Add zone_id (geohash), vehicle_type
-        L1->>TS: Write to Timestream (hot storage)
+        L1->>TS: Write to TimescaleDB (hot storage)
         TS-->>L1: Write confirmed
         L1->>Kafka: Publish enriched event to "telemetry-enriched"
     and Lambda Path (Real-Time Alerts)
@@ -99,7 +98,7 @@ sequenceDiagram
     end
 
     Note over V,Glue: Batch Archival (Every 5 minutes)
-    Kafka->>KF: Kinesis Firehose consumes Kafka
+    Kafka->>KF: Apache BEAM consumes Kafka
     KF->>KF: Buffer events (5 minutes or 5 MB)
     KF->>S3: Write Parquet files (Bronze layer)
     S3-->>KF: Write confirmed
@@ -172,7 +171,7 @@ sequenceDiagram
 **Processing Logic:**
 - Parses Kafka messages and enriches with zone information (geohash)
 - Looks up vehicle type from cached DynamoDB data
-- Batches writes to Timestream for efficiency (100 records per batch)
+- Batches writes to TimescaleDB for efficiency (100 records per batch)
 
 **Performance:**
 - Concurrency: 500 parallel Lambda invocations
@@ -193,7 +192,7 @@ sequenceDiagram
 
 ---
 
-## 10. Timestream Storage (Hot Storage)
+## 10. TimescaleDB Storage (Hot Storage)
 
 **Configuration:**
 - Memory store retention: 3 days (high-frequency queries)
@@ -210,7 +209,7 @@ sequenceDiagram
 
 ## 11. S3 Archival (Cold Storage)
 
-**Kinesis Firehose Configuration:**
+**Apache BEAM Configuration:**
 - Source: Kafka topic `vehicle-telemetry`
 - Buffer: 5 minutes or 5 MB (whichever comes first)
 - Format: Parquet (compressed with Snappy)
@@ -249,7 +248,7 @@ sequenceDiagram
 | **IoT Core** | Real-time | N/A | N/A | $4,915 |
 | **Kafka** | < 1 second | 7 days | 6 TB | $5,000 |
 | **Lambda** | < 1 second | N/A | N/A | $7,160 |
-| **Timestream (Hot)** | < 5 seconds | 3 days | 1 TB | $9,400 |
+| **TimescaleDB (Hot)** | < 5 seconds | 3 days | 1 TB | $9,400 |
 | **S3 (Bronze)** | 5 minutes | 90 days | 48.6 TB | $1,290 |
 | **S3 (Silver)** | 1 hour | 2 years | 30 TB | $690 |
 | **S3 (Gold)** | 1 day | 5 years | 5 TB | $115 |
@@ -266,7 +265,7 @@ sequenceDiagram
 - IoT Core: Auto-scales ✅
 - Kafka: Add partitions (50 → 75) ✅
 - Lambda: Increase concurrency (500 → 1,000) ✅
-- Timestream: Auto-scales ✅
+- TimescaleDB: Auto-scales ✅
 - S3: Unlimited capacity ✅
 - Glue: Increase DPUs (50 → 100) ✅
 
@@ -279,7 +278,7 @@ sequenceDiagram
 
 **Optimization Strategies:**
 1. **IoT Core:** Enterprise pricing negotiation → Save $500/month
-2. **Timestream:** Reduce memory store retention (3 → 1 day) → Save $3,000/month
+2. **TimescaleDB:** Reduce memory store retention (3 → 1 day) → Save $3,000/month
 3. **S3:** Intelligent-Tiering (automatic cost optimization) → Save $400/month
 4. **Glue:** Optimize jobs (20% DPU reduction) → Save $3,600/month
 

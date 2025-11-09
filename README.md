@@ -316,7 +316,7 @@ Read key ADRs in order:
 
 ### AI/ML Platform
 - **Training:** AWS SageMaker
-- **Serving:** SageMaker Endpoints + Lambda
+- **Serving:** SageMaker Endpoints
 - **Feature Store:** SageMaker Feature Store
 - **MLOps:** SageMaker Pipelines
 - **Models:** LightGBM, XGBoost (custom training)
@@ -332,11 +332,10 @@ Read key ADRs in order:
 - **Real-time DB:** DynamoDB
 - **Relational DB:** Amazon Aurora PostgreSQL
 - **Cache:** Amazon ElastiCache (Redis)
-- **Time-Series:** Amazon Timestream
+- **Time-Series:** Amazon TimescaleDB
 
 ### Compute & Orchestration
-- **Containers:** Amazon ECS (Fargate)
-- **Functions:** AWS Lambda
+- **Containers:** Amazon EKS
 - **API Gateway:** Amazon API Gateway
 - **Workflow:** Apache Airflow + Apache Beam + Temporal
 
@@ -586,7 +585,7 @@ Every ADR includes:
 ## 💰 Cost Estimate
 
 ### Monthly Infrastructure Costs (Production)
-- **Compute:** ~$45,000 (ECS + Lambda + SageMaker)
+- **Compute:** ~$45,000 (EKS + SageMaker)
 - **Data Storage:** ~$12,000 (S3 + RDS + DynamoDB)
 - **AI/ML:** ~$28,000 (SageMaker training + inference)
 - **Networking:** ~$8,000 (Data transfer + API Gateway)

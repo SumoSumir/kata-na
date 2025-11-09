@@ -36,11 +36,9 @@ Adopt a **multi-region active-active deployment architecture** with **region-awa
      - Versioning enabled for compliance audit trails
 
 3. **Compute Layer (Regional Isolation)**
-   - **ECS Fargate clusters** in each region
+   - **EKS clusters** in each region
      - Microservices deployed independently per region
-     - Auto-scaling based on regional traffic patterns
-   - **Lambda functions** with regional endpoints
-     - Real-time processing stays within region boundaries
+     - Auto-scaling based on regional traffic patterns & events using KEDA
    - **SageMaker endpoints** per region for AI inference
 
 4. **Traffic Routing**

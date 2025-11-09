@@ -17,7 +17,7 @@
 | Category | % of Total | Key Insight |
 |----------|-----------|-------------|
 | **ML & AI Services** | 32.4% | Traditional ML (21%) + Gen AI (11%) |
-| **Compute & Infrastructure** | 22.0% | Serverless ECS Fargate, auto-scaling |
+| **Compute & Infrastructure** | 22.0% | EKS, auto-scaling |
 | **Edge Computing** | 17.2% | 50K IoT devices at $1.40/vehicle/month |
 | **Third-Party Services** | 9.1% | Stripe, Maps, Weather APIs |
 | **Security & Compliance** | 6.0% | Zero-trust, GDPR, PCI-DSS automation |
