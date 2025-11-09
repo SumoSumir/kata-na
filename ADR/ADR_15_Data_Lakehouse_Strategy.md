@@ -27,7 +27,7 @@ MobilityCorp's AI-enabled platform generates massive amounts of data from multip
 ```
 Data Sources → Bronze (Raw) → Silver (Cleaned) → Gold (Aggregated) → Consumers
                       ↓              ↓                    ↓
-                 Airflow DAGs orchestrate transformations
+                 Airflow + BEAM DAGs orchestrate transformations
 ```
 
 ### Layer Details
@@ -35,8 +35,8 @@ Data Sources → Bronze (Raw) → Silver (Cleaned) → Gold (Aggregated) → Con
 **Bronze Layer (Raw Data)**
 - Format: Parquet (Snappy compression)
 - Partitioning: `/year/month/day/hour/`
-- Retention: 90 days → Glacier
-- Sources: Kafka → Kinesis Firehose → S3
+- Retention: 30 days → Glacier
+- Sources: Kafka → Airflow + BEAM DAGs → S3
 
 **Silver Layer (Cleaned & Validated)**
 - Format: Delta Lake (ACID transactions)
@@ -45,14 +45,19 @@ Data Sources → Bronze (Raw) → Silver (Cleaned) → Gold (Aggregated) → Con
   - Deduplication, type casting, PII masking
   - Schema enforcement with evolution support
 - Retention: 2 years
-- Orchestration: Airflow DAGs trigger hourly/daily
+- Orchestration: Airflow + BEAM DAGs trigger hourly/daily
 
 **Gold Layer (Business Aggregations)**
-- Format: Delta Lake + Redshift Spectrum
-- Schema: Star schema for BI
+- Format: Delta Lake
 - Aggregations: demand_by_zone, vehicle_utilization, revenue metrics
-- Retention: 5 years (compliance)
-- Orchestration: Airflow DAGs for daily aggregations
+- Retention: 3 years (compliance)
+- Orchestration: Airflow + BEAM DAGs for daily aggregations
+
+**TimescaleDB**
+- Stores recent (15 days) telemetry data for fast, ad-hoc timeseries queries.
+- Can use in OpenSearch using an ingestion pipeline
+- Primarily used for operational dashboards in grafana
+
 
 ### Technology Stack
 
@@ -61,8 +66,7 @@ Data Sources → Bronze (Raw) → Silver (Cleaned) → Gold (Aggregated) → Con
 | **Storage** | S3 | Durable (11 nines), tiered lifecycle, unlimited scale |
 | **Table Format** | Delta Lake | ACID, time travel, schema evolution, open format |
 | **Orchestration** | Airflow + Beam | Already adopted (ADR-08), DAG visualization, distributed ETL |
-| **Query** | Athena + Redshift | Serverless SQL, BI integration |
-| **Catalog** | AWS Glue Catalog | Metadata repository, schema registry |
+| **Query** | BEAM + OpenSearch | S3 data source for BI using OpenSearch Dashboard |
 | **Governance** | Lake Formation | RBAC, column-level security, audit logs |
 
 ### Data Governance
@@ -70,7 +74,7 @@ Data Sources → Bronze (Raw) → Silver (Cleaned) → Gold (Aggregated) → Con
 **Access Control (Lake Formation):**
 - Data Scientists: Silver + Gold read access
 - ML Engineers: Silver, Gold + Feature Store
-- Analysts: Gold via Redshift (BI tools)
+- Analysts: Gold via OpenSearch (BI tools)
 - Operations: Real-time operational views
 - Column-level security for PII fields
 
@@ -91,12 +95,12 @@ Data Sources → Bronze (Raw) → Silver (Cleaned) → Gold (Aggregated) → Con
 - ✅ **Governed:** Lake Formation provides RBAC and audit trails
 
 ### Negative
-- ❌ **Airflow Overhead:** DAG management complexity for large pipelines
+- ❌ **Airflow+Beam Overhead:** DAG management complexity for large pipelines
 - ❌ **Delta on S3 Slower:** Compared to Databricks-optimized Delta
 - ❌ **Manual Optimization:** Requires tuning (Z-order, partitioning)
 
 ### Mitigation
-- **Airflow Complexity:** Modular DAGs, comprehensive monitoring
+- **Airflow+Beam Complexity:** Modular DAGs, comprehensive monitoring
 - **Performance:** Optimize partitioning, use Athena caching, Z-order weekly
 - **Expertise:** Team training on Delta Lake best practices
 
