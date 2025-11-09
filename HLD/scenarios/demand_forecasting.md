@@ -104,7 +104,7 @@ Apache BEAM ETL jobs handle raw data ingestion:
 - All data stored in Parquet format, partitioned by date for efficient querying
 
 **Data Volume:**
-- Telemetry: 4.3B events/day → 100 GB/day (compressed Parquet)
+- Telemetry: 7.2M events/day → 100 GB/day (compressed Parquet)
 - Bookings: 1M bookings/day → 500 MB/day
 - Weather: 10 cities × 24 hours × 365 days = 87K records/year → 50 MB/year
 

@@ -27,8 +27,8 @@ This diagram zooms into the MobilityCorp platform, showing the high-level contai
 
 - **API Gateway:** 10K requests/second
 - **Kafka:** 50 partitions/topic, 3 brokers
-- **Telemetry:** 4.3 billion events/day
-- **Edge Devices:** 50K IoT Greengrass instances
+- **Telemetry:** 7.2 million events/day
+- **Edge Devices:** 50K IoT Devices
 - **IoT Core:** 130B MQTT messages/month
 - **Multi-Region:** <30s failover RTO
 

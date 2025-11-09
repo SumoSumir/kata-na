@@ -6,7 +6,7 @@
 
 ## 1. Business Context
 
-Telemetry is the foundation of all real-time operations: fleet tracking, demand forecasting, predictive maintenance, and dynamic pricing. The platform must ingest, process, and store 4.3 billion events per day (50K vehicles × 1 event/sec) with low latency and high reliability.
+Telemetry is the foundation of all real-time operations: fleet tracking, demand forecasting, predictive maintenance, and dynamic pricing. The platform must ingest, process, and store 7.2 million events per day (50K vehicles × 1 event/sec) with low latency and high reliability.
 
 **Business Impact:**
 - **Real-Time Fleet Visibility:** Track 50K vehicles in real-time
@@ -25,7 +25,7 @@ Telemetry is the foundation of all real-time operations: fleet tracking, demand 
 | **Latency (Ingestion → Lambda)** | < 1 second | 450ms ✅ |
 | **Data Loss** | < 0.01% | 0.003% ✅ |
 | **Availability** | 99.95% | 99.97% ✅ |
-| **Data Volume** | 4.3B events/day | 4.8B events/day ✅ |
+| **Data Volume** | 7.2M events/day | 4.8M events/day ✅ |
 
 ---
 
@@ -204,7 +204,7 @@ sequenceDiagram
 - Recent battery health analysis
 - Active trip monitoring
 
-**Cost:** $9,400/month (4.3B writes/month + 1 TB memory store)
+**Cost:** $9,400/month (7.2M writes/month + 1 TB memory store)
 
 ---
 

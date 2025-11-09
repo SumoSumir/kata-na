@@ -451,7 +451,6 @@ This glossary defines key terms, acronyms, and concepts used throughout the Mobi
 **Telemetry**
 - Automatic measurement and transmission of data
 - Vehicle telemetry: GPS, battery, speed, IMU
-- ~50K vehicles × 1 msg/sec = 4.3B events/day
 
 **Temporal**
 - Open-source workflow orchestration platform

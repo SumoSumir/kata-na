@@ -17,7 +17,7 @@ This diagram provides a high-level overview of the MobilityCorp platform and its
 
 #### Core Integrations
 -   **IoT Vehicles (50K fleet):** Electric scooters, eBikes, cars, and vans with embedded sensors
-    - Real-time telemetry (GPS, battery, IMU @ 4.3B events/day)
+    - Real-time telemetry (GPS, battery, IMU @ 7.2M events/day)
     - Edge ML models (collision detection, geofence, tamper)
     - Bi-directional communication via AWS IoT Core
 
@@ -62,7 +62,7 @@ The MobilityCorp Platform handles:
 | **Daily Active Users** | 500,000 | Peak usage during commute hours (7-9 AM, 5-7 PM) |
 | **Fleet Size** | 50,000 vehicles | Mixed fleet: eBikes (40%), eScooters (35%), eCars (20%), eVans (5%) |
 | **Geographic Coverage** | 25 EU cities | Primary: Frankfurt, Paris, Amsterdam, Berlin, Dublin |
-| **Telemetry Volume** | 4.3B events/day | Real-time GPS, battery, IMU data @ 1Hz-100Hz |
+| **Telemetry Volume** | 7.2M events/day | Real-time GPS, battery, IMU data @ 1Hz-100Hz |
 | **Daily Bookings** | 500,000 transactions | Average trip duration: 18 minutes |
 | **Availability SLA** | 99.9% uptime | <43 minutes downtime/month |
 | **API Request Volume** | 10,000 req/sec | Peak: 15,000 req/sec during events |
