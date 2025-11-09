@@ -16,6 +16,12 @@ This glossary defines key terms, acronyms, and concepts used throughout the Mobi
 - Uses LLMs with tool calling capabilities
 - Examples: Trip Planning Assistant, Operations Copilot
 
+**Airflow (Apache Airflow)**
+- Open-source workflow orchestration platform
+- DAG-based scheduling for batch pipelines
+- Used for ETL jobs, ML training pipelines, data validation
+- Integrated with Apache Beam for distributed processing
+
 **API Gateway**
 - Service that handles all API requests, provides rate limiting, authentication
 - AWS API Gateway used in our architecture
@@ -32,6 +38,12 @@ This glossary defines key terms, acronyms, and concepts used throughout the Mobi
 - ML predictions run on large datasets at scheduled intervals
 - Contrast with real-time inference
 - Examples: Weekly battery degradation predictions
+
+**Beam (Apache Beam)**
+- Unified programming model for batch and streaming data processing
+- Provides distributed ETL capabilities
+- Works with Airflow for large-scale data pipelines
+- Used in Data Lakehouse transformations
 
 **Bedrock (AWS Bedrock)**
 - AWS managed service for foundation models (LLMs)
@@ -203,11 +215,6 @@ This glossary defines key terms, acronyms, and concepts used throughout the Mobi
 - Role-based access control (RBAC)
 - Used for all service-to-service auth
 
-**Iceberg (Apache Iceberg)**
-- Open table format for data lakes
-- Alternative to Delta Lake
-- Not used (we chose Delta Lake)
-
 **IMU (Inertial Measurement Unit)**
 - Sensor measuring acceleration and rotation
 - Includes accelerometer + gyroscope
@@ -316,11 +323,6 @@ This glossary defines key terms, acronyms, and concepts used throughout the Mobi
 
 ## N
 
-**Neo (SageMaker Neo)**
-- AWS service for ML model optimization
-- Compiles models for edge devices
-- Reduces model size and improves inference speed
-
 **NFR (Non-Functional Requirement)**
 - System quality attribute (performance, security, scalability)
 - Examples: 99.95% uptime, P95 latency < 200ms
@@ -368,11 +370,6 @@ This glossary defines key terms, acronyms, and concepts used throughout the Mobi
 - Crafting LLM prompts for optimal responses
 - Includes system prompt, few-shot examples, context
 - Iterative optimization process
-
-**Pub/Sub (Publisher/Subscriber)**
-- Messaging pattern where publishers send to topics, subscribers receive
-- Decouples producers and consumers
-- Used in Kafka, AWS IoT Core
 
 ---
 
@@ -456,6 +453,12 @@ This glossary defines key terms, acronyms, and concepts used throughout the Mobi
 - Vehicle telemetry: GPS, battery, speed, IMU
 - ~50K vehicles × 1 msg/sec = 4.3B events/day
 
+**Temporal**
+- Open-source workflow orchestration platform
+- Event-driven, reliable execution with automatic retries
+- Used for real-time AI workflows and retraining triggers
+- Complements Airflow for event-based orchestration
+
 **TensorFlow Lite**
 - Lightweight ML framework for mobile/edge
 - Optimized for constrained devices
@@ -484,10 +487,12 @@ This glossary defines key terms, acronyms, and concepts used throughout the Mobi
 
 ## V
 
-**Vertex AI**
-- Google Cloud's unified ML platform
-- Alternative to SageMaker (not chosen)
-- Excellent AutoML capabilities
+**VictoriaMetrics**
+- High-performance time-series database
+- Drop-in replacement for Prometheus with better efficiency
+- Lower memory footprint and resource usage at scale
+- Used as primary metrics data store
+- Fully compatible with Prometheus protocols and Grafana
 
 **VPC (Virtual Private Cloud)**
 - Isolated network in AWS
@@ -511,11 +516,6 @@ This glossary defines key terms, acronyms, and concepts used throughout the Mobi
 ---
 
 ## Z
-
-**Z-Order Clustering**
-- Delta Lake optimization technique
-- Co-locates related data on storage
-- Improves query performance (data skipping)
 
 **Zone**
 - Geographic area for operations

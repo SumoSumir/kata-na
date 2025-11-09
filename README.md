@@ -321,8 +321,8 @@ Read key ADRs in order:
 - **Training:** AWS SageMaker
 - **Serving:** SageMaker Endpoints + Lambda
 - **Feature Store:** SageMaker Feature Store
-- **MLOps:** SageMaker Pipelines, MLflow
-- **Forecasting:** Amazon Forecast + custom LightGBM models
+- **MLOps:** SageMaker Pipelines
+- **Models:** LightGBM, XGBoost (custom training)
 - **Agentic AI:** LangChain on AWS Bedrock (Claude 3.5)
 
 ### Data Platform
@@ -341,8 +341,7 @@ Read key ADRs in order:
 - **Containers:** Amazon ECS (Fargate)
 - **Functions:** AWS Lambda
 - **API Gateway:** Amazon API Gateway
-- **Workflow:** AWS Step Functions
-- **Batch:** AWS Batch
+- **Workflow:** Apache Airflow + Apache Beam + Temporal
 
 ### IoT & Edge
 - **IoT Core:** AWS IoT Core (MQTT)
@@ -351,10 +350,11 @@ Read key ADRs in order:
 - **Device Management:** AWS IoT Device Management
 
 ### Observability
-- **Metrics:** Amazon CloudWatch + Prometheus
-- **Tracing:** AWS X-Ray + OpenTelemetry
-- **Logging:** CloudWatch Logs + ELK Stack
-- **Monitoring:** Grafana + CloudWatch Dashboards
+- **Metrics:** VictoriaMetrics + Prometheus + CloudWatch
+- **Tracing:** OpenTelemetry
+- **Logging:** CloudWatch Logs + OpenSearch
+- **Monitoring:** Grafana
+- **Alerting:** PagerDuty
 
 ### Security
 - **Identity:** AWS IAM (zero-trust) + AWS SSO (MFA)
@@ -364,8 +364,6 @@ Read key ADRs in order:
 - **Threat Detection:** AWS GuardDuty, Security Hub, Macie
 - **IoT Security:** X.509 certificates, mTLS, IoT Device Defender
 - **Compliance:** AWS Config, CloudTrail (GDPR, PCI-DSS, ISO 27001)
-- **Network:** VPC, Security Groups, NACLs
-- **Compliance:** AWS Config, CloudTrail
 
 ### Frontend
 - **Mobile:** React Native (iOS/Android)
@@ -374,7 +372,7 @@ Read key ADRs in order:
 
 ### Development & CI/CD
 - **Source Control:** GitHub
-- **CI/CD:** GitHub Actions + AWS CodePipeline
+- **CI/CD:** GitHub Actions
 - **Infrastructure:** Terraform
 - **Configuration:** AWS Systems Manager Parameter Store
 

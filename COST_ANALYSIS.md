@@ -75,9 +75,6 @@
 | **Zero-Trust IAM** | Free tier (IAM + SSO) | No identity management fees vs. Azure AD Premium |
 | **PII Detection** | Macie automation | Eliminates manual GDPR audit costs |
 | **Compliance Tools** | Config + CloudTrail | 95% automated governance |
-
-**vs. Azure:** +15% total cost | **vs. GCP:** +10% total cost | **vs. Multi-cloud:** +30% total cost
-
 ---
 
 ## Key Metrics
