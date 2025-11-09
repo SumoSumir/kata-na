@@ -380,8 +380,8 @@ Read key ADRs in order:
 ### Architecture Documentation
 - **ADRs (19):** [ADR Directory](./ADR/) - All architectural decisions with rationale
 - **Diagrams:** [ARCHITECTURAL_DIAGRAMS](ARCHITECTURAL_DIAGRAMS/) - C4 model diagrams
-- **HLD:** [HLD Directory](HLD/) - Detailed scenario walkthroughs ⭐ NEW
-- **Glossary:** [GLOSSARY.md](GLOSSARY.md) - Domain terminology ⭐ NEW
+- **HLD:** [HLD Directory](HLD/) - Detailed scenario walkthroughs
+- **Glossary:** [GLOSSARY.md](GLOSSARY.md) - Domain terminology
 
 ### Requirements
 - **Functional:** [FUNCTIONAL_REQUIREMENTS.md](FUNCTIONAL_REQUIREMENTS/FUNCTIONAL_REQUIREMENTS.md)
@@ -393,7 +393,7 @@ Read key ADRs in order:
 - **Testing:** [TESTING_APPROACHES.md](TESTING_APPROACHES/TESTING_APPROACHES.md)
 - **Metrics:** [FITNESS_FUNCTIONS.md](FITNESS_FUNCTIONS/FITNESS_FUNCTIONS.md)
 - **Deployment:** [ROLLOUT_STRATEGY.md](ROLLOUT_STRATEGY/ROLLOUT_STRATEGY.md)
-- **Cost:** [COST_ANALYSIS.md](COST_ANALYSIS.md) - TCO estimates ⭐ NEW
+- **Cost:** [COST_ANALYSIS.md](COST_ANALYSIS.md) - TCO estimates
 
 ### Workflows
 - **Customer:** [CUSTOMER_WORKFLOWS.md](WORKFLOWS/CUSTOMER_WORKFLOWS.md)

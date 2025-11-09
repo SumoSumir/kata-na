@@ -2,60 +2,8 @@
 
 This diagram provides a high-level overview of the MobilityCorp platform and its interactions with external users and systems.
 
-## ASCII Diagram
+[![](https://img.plantuml.biz/plantuml/svg/ZLR1RkCs4BtxAwOvR1siirwWsKjH5ElOsIHed7XZfK5F0IsDPIAKA92K4-_Nzv6KR3dnjhdO56czUJFpvj5VhHF6rONg_IBBLDKPqn_Zq-7uz76iIySlxizUpqcdcEORwxYWPfjEQAeNKact6MjJqKm9jzIcwFL-fHaRgqjBmf7JLIy-zjFQEbsm6T3Hk5aUOHrGc4HLKMtPq4Bh9rdc9CeC6twrvfLC5LlgV_dy-I-QZEwFZuvRLD1VBW4pzzyUxxPY8vpqyHsBWWfHYjp3B1MpexKKb0cxMcXXiXsCo0fPuksH__OmJRPXNre7I6ti3YpLvLBcTOoqWyc44pQLNAOCZ0cUQ1uVAG6PaEyrSGaCnXjDWjzOkDgWmeZ18N74GrWS5JfZPH40PPrYZspaXLNAQ8JfHQBzggb_Mz7NVGcXPMeqQhoMAQhvaKPNGx3vIETPpkXhKTNEnyJ66jWd4oFnJIEJhgJZr5Fyr7ArlzCLmYibS_oKRhIJIvd6kWzeiYb58LEQ6Pa2SU15iqQ-uLme1AR-6MT6fq_7WnWUHFfpiMItEHaRwO2bS3IjbPCdTvpZFUgVXyQZ4kSloDm3nMe4fIsqWwQQSZpY5tsf7PA-qWdztIZ85-4B91Iby2pT2XfHNB0pcm5TpEOTCgUVVZiZzeMmmqniVEGETYKs1Ow0DuihkX2EdyKcn9Wx8okcFl8lXDaWaL6sGIdxtuHI2u6izz4AKLdV7r7Hl6cFXxdGEiTeJCCfFXVwXVgfjevqvMGXVuHwli9wHeDMOSeUuee-n7vQ6iskR3CYPNC8r07Qn9bCtUNtVII8iBGov5Wl5DgPn8qjJkmE98fE-8m98YozRFTnKYXBIH5dOhnz0AzHdKaNCftCxhpeqwSW5-7tmn04xNTxMbeCNOIwQjTRGcCb9DJmWTP2oQoTpSxhkT5rcJbJkvLlayXvAfvGeekmZmHnq0of7sLIOi4g9WJPtR6A2b_9oi80uLUKIOFHYB9U2uFCK6WC72tOGQJUA9pHgeTt7oVwkMk3dP4zYwOteBfK60gSjVfQCcTUCPxLPPBCviDec63a8U-hpkHt77OEtJagzySIJ7K1s5YPKB5PRLV3-NJk4znIR3ormoyHzYcQ7qTQ1Rp8SHcghtHkT_GUU768M-lJ8yN6WOkmLkQb1yD38sVE27rm_0PjHwtnwGwrngWjoeqA0YpS8aLUU9QwbF1Kty3_uzTU07TSwK1mUqbuie7qprdjsNw7sojZJp7NTX0zVMln7XNw7OumZgKuH6t_Ke4qCGGoNxajbFSlcTe6oJCxarjkEvpeXqbhUDIVVa-IZl_6ksP0jyc8wWfHOoFyhuRUHN6VUDaTn7xhXnNS7UdkrJwoEmZGME2T3dVGW7BMgSxU-_PRq_D56qJ_3kjtmUmShxKwcwuugt5r3Dv8C-8SGFcPtvbMMj7UziVcFrWTzhoEnRq7PD_valR_HInJiBatP7hNetzkxvF7v7RsEBbzkEaVjpiFLydbu_NvnVdD19kzhx0K_8Fy5m00)](https://editor.plantuml.com/uml/ZLR1RkCs4BtxAwOvR1siirwWsKjH5ElOsIHed7XZfK5F0IsDPIAKA92K4-_Nzv6KR3dnjhdO56czUJFpvj5VhHF6rONg_IBBLDKPqn_Zq-7uz76iIySlxizUpqcdcEORwxYWPfjEQAeNKact6MjJqKm9jzIcwFL-fHaRgqjBmf7JLIy-zjFQEbsm6T3Hk5aUOHrGc4HLKMtPq4Bh9rdc9CeC6twrvfLC5LlgV_dy-I-QZEwFZuvRLD1VBW4pzzyUxxPY8vpqyHsBWWfHYjp3B1MpexKKb0cxMcXXiXsCo0fPuksH__OmJRPXNre7I6ti3YpLvLBcTOoqWyc44pQLNAOCZ0cUQ1uVAG6PaEyrSGaCnXjDWjzOkDgWmeZ18N74GrWS5JfZPH40PPrYZspaXLNAQ8JfHQBzggb_Mz7NVGcXPMeqQhoMAQhvaKPNGx3vIETPpkXhKTNEnyJ66jWd4oFnJIEJhgJZr5Fyr7ArlzCLmYibS_oKRhIJIvd6kWzeiYb58LEQ6Pa2SU15iqQ-uLme1AR-6MT6fq_7WnWUHFfpiMItEHaRwO2bS3IjbPCdTvpZFUgVXyQZ4kSloDm3nMe4fIsqWwQQSZpY5tsf7PA-qWdztIZ85-4B91Iby2pT2XfHNB0pcm5TpEOTCgUVVZiZzeMmmqniVEGETYKs1Ow0DuihkX2EdyKcn9Wx8okcFl8lXDaWaL6sGIdxtuHI2u6izz4AKLdV7r7Hl6cFXxdGEiTeJCCfFXVwXVgfjevqvMGXVuHwli9wHeDMOSeUuee-n7vQ6iskR3CYPNC8r07Qn9bCtUNtVII8iBGov5Wl5DgPn8qjJkmE98fE-8m98YozRFTnKYXBIH5dOhnz0AzHdKaNCftCxhpeqwSW5-7tmn04xNTxMbeCNOIwQjTRGcCb9DJmWTP2oQoTpSxhkT5rcJbJkvLlayXvAfvGeekmZmHnq0of7sLIOi4g9WJPtR6A2b_9oi80uLUKIOFHYB9U2uFCK6WC72tOGQJUA9pHgeTt7oVwkMk3dP4zYwOteBfK60gSjVfQCcTUCPxLPPBCviDec63a8U-hpkHt77OEtJagzySIJ7K1s5YPKB5PRLV3-NJk4znIR3ormoyHzYcQ7qTQ1Rp8SHcghtHkT_GUU768M-lJ8yN6WOkmLkQb1yD38sVE27rm_0PjHwtnwGwrngWjoeqA0YpS8aLUU9QwbF1Kty3_uzTU07TSwK1mUqbuie7qprdjsNw7sojZJp7NTX0zVMln7XNw7OumZgKuH6t_Ke4qCGGoNxajbFSlcTe6oJCxarjkEvpeXqbhUDIVVa-IZl_6ksP0jyc8wWfHOoFyhuRUHN6VUDaTn7xhXnNS7UdkrJwoEmZGME2T3dVGW7BMgSxU-_PRq_D56qJ_3kjtmUmShxKwcwuugt5r3Dv8C-8SGFcPtvbMMj7UziVcFrWTzhoEnRq7PD_valR_HInJiBatP7hNetzkxvF7v7RsEBbzkEaVjpiFLydbu_NvnVdD19kzhx0K_8Fy5m00)
 
-```
-┌────────────────────────────────────────────────────────────────────────────────┐
-│                         SYSTEM CONTEXT (C1)                                    │
-└────────────────────────────────────────────────────────────────────────────────┘
-
-USERS & ACTORS:
-┌─────────────┐  ┌─────────────┐  ┌─────────────┐  ┌──────────────┐
-│  Customer   │  │    Staff    │  │    Admin    │  │ Data Science │
-│  (Mobile    │  │ (Operations │  │   (System   │  │    Team      │
-│   App)      │  │  Dashboard) │  │   Config)   │  │ (Analytics)  │
-└──────┬──────┘  └──────┬──────┘  └──────┬──────┘  └──────┬───────┘
-       │  ▲             │  ▲             │  ▲             │  ▲
-       │  │             │  │             │  │             │  │
-       │  │ Booking,    │  │ Task Mgmt,  │  │ System     │  │ Feature
-       │  │ Unlock,     │  │ Maintenance │  │ Settings,  │  │ Store,
-       │  │ Payment,    │  │ Logs,       │  │ User Mgmt, │  │ Model
-       │  │ Feedback    │  │ Incident    │  │ Monitoring │  │ Training
-       │  │             │  │ Response    │  │            │  │
-       │  └─ Smart      │  └─ Alerts &   │  └─ Reports & │  └─ Insights
-       │    Notif,      │    Assignments │    Dashboards │
-       │    Recomm.     │                │               │
-       ▼                ▼                ▼               ▼
-┌──────────────────────────────────────────────────────────────────────┐
-│                                                                      │
-│                   MobilityCorp Platform                              │
-│    (Microservices + AI/ML + Edge Computing + Event-Driven)           │
-│                                                                      │
-│  ⭐ Intelligent Notification Service                                │
-│  ⭐ AI-Driven Dynamic Pricing & Relocation Incentives               │
-│  ⭐ Conversational AI Assistant (LangChain + Bedrock)               │
-│  ⭐ Edge ML Models (Collision Detection, Geofence, Tamper)          │
-│  ⭐ Multi-Region Active-Active Architecture                         │
-│                                                                      │
-└──────────────────────────────────────────────────────────────────────┘
-       │           │            │            │           │
-       │           │            │            │           │
-┌──────▼─────┐ ┌──▼────────┐ ┌─▼──────────┐ ┌─▼────────┐ ┌─▼───────────┐
-│    IoT     │ │  External │ │  Payment   │ │  Map     │ │  Compliance │
-│  Vehicles  │ │    APIs   │ │  Gateway   │ │  APIs    │ │  & Audit    │
-│(Telemetry, │ │ (Weather, │ │  (Stripe,  │ │ (Google, │ │  Systems    │
-│ GPS, NFC,  │ │  Events,  │ │   Adyen)   │ │  Mapbox) │ │  (GDPR)     │
-│ Edge ML)   │ │ Holidays, │ │            │ │          │ │             │
-│            │ │  Transit) │ │            │ │          │ │             │
-└────────────┘ └───────────┘ └────────────┘ └──────────┘ └─────────────┘
-       │                                                         │
-       │                                                         │
-┌──────▼─────────┐                                      ┌────────▼────────┐
-│  Ground Truth  │                                      │    Insurance    │
-│   Labeling     │                                      │   Provider APIs │
-│  (SageMaker)   │                                      │                 │
-└────────────────┘                                      └─────────────────┘
-```
 
 ## Key External Actors:
 
@@ -106,9 +54,6 @@ The MobilityCorp Platform handles:
 - Event-driven architecture with Kafka event bus
 - Data lakehouse (Bronze/Silver/Gold medallion)
 - MLOps pipeline (training, deployment, monitoring)
-
-## C4 Diagram
-[![](https://img.plantuml.biz/plantuml/svg/ZLR1RkCs4BtxAwOvR1siirwWsKjH5ElOsIHed7XZfK5F0IsDPIAKA92K4-_Nzv6KR3dnjhdO56czUJFpvj5VhHF6rONg_IBBLDKPqn_Zq-7uz76iIySlxizUpqcdcEORwxYWPfjEQAeNKact6MjJqKm9jzIcwFL-fHaRgqjBmf7JLIy-zjFQEbsm6T3Hk5aUOHrGc4HLKMtPq4Bh9rdc9CeC6twrvfLC5LlgV_dy-I-QZEwFZuvRLD1VBW4pzzyUxxPY8vpqyHsBWWfHYjp3B1MpexKKb0cxMcXXiXsCo0fPuksH__OmJRPXNre7I6ti3YpLvLBcTOoqWyc44pQLNAOCZ0cUQ1uVAG6PaEyrSGaCnXjDWjzOkDgWmeZ18N74GrWS5JfZPH40PPrYZspaXLNAQ8JfHQBzggb_Mz7NVGcXPMeqQhoMAQhvaKPNGx3vIETPpkXhKTNEnyJ66jWd4oFnJIEJhgJZr5Fyr7ArlzCLmYibS_oKRhIJIvd6kWzeiYb58LEQ6Pa2SU15iqQ-uLme1AR-6MT6fq_7WnWUHFfpiMItEHaRwO2bS3IjbPCdTvpZFUgVXyQZ4kSloDm3nMe4fIsqWwQQSZpY5tsf7PA-qWdztIZ85-4B91Iby2pT2XfHNB0pcm5TpEOTCgUVVZiZzeMmmqniVEGETYKs1Ow0DuihkX2EdyKcn9Wx8okcFl8lXDaWaL6sGIdxtuHI2u6izz4AKLdV7r7Hl6cFXxdGEiTeJCCfFXVwXVgfjevqvMGXVuHwli9wHeDMOSeUuee-n7vQ6iskR3CYPNC8r07Qn9bCtUNtVII8iBGov5Wl5DgPn8qjJkmE98fE-8m98YozRFTnKYXBIH5dOhnz0AzHdKaNCftCxhpeqwSW5-7tmn04xNTxMbeCNOIwQjTRGcCb9DJmWTP2oQoTpSxhkT5rcJbJkvLlayXvAfvGeekmZmHnq0of7sLIOi4g9WJPtR6A2b_9oi80uLUKIOFHYB9U2uFCK6WC72tOGQJUA9pHgeTt7oVwkMk3dP4zYwOteBfK60gSjVfQCcTUCPxLPPBCviDec63a8U-hpkHt77OEtJagzySIJ7K1s5YPKB5PRLV3-NJk4znIR3ormoyHzYcQ7qTQ1Rp8SHcghtHkT_GUU768M-lJ8yN6WOkmLkQb1yD38sVE27rm_0PjHwtnwGwrngWjoeqA0YpS8aLUU9QwbF1Kty3_uzTU07TSwK1mUqbuie7qprdjsNw7sojZJp7NTX0zVMln7XNw7OumZgKuH6t_Ke4qCGGoNxajbFSlcTe6oJCxarjkEvpeXqbhUDIVVa-IZl_6ksP0jyc8wWfHOoFyhuRUHN6VUDaTn7xhXnNS7UdkrJwoEmZGME2T3dVGW7BMgSxU-_PRq_D56qJ_3kjtmUmShxKwcwuugt5r3Dv8C-8SGFcPtvbMMj7UziVcFrWTzhoEnRq7PD_valR_HInJiBatP7hNetzkxvF7v7RsEBbzkEaVjpiFLydbu_NvnVdD19kzhx0K_8Fy5m00)](https://editor.plantuml.com/uml/ZLR1RkCs4BtxAwOvR1siirwWsKjH5ElOsIHed7XZfK5F0IsDPIAKA92K4-_Nzv6KR3dnjhdO56czUJFpvj5VhHF6rONg_IBBLDKPqn_Zq-7uz76iIySlxizUpqcdcEORwxYWPfjEQAeNKact6MjJqKm9jzIcwFL-fHaRgqjBmf7JLIy-zjFQEbsm6T3Hk5aUOHrGc4HLKMtPq4Bh9rdc9CeC6twrvfLC5LlgV_dy-I-QZEwFZuvRLD1VBW4pzzyUxxPY8vpqyHsBWWfHYjp3B1MpexKKb0cxMcXXiXsCo0fPuksH__OmJRPXNre7I6ti3YpLvLBcTOoqWyc44pQLNAOCZ0cUQ1uVAG6PaEyrSGaCnXjDWjzOkDgWmeZ18N74GrWS5JfZPH40PPrYZspaXLNAQ8JfHQBzggb_Mz7NVGcXPMeqQhoMAQhvaKPNGx3vIETPpkXhKTNEnyJ66jWd4oFnJIEJhgJZr5Fyr7ArlzCLmYibS_oKRhIJIvd6kWzeiYb58LEQ6Pa2SU15iqQ-uLme1AR-6MT6fq_7WnWUHFfpiMItEHaRwO2bS3IjbPCdTvpZFUgVXyQZ4kSloDm3nMe4fIsqWwQQSZpY5tsf7PA-qWdztIZ85-4B91Iby2pT2XfHNB0pcm5TpEOTCgUVVZiZzeMmmqniVEGETYKs1Ow0DuihkX2EdyKcn9Wx8okcFl8lXDaWaL6sGIdxtuHI2u6izz4AKLdV7r7Hl6cFXxdGEiTeJCCfFXVwXVgfjevqvMGXVuHwli9wHeDMOSeUuee-n7vQ6iskR3CYPNC8r07Qn9bCtUNtVII8iBGov5Wl5DgPn8qjJkmE98fE-8m98YozRFTnKYXBIH5dOhnz0AzHdKaNCftCxhpeqwSW5-7tmn04xNTxMbeCNOIwQjTRGcCb9DJmWTP2oQoTpSxhkT5rcJbJkvLlayXvAfvGeekmZmHnq0of7sLIOi4g9WJPtR6A2b_9oi80uLUKIOFHYB9U2uFCK6WC72tOGQJUA9pHgeTt7oVwkMk3dP4zYwOteBfK60gSjVfQCcTUCPxLPPBCviDec63a8U-hpkHt77OEtJagzySIJ7K1s5YPKB5PRLV3-NJk4znIR3ormoyHzYcQ7qTQ1Rp8SHcghtHkT_GUU768M-lJ8yN6WOkmLkQb1yD38sVE27rm_0PjHwtnwGwrngWjoeqA0YpS8aLUU9QwbF1Kty3_uzTU07TSwK1mUqbuie7qprdjsNw7sojZJp7NTX0zVMln7XNw7OumZgKuH6t_Ke4qCGGoNxajbFSlcTe6oJCxarjkEvpeXqbhUDIVVa-IZl_6ksP0jyc8wWfHOoFyhuRUHN6VUDaTn7xhXnNS7UdkrJwoEmZGME2T3dVGW7BMgSxU-_PRq_D56qJ_3kjtmUmShxKwcwuugt5r3Dv8C-8SGFcPtvbMMj7UziVcFrWTzhoEnRq7PD_valR_HInJiBatP7hNetzkxvF7v7RsEBbzkEaVjpiFLydbu_NvnVdD19kzhx0K_8Fy5m00)
 
 ## Key Metrics & Scale
 
@@ -166,9 +111,3 @@ The MobilityCorp Platform handles:
 - [ADR-01: Microservices Architecture](./ADR/ADR_01_microservices_architecture.md)
 - [ADR-09: Multi-Region Deployment](./ADR/ADR_09_MULTI_REGION.md)
 - [ADR-18: Edge vs Cloud AI Strategy](./ADR/ADR_18_Edge_Cloud_AI_Strategy.md)
-
----
-
-**Document Version:** 2.0  
-**Last Updated:** November 8, 2025  
-**Status:** Final - Production Architecture
