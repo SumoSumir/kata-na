@@ -36,7 +36,7 @@ This diagram shows a high-level overview of the multi-region deployment strategy
      │ └────────────────────────┘ │                     │ └────────────────────────┘ │                     │ └────────────────────────┘ │
      │                            │                     │                            │                     │                            │
      │ ┌────────────────────────┐ │<────────────────────>│ ┌────────────────────────┐ │<────────────────────>│ ┌────────────────────────┐ │
-     │ │ TimescaleDB (Telemetry)│ │                     │ │ TimescaleDB (Telemetry)│ │                     │ │ TimescaleDB (Telemetry)│ │
+     │ │ TimescaleDB (Vehicle Telemetry)│ │             │ │ TimescaleDB (Vehicle Telemetry)│ │         │ │ TimescaleDB (Vehicle Telemetry)│ │
      │ │ Anonymized Replication │ │                     │ │ Anonymized Replication │ │                     │ │ Anonymized Replication │ │
      │ └────────────────────────┘ │                     │ └────────────────────────┘ │                     │ └────────────────────────┘ │
      └─────────────────────────────┘                     └─────────────────────────────┘                     └────────────────────────────┘

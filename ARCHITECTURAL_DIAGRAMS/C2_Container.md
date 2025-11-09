@@ -1,4 +1,4 @@
-# C2: Container Diagram (Updated)
+# C2: Container Diagram
 
 This diagram zooms into the MobilityCorp platform, showing the high-level containers (applications, microservices, data stores) that constitute the system. This updated version includes Edge Computing, Orchestrator Layer, Data Lakehouse, and all missing components from the review.
 
@@ -17,12 +17,11 @@ This diagram zooms into the MobilityCorp platform, showing the high-level contai
 9. **OpenSearch Serverless** (Vector DB for RAG)
 10. **ElastiCache Redis** (caching layer)
 11. **Data Lakehouse** (Bronze/Silver/Gold layers)
-12. **Glue Data Catalog, Athena, Glue ETL Jobs**
+12. **Apache Airflow ETL Jobs**
 13. **EventBridge** (scheduled events)
 14. **Edge Compute Layer** (IoT Greengrass + Edge ML)
 15. **SageMaker Model Monitor** (drift detection)
-16. **Step Functions** (workflow orchestration)
-17. **Multi-Region Infrastructure** (Route 53, Global DB, Global Tables, S3 CRR)
+16. **Multi-Region Infrastructure** (Route 53, Global DB, Global Tables, S3 CRR)
 
 ### 📊 Scale & Performance:
 
@@ -33,14 +32,6 @@ This diagram zooms into the MobilityCorp platform, showing the high-level contai
 - **IoT Core:** 130B MQTT messages/month
 - **Multi-Region:** <30s failover RTO
 
-### 💰 Cost Estimate:
-
-- **Edge Hardware:** $68K/month (amortized)
-- **MSK (Kafka):** $5K/month
-- **SageMaker MLOps:** $28K/month
-- **Data Lakehouse:** $2.4K/month
-- **Multi-Region Overhead:** $15-20K/month
-- **Total:** ~$132K/month
 
 ## Related Documents:
 
