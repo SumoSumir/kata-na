@@ -63,7 +63,7 @@ Without a robust MLOps pipeline, we risk:
 │                                                                  │
 │  1. Data Preparation                                             │
 │     ├─ S3 (Raw Data: Bronze Layer)                              │
-│     ├─ Glue ETL / Airflow DAGs                                  │
+│     ├─ Airflow + BEAM DAGs.                                     │
 │     └─ Feature Store (Online + Offline)                         │
 │                                                                  │
 │  2. Model Training (SageMaker Pipelines)                        │
@@ -206,7 +206,7 @@ Without a robust MLOps pipeline, we risk:
 ```
 Kubernetes Cluster (EKS)
 ├─ MLflow Server (Tracking + Model Registry)
-├─ Airflow (Pipeline Orchestration)
+├─ Airflow + Beam (Pipeline Orchestration)
 ├─ Seldon Core / KFServing (Model Serving)
 ├─ Prometheus + Grafana (Monitoring)
 └─ Feast (Feature Store)
@@ -214,7 +214,7 @@ Kubernetes Cluster (EKS)
 
 #### Components
 - **MLflow:** Model tracking, registry, deployment
-- **Airflow:** Pipeline orchestration
+- **Airflow + Beam:** Pipeline orchestration
 - **Kubeflow / Seldon:** Model serving on Kubernetes
 - **Feast:** Open-source feature store
 - **Prometheus:** Metrics collection

@@ -67,10 +67,10 @@ The MobilityCorp Platform handles:
 | **Availability SLA** | 99.9% uptime | <43 minutes downtime/month |
 | **API Request Volume** | 10,000 req/sec | Peak: 15,000 req/sec during events |
 | **ML Models in Production** | 14 models | 11 cloud + 3 edge models |
-| **Edge Devices** | 50,000 IoT Greengrass | Real-time safety-critical inference |
-| **Multi-Region** | 2 active regions | Frankfurt (primary), Ireland (secondary) |
+| **Edge Devices** | 50,000 IoT devices| Real-time safety-critical inference |
+| **Multi-Region** | 8 active regions | Separate deployments in countries with localisation requirements |
 | **Data Lakehouse** | 2.5 PB | Bronze (raw) → Silver (clean) → Gold (aggregated) |
-| **Event Streaming** | 130B MQTT msg/month | Kafka MSK: 3 brokers, 50 partitions/topic |
+| **Event Streaming** | 130B MQTT msg/month | Kafka 3 brokers, 50 partitions/topic |
 
 ## Architecture Characteristics
 
@@ -78,7 +78,7 @@ The MobilityCorp Platform handles:
 
 | Attribute | Requirement | Implementation |
 |-----------|-------------|----------------|
-| **Scalability** | Handle 3x traffic spikes during events | Auto-scaling ECS/Lambda, ElastiCache, multi-region |
+| **Scalability** | Handle 3x traffic spikes during events | Auto-scaling EKS, ElastiCache, multi-region |
 | **Reliability** | 99.9% uptime | Multi-AZ, multi-region, circuit breakers |
 | **Performance** | API p99 <500ms, ML inference <200ms | Feature Store caching, SageMaker endpoints |
 | **Security** | GDPR compliant, zero-trust | OAuth2/JWT, encryption at rest/transit, audit logs |
@@ -93,16 +93,16 @@ The MobilityCorp Platform handles:
 |-------|-------------|
 | **Frontend** | React Native (mobile), React (web dashboards) |
 | **API Gateway** | AWS API Gateway, Kong (hybrid) |
-| **Compute** | ECS Fargate, AWS Lambda, EC2 (ML training) |
-| **Event Streaming** | Apache Kafka (MSK), AWS EventBridge |
-| **Databases** | Aurora PostgreSQL, DynamoDB, ElastiCache Redis, TimescaleDB |
+| **Compute** | EKS, AWS Lambda, EC2 (ML training) |
+| **Event Streaming** | Apache Kafka, EKS |
+| **Databases** | PostgreSQL, DynamoDB, ElastiCache Redis, TimescaleDB |
 | **Data Lake** | S3 + Delta Lake (Bronze/Silver/Gold) |
 | **ML Platform** | SageMaker (training, endpoints, pipelines, Feature Store) |
 | **AI/LLM** | AWS Bedrock (Claude 3.5 Sonnet), OpenAI GPT-4o (fallback) |
-| **Edge Computing** | AWS IoT Greengrass v2, TensorFlow Lite |
-| **Observability** | OpenTelemetry, VictoriaMetrics, Grafana, CloudWatch |
-| **Orchestration** | Step Functions, Airflow (MWAA), Temporal |
-| **CI/CD** | GitHub Actions, AWS CodePipeline, ArgoCD |
+| **Edge Computing** | TensorFlow Lite |
+| **Observability** | OpenTelemetry, VictoriaMetrics, Grafana, CloudWatch, OpenSearch |
+| **Orchestration** | Airflow, Temporal |
+| **CI/CD** | GitHub Actions, ArgoCD |
 
 ## Related Documents
 

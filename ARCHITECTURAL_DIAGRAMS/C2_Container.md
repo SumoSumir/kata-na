@@ -17,7 +17,7 @@ This diagram zooms into the MobilityCorp platform, showing the high-level contai
 9. **OpenSearch Serverless** (Vector DB for RAG)
 10. **ElastiCache Redis** (caching layer)
 11. **Data Lakehouse** (Bronze/Silver/Gold layers)
-12. **Apache Airflow ETL Jobs**
+12. **Apache Airflow + BEAM ETL Jobs**
 13. **EventBridge** (scheduled events)
 14. **Edge Compute Layer** (IoT Greengrass + Edge ML)
 15. **SageMaker Model Monitor** (drift detection)

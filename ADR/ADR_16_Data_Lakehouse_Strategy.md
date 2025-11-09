@@ -175,7 +175,7 @@ This data must support:
 - ✅ Serverless: No infrastructure
 
 **Alternatives Considered:**
-- Airflow (MWAA): More powerful but overkill, higher cost
+- Airflow+BEAM: More powerful but overkill, higher cost
 - Prefect/Dagster: Not AWS-native
 
 ### Data Flow Details

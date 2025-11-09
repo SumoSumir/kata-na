@@ -24,7 +24,7 @@ This diagram illustrates the flow of data through the AI/ML pipeline, from initi
 +-----------------------------------------------------+ <----------------+
 |                   MODEL TRAINING                    |                  |
 |                                                     |                  |
-|      [Training Pipeline on Airflow] (F)             |                  |
+|      [Training Pipeline on Airflow+BEAM] (F)        |                  |
 |                         |                           |                  |
 |                         v                           |                  |
 |                  (SageMaker) (G)                    |                  |

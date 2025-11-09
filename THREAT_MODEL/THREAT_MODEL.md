@@ -147,7 +147,7 @@
 - Cached in Redis to reduce external calls
 
 
-### DF6: AI/ML Training Pipeline (Airflow) → S3 Data Lake → Model Registry (TB4)
+### DF6: AI/ML Training Pipeline (Airflow+BEAM) → S3 Data Lake → Model Registry (TB4)
 - Reads historical data, trains models, stores artifacts
 - Scheduled batch jobs (weekly/monthly)
 - Anonymized datasets for cross-region training
