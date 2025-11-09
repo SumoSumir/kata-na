@@ -31,49 +31,47 @@ Key requirements include:
 - **Rejected:** Kafka’s log-based architecture better suits real-time workloads  
 
 ## Decision
-Implement an **event-driven architecture** using **Apache Kafka on AWS MSK (Managed Streaming for Kafka)** as the central event bus.
+Implement an **event-driven architecture** using **Apache Kafka** as the central event bus.
 
 **Kafka Configuration:**
-- **Cluster:** Multi-broker MSK cluster for high availability
+- **Cluster:** Multi-broker cluster for high availability
 - **Partitioning:** Topic partitioning strategy for parallel processing
 - **Replication:** Multi-replica configuration for durability
 - **Retention:** Event retention policy balancing cost and replay capability
 - **Compression:** LZ4 compression for efficient storage and transfer
 
-**Schema Management:**
-- **AWS Glue Schema Registry** for Avro schemas (AWS-native alternative to Confluent)
-- Schema evolution with backward compatibility
-- Automatic schema validation on publish
-
 ### Core Event Topics
 - `bookings.created` – New booking initiated  
 - `bookings.completed` – Rental ended  
-- `vehicles.telemetry` – GPS location updates  
-- `vehicles.battery_status` – Battery level updates  
+- `vehicles.telemetry` – GPS location updates (30s interval)  
+- `vehicles.battery_status` – Battery level updates (60s interval) 
 - `customers.app_events` – User interactions  
 - `photos.uploaded` – Return validation photos  
 - `predictions.generated` – AI prediction results  
 - `operations.task_completed` – Staff task completion  
 
 ### Event Schema
-- Use **Avro schemas** with **Schema Registry** for schema evolution  
+- Use Avro schemas with Confluent Schema Registry for schema evolution  
 - Include **parent IDs** for distributed tracing (opentelemetry)  
 - Timestamp all events with **event time** (not processing time)
+- Schema evolution with backward compatibility
+- Automatic schema validation on publish
+- Schema evolution with backward compatibility
+- Automatic schema validation on publish
 
 ### Processing Patterns
-- Real-time stream processing using **AWS Lambda** (event-driven, serverless)
-- **Kafka Streams** for stateful processing when Lambda is insufficient
-- **Event sourcing** for audit trail (Aurora PostgreSQL event store)
-- **CQRS** pattern for read-optimized views (Aurora for writes, Redis/DynamoDB for reads)
+- Real-time stream processing using **Kafka Streams**  
+- **Event sourcing** for audit trail  
+- **CQRS** pattern for read-optimized views 
 
 ### Event Flow
 ```
 Producer (Microservice) 
-  → AWS MSK (Kafka Topics with partitioning) 
+  → Kafka Topics with partitioning
   → Multiple Consumers:
-      ├─ Lambda (real-time processing, anomaly detection)
-      ├─ Kinesis Firehose (S3 archival, Data Lakehouse Bronze layer)
-      ├─ SageMaker (ML model retraining)
+      ├─ TimeScaleDB (time series data processing)
+      ├─ Apache Airflow + Beam (ETL + S3 Data Lakehouse layers)
+      ├─ SageMaker (ML model)
       └─ Microservices (async updates)
 ```
 (asynchronous, parallel processing)
