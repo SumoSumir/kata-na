@@ -342,8 +342,8 @@ Read key ADRs in order:
 
 ### IoT & Edge
 - **IoT Core:** AWS IoT Core (MQTT)
-- **Edge Runtime:** AWS IoT Greengrass v2
-- **Edge ML:** AWS IoT Greengrass ML Inference
+- **Edge Runtime:** AWS IoT runtime
+- **Edge ML:** AWS IoT ML Inference
 - **Device Management:** AWS IoT Device Management
 
 ### Observability

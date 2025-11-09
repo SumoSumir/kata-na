@@ -111,7 +111,7 @@ Adopt a **hybrid edge-cloud vehicle telemetry architecture** with intelligent wo
   - Edge-optimized models (TensorFlow Lite) for local inference
 
 **Inference & Alerting:**
-- **Edge inference:** Greengrass Lambda runs predictions on local data
+- **Edge inference:** runs predictions on local data
   - Battery health scores computed locally
   - Critical predictions trigger immediate cloud alerts such as accidents
 - **Cloud aggregation:** SageMaker batch transform jobs for fleet-wide predictions

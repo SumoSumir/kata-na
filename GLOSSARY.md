@@ -187,11 +187,6 @@ This glossary defines key terms, acronyms, and concepts used throughout the Mobi
 - Optimized for BI and reporting
 - Retention: 3 years
 
-**Greengrass (AWS IoT Greengrass v2)**
-- AWS edge runtime for IoT devices
-- Runs ML models locally on vehicles
-- Supports OTA updates and offline operation
-
 ---
 
 ## H
@@ -225,7 +220,6 @@ This glossary defines key terms, acronyms, and concepts used throughout the Mobi
 - Handles 50K+ vehicle connections
 - Routes telemetry to Kafka and Lambda
 
-**IoT Greengrass** - See **Greengrass**
 
 ---
 
@@ -344,7 +338,6 @@ This glossary defines key terms, acronyms, and concepts used throughout the Mobi
 
 **OTA (Over-The-Air)**
 - Remote software/model updates
-- Delivered via IoT Greengrass
 - No physical access required
 
 ---
