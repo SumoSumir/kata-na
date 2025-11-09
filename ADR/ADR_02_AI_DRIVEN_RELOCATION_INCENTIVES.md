@@ -37,8 +37,8 @@ Traditional approaches include:
 **1. Manual Relocation Only**  
 - Operations staff physically relocate vehicles based on daily patterns  
 - ✅ Pros: Simple, predictable, no customer friction  
-- ❌ Cons: Expensive, slow response to demand spikes, doesn't scale  
-- **Rejected:** Cannot keep pace with rapid demand changes or fleet growth  
+- ❌ Cons: Expensive (~€10-15 per relocation), slow response to demand spikes, doesn't scale
+- **Rejected:** Cannot keep pace with rapid demand changes or fleet growth, can be slow to reach physical location if travelling in peak hours to service urgent needs. Normal operation generally occurs in off hours.
 
 **2. Fixed-Price Relocation Incentives**  
 - Offer standard discounts (e.g., 20% off) for predefined "rebalancing routes"  
@@ -58,6 +58,7 @@ Implement an **AI-driven dynamic pricing and relocation incentive system** that 
 ### Architecture Components
 
 **1. Demand Forecasting Engine**
+- **Real-time prediction:** Forecast demand at 15-minute intervals for each 500m grid cell in each city
 - **ML Platform:** AWS SageMaker for model training and deployment
 - **Model:** XGBoost gradient boosting trained on historical booking data
 - **Input features:**
@@ -104,7 +105,7 @@ Implement an **AI-driven dynamic pricing and relocation incentive system** that 
  - Vehicle type: Cars/vans get higher incentives than bikes/scooters due to higher relocation value.
  - Customer segmentation: Frequent users may receive personalized offers.
 - **Incentive types:**
- - Percentage discounts (e.g., “50% off if you drop off in Zone B”)
+ - Percentage discounts (e.g., “10% off if you drop off in Zone B”)
  - Flat-rate bonuses (e.g., “Earn €5 credit for this relocation”)
  - Loyalty points multipliers (e.g., “2× points for relocations”)
 - **Real-time updates:** Incentives adjust every 5–15 minutes based on live demand-supply conditions.​
@@ -133,7 +134,7 @@ Implement an **AI-driven dynamic pricing and relocation incentive system** that 
 ### ✅ Positive Impacts
 
 **Financial**
-- Reduction in manual relocation costs (€10-15/vehicle → customer self-relocations)
+- Reduction in manual relocation costs (€10-15/vehicle → minimal < €5 customer self-relocations)
 - Revenue increase from dynamic pricing capturing willingness-to-pay during peak demand
 - Improved fleet utilization and reduced idle inventory from better vehicle distribution
 

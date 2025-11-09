@@ -38,6 +38,7 @@ Implement microservices architecture with services organized by business capabil
 - **Pricing Service**
 - **Analytics Service**
 - **Notification Service**
+- **Insurance Service**
 
 **Rationale for Microservices over Service-Based Architecture:**
 - **Independent Scaling:** Telemetry processes continuous high-volume data streams requiring aggressive scaling, while booking/payment services handle low-volume transactional loads. Service-based architecture would force scaling entire service groups together, wasting resources. Microservices enable precise capacity allocation per service.
