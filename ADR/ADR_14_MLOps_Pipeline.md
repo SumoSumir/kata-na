@@ -72,14 +72,15 @@ Adopt AWS-native MLOps using **Apache Airflow** (orchestration) and **Amazon Sag
 **Operations:** CI/CD pipelines, IAM least-privilege, approval gates, per-model retraining cadence
 
 ## Alternatives Considered
-**MLflow + Kubernetes** — Rejected: High ops overhead, longer time-to-prod, deep K8s expertise required
+**MLflow + Kubernetes** — Rejected: High ops overhead, longer time-to-prod, deep K8s expertise required from ML team as well
 
 ## ML Use Case: Dynamic Insurance Pricing
 - Insurance tiers: Basic (minimal coverage), Standard (balanced), Premium (comprehensive).
 - Telemetry (speed, braking, acceleration) is used to compute driving risk scores via ML.
-- Behavioral nudge: Standard tier priced to encourage upgrades to Premium.
+- Behavioral nudge: Standard tier priced closer to premium to encourage upgrades to Premium.
 - Data: historical telemetry, claims, and driving patterns; retrain weekly.
 - Serving: real-time risk scoring integrated into the booking flow.
+Example Case study - 
 
 
 ### Feature Store Architecture
@@ -136,17 +137,11 @@ Adopt AWS-native MLOps using **Apache Airflow** (orchestration) and **Amazon Sag
 │     ├─ SHAP value changes                            │
 │     └─ Feature importance shifts                     │
 │                                                       │
-│  CloudWatch Metrics:                                  │
-│  ├─ Endpoint latency (percentiles)                   │
-│  ├─ Error rate (4xx, 5xx)                            │
-│  ├─ Invocations per minute                           │
+│  CloudWatch Logs/Metrics:                            │
+│  ├─ Exported to Otel Collector for regular           |
+|  |  log & alert flow                                 │
 │  └─ Model loading time                               │
-│                                                       │
-│  Alerting (SNS → PagerDuty):                         │
-│  ├─ Critical: Accuracy below threshold (page on-call)│
-│  ├─ High: Data drift detected (Slack alert)          │
-│  ├─ Medium: Latency threshold exceeded (email)       │
-│  └─ Low: Training job failed (Slack)                 │
+│                                                      
 │                                                       │
 └──────────────────────────────────────────────────────┘
 ```
@@ -210,35 +205,6 @@ Strategy: Shadow Mode → Full Replacement
 | **Performance** | MAPE > 20% for 3 days | Retrain + investigate |
 | **Manual** | New feature added | On-demand retrain |
 | **Data Volume** | 10K new labels | Damage model retrain |
-
-### CI/CD Integration
-
-```
-GitHub Actions Workflow:
-
-1. On PR to main:
-   ├─ Lint code (Ruff, Black)
-   ├─ Unit tests (pytest)
-   ├─ Integration tests
-   └─ SageMaker pipeline validation
-
-2. On Merge to main:
-   ├─ Build Docker images
-   ├─ Push to ECR
-   ├─ Update SageMaker pipeline
-   └─ Trigger pipeline execution (if config changed)
-
-3. On Pipeline Success:
-   ├─ Notify ML team (Slack)
-   ├─ Update Model Registry
-   └─ Await manual approval for deployment
-
-4. On Manual Approval:
-   ├─ Deploy to staging endpoint
-   ├─ Run E2E tests
-   ├─ If OK: Deploy to production (canary)
-   └─ If NOT OK: Rollback + investigate
-```
 
 ## Consequences
 
