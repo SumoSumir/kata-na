@@ -256,7 +256,7 @@ Read [PERSONAS.md](PERSONAS.md) to understand who we're building for (Sarah, Mar
 4. **Review Architecture Decisions**
 Read key ADRs in order:
 1. [ADR-01: Microservices Architecture](./ADR/ADR_01_microservices_architecture.md)
-2. [ADR-15: MLOps Pipeline](./ADR/ADR_14_MLOps_Pipeline.md)
+2. [ADR-14: MLOps Pipeline](./ADR/ADR_14_MLOps_Pipeline.md)
 3. [ADR-16: Data Lakehouse](./ADR/ADR_16_Data_Lakehouse_Strategy.md)
 
 5. **Explore Architecture**
@@ -272,7 +272,7 @@ Read key ADRs in order:
 ### For AI/ML Engineers
 7. **Understand AI Usage**
 - [ADR-02: Dynamic Pricing](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md) - ML models and demand forecasting
-- [ADR-15: MLOps Pipeline](./ADR/ADR_14_MLOps_Pipeline.md) - Training and deployment
+- [ADR-14: MLOps Pipeline](./ADR/ADR_14_MLOps_Pipeline.md) - Training and deployment
 - [ADR-17: Agentic AI Framework](./ADR/ADR_17_Agentic_AI_Framework.md) - Conversational AI implementation
 
 ### For Domain Experts
@@ -366,7 +366,6 @@ Read key ADRs in order:
 - **Threat Detection:** AWS GuardDuty, Security Hub, Macie
 - **IoT Security:** X.509 certificates, mTLS, IoT Device Defender
 - **Compliance:** AWS Config, CloudTrail (GDPR, PCI-DSS, ISO 27001)
-- **ADR:** [ADR-12: Security-by-Design Architecture](./ADR/ADR_12_SECURITY_ARCHITECTURE.md)
 - **Network:** VPC, Security Groups, NACLs
 - **Compliance:** AWS Config, CloudTrail
 
@@ -503,8 +502,6 @@ Read key ADRs in order:
 
 ## 🔒 Security & Compliance
 
-**Security-by-Design Philosophy:** Zero-trust architecture with defense-in-depth (ADR-12)
-
 - ✅ **Zero-Trust:** All access authenticated + authorized (no implicit trust)
 - ✅ **Encryption Everywhere:** AES-256 at rest, TLS 1.3 in transit, mTLS for IoT
 - ✅ **GDPR Compliant:** Data residency (EU-only), right-to-erasure, consent management
@@ -516,8 +513,6 @@ Read key ADRs in order:
 
 **Security Cost:** $24,500/month (6% of total spend, industry standard 5-8%)  
 **Security ROI:** €295K/year positive ROI (breach prevention - security cost)
-
-**Detailed Security Architecture:** [ADR-12: Security-by-Design](./ADR/ADR_12_SECURITY_ARCHITECTURE.md)
 
 **Details:** [THREAT_MODEL.md](THREAT_MODEL/THREAT_MODEL.md)
 
@@ -559,7 +554,7 @@ Read key ADRs in order:
 - Traditional ML: €3K/month
 - **Savings: €924K/year by choosing the right tool**
 
-**Details:** See [ADR-02](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md), [ADR-15](./ADR/ADR_14_MLOps_Pipeline.md), and [ADR-17](./ADR/ADR_17_Agentic_AI_Framework.md)
+**Details:** See [ADR-02](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md), [ADR-14](./ADR/ADR_14_MLOps_Pipeline.md), and [ADR-17](./ADR/ADR_17_Agentic_AI_Framework.md)
 
 ---
 

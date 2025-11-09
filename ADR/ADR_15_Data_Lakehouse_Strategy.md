@@ -102,7 +102,7 @@ Data Sources → Bronze (Raw) → Silver (Cleaned) → Gold (Aggregated) → Con
 
 ## Related Decisions
 - **[ADR-08](ADR_08_SCHEDULER_FRAMEWORK.md):** Scheduler Framework - Airflow orchestrates lakehouse ETL
-- **[ADR-15](ADR_15_MLOps_Pipeline.md):** MLOps Pipeline - Feature Store sources from Silver/Gold
+- **[ADR-14](ADR_14_MLOps_Pipeline.md):** MLOps Pipeline - Feature Store sources from Silver/Gold
 - **[ADR-06](ADR_06_EVENT_DRIVEN_ARCHITECTURE.md):** Event-Driven Architecture - Kafka feeds Bronze layer
 
 ## References

@@ -37,7 +37,7 @@ Implement an **AI-powered, event-driven Notification Service** that delivers per
 - **Rate limiter:** Prevents notification fatigue (critical notifications bypass)
 - **Deduplication:** Prevents redundant notifications for same event
 
-**3. AI-Driven Personalization (ADR-05, ADR-13)**
+**3. AI-Driven Personalization (ADR-05, ADR-12)**
 
 a) **Proactive Commute Recommendations**
 - Pattern detection analyzes telemetry to identify regular trips (e.g., A→B at 9 AM daily)
@@ -84,7 +84,7 @@ e) **Feedback Follow-Up**
 - Publishes `notifications.engagement_event` to Kafka
 
 ### Integration Points
-- **AI/ML Services:** Multi-Provider AI Orchestrator (ADR-05), Conversational AI (ADR-13), Demand Forecasting, Pricing Engine
+- **AI/ML Services:** Multi-Provider AI Orchestrator (ADR-05), Conversational AI (ADR-12), Demand Forecasting, Pricing Engine
 - **Core Services:** Booking, Telemetry, Fleet Operations, Vehicle Management
 - **External APIs:** Weather, traffic, events (ADR-04)
 - **Infrastructure:** Kafka event bus (ADR-06), OpenTelemetry tracing (ADR-07)

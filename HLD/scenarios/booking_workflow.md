@@ -510,7 +510,7 @@ sequenceDiagram
 - **[ADR-01: Event-Driven Architecture](.././ADR/ADR-01.txt)** - Kafka event bus
 - **[ADR-02: CQRS](.././ADR/ADR-02.txt)** - Separate read/write paths
 - **[REMOVED](.././ADR/ADR_15_Cloud_Provider_Selection.md)** - AWS justification
-- **[ADR-15: MLOps Pipeline](.././ADR/ADR_14_MLOps_Pipeline.md)** - ML models (used by pricing)
+- **[ADR-14: MLOps Pipeline](.././ADR/ADR_14_MLOps_Pipeline.md)** - ML models (used by pricing)
 - **[Functional Requirements](../../FUNCTIONAL_REQUIREMENTS/FUNCTIONAL_REQUIREMENTS.md)** - Booking requirements
 - **[Fitness Functions](../../FITNESS_FUNCTIONS/FITNESS_FUNCTIONS.md)** - Latency fitness functions
 - **[Threat Model](../../THREAT_MODEL/THREAT_MODEL.md)** - Security (payment fraud)

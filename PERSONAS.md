@@ -64,7 +64,7 @@ This document introduces the key people and personas that guide our architectura
 
 **How We Solve This:**
 - **[ADR-02: AI Task Prioritization](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md)** - Prioritizes tasks by urgency × impact, reducing planning time from 2 hours → 15 minutes
-- **[ADR-15: Predictive Maintenance](./ADR/ADR_14_MLOps_Pipeline.md)** - Predicts failures 7 days ahead with 92% confidence
+- **[ADR-14: Predictive Maintenance](./ADR/ADR_14_MLOps_Pipeline.md)** - Predicts failures 7 days ahead with 92% confidence
 - **[WORKFLOWS/STAFF_WORKFLOWS.md](./WORKFLOWS/STAFF_WORKFLOWS.md)** - AI-powered task prioritization system
 - See [Use Case 3](#use-case-3-marcuss-ai-optimized-morning-operational-efficiency) for detailed morning workflow
 
@@ -101,8 +101,7 @@ This document introduces the key people and personas that guide our architectura
 **How We Solve This:**
 - **[ADR-01: Microservices](./ADR/ADR_01_microservices_architecture.md)** - 8 independently scalable services on AWS ECS
 - **[ADR-09: Multi-Region](./ADR/ADR_09_MULTI_REGION.md)** - Active-passive (Frankfurt + Ireland)
-- **[ADR-12: Zero-Trust Security](./ADR/ADR_12_SECURITY_ARCHITECTURE.md)** - IAM, KMS encryption, mTLS for IoT
-- **[ADR-14: Data Compliance](./ADR/ADR_14_DATA_COMPLIANT.md)** - GDPR, PCI-DSS automation
+- **[ADR-13: Data Compliance](./ADR/ADR_13_DATA_COMPLIANT.md)** - GDPR, PCI-DSS automation
 - See [Use Case 5](#use-case-5-davids-security-incident-response-zero-trust-in-action) for incident response example
 
 **Impact:**
@@ -159,7 +158,7 @@ This document introduces the key people and personas that guide our architectura
 **Quote:** *"Make it as easy as Google Maps—I shouldn't need to think about logistics."*
 
 **How We Solve This:**
-- **[ADR-13: Conversational AI](./ADR/ADR_12_CONVERSATIONAL_UX_AND_AI_ASSISTANT.md)** - Claude 3.7 Sonnet with multilingual support
+- **[ADR-12: Conversational AI](./ADR/ADR_12_CONVERSATIONAL_UX_AND_AI_ASSISTANT.md)** - Claude 3.7 Sonnet with multilingual support
 - **[ADR-04: Maps Integration](./ADR/ADR_04_EXTERNAL_APIS.md)** - Route planning and parking zones
 - See [Use Case 2](#use-case-2-alexs-tourist-experience-conversational-ai) for interaction example
 
@@ -307,9 +306,9 @@ This matrix shows exactly where each persona's needs are addressed in our archit
 |---------|---------------|-------------|----------|-----------------|
 | **Sarah (CPO)** | ML Demand Forecasting | [ADR-02](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md) | [Customer Discovery](WORKFLOWS/CUSTOMER_WORKFLOWS.md) | Retention: 20% → 55% |
 | **Marcus (VP Fleet Ops)** | AI Relocation Incentives | [ADR-02](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md) | [Staff Workflows](WORKFLOWS/STAFF_WORKFLOWS.md) | Cost: €15 → €6/swap |
-| **David (CTO/CISO)** | Microservices + Multi-Region + Zero-Trust | [ADR-01](./ADR/ADR_01_microservices_architecture.md), [ADR-09](./ADR/ADR_09_MULTI_REGION.md), [ADR-12](./ADR/ADR_12_SECURITY_ARCHITECTURE.md) | [Event Storming](EVENT_STORMING.md) | Uptime: 99.95% SLA, Zero breaches |
+| **David (CTO/CISO)** | Microservices + Multi-Region + Zero-Trust | [ADR-01](./ADR/ADR_01_microservices_architecture.md), [ADR-09](./ADR/ADR_09_MULTI_REGION.md), | [Event Storming](EVENT_STORMING.md) | Uptime: 99.95% SLA, Zero breaches |
 | **Emma (Commuter)** | Predictive Rebalancing | [ADR-02](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md) | [Booking Flow](WORKFLOWS/CUSTOMER_WORKFLOWS.md#workflow-vehicle-discovery-and-booking) | Availability: 75% → 95% |
-| **Alex (Tourist)** | Conversational AI | [ADR-13](./ADR/ADR_12_CONVERSATIONAL_UX_AND_AI_ASSISTANT.md) | [Customer Workflows](WORKFLOWS/CUSTOMER_WORKFLOWS.md) | Conversion: +40% |
+| **Alex (Tourist)** | Conversational AI | [ADR-12](./ADR/ADR_12_CONVERSATIONAL_UX_AND_AI_ASSISTANT.md) | [Customer Workflows](WORKFLOWS/CUSTOMER_WORKFLOWS.md) | Conversion: +40% |
 | **Lisa (Family User)** | Computer Vision Quality | [ADR-17](./ADR/ADR_17_Agentic_AI_Framework.md) | [Return Verification](WORKFLOWS/CUSTOMER_WORKFLOWS.md#5-return--verification) | NPS: +25 points |
 | **Nina (Support)** | Automated Dispute AI | [ADR-17](./ADR/ADR_17_Agentic_AI_Framework.md) | [Support Automation](WORKFLOWS/CUSTOMER_WORKFLOWS.md#6-payment--feedback) | Auto-resolve: 70% |
 
@@ -381,7 +380,7 @@ Port Vell. Pre-book an eBike tonight—better for longer distances."
 ```
 
 **Systems Involved:**
-- Conversational AI Service (ADR-13)
+- Conversational AI Service (ADR-12)
 - Google Maps API (ADR-04)
 - Vehicle Telemetry (ADR-03)
 - Booking Service (ADR-01)
@@ -594,12 +593,12 @@ SOC 2 Type II Evidence:
 **David's Quote:** *"This is why we invested in zero-trust. The attacker never got past the front door."*
 
 **Systems Involved:**
-- Zero-Trust Architecture (ADR-12)
-- AWS IAM + MFA (ADR-12)
+- Zero-Trust Architecture
+- AWS IAM + MFA
 - CloudWatch Logs (ADR-10)
 - VictoriaMetrics (ADR-10)
-- WAF Rules (ADR-12)
-- Incident Response Playbook (ADR-12)
+- WAF Rules
+- Incident Response Playbook
 
 ---
 

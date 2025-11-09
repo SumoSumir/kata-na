@@ -159,7 +159,7 @@ graph TD
 **Actors:** 🟨 ML Model, Marcus (VP Fleet Operations)  
 **Trigger:** Hourly batch job  
 **Business Impact:** Reduces vehicle unavailability significantly  
-**ADRs:** [ADR-02](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md), [ADR-15](./ADR/ADR_14_MLOps_Pipeline.md)
+**ADRs:** [ADR-02](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md), [ADR-14](./ADR/ADR_14_MLOps_Pipeline.md)
 
 ---
 
@@ -284,7 +284,7 @@ graph TD
 - Real-time recalibration based on actual bookings
 - Human-in-the-loop for major events (festivals, strikes)
 
-**ADRs:** [ADR-02](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md), [ADR-15](./ADR/ADR_14_MLOps_Pipeline.md)
+**ADRs:** [ADR-02](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md), [ADR-14](./ADR/ADR_14_MLOps_Pipeline.md)
 
 ---
 
@@ -296,7 +296,7 @@ graph TD
 - Implement retry logic with exponential backoff
 - Fraud detection via anomaly detection
 
-**ADRs:** [ADR-01](./ADR/ADR_01_microservices_architecture.md), [ADR-14](./ADR/ADR_14_DATA_COMPLIANT.md)
+**ADRs:** [ADR-01](./ADR/ADR_01_microservices_architecture.md), [ADR-13](./ADR/ADR_13_DATA_COMPLIANT.md)
 
 ---
 
@@ -308,7 +308,7 @@ graph TD
 - High model accuracy threshold before production
 - A/B testing with manual verification fallback
 
-**ADRs:** [ADR-13](./ADR/ADR_12_CONVERSATIONAL_UX_AND_AI_ASSISTANT.md), Vision AI implementation
+**ADRs:** [ADR-12](./ADR/ADR_12_CONVERSATIONAL_UX_AND_AI_ASSISTANT.md), Vision AI implementation
 
 ---
 
@@ -393,7 +393,7 @@ graph TB
 **When:** Vision AI detects incorrect parking (confidence >90%)  
 **Then:** Apply fine, notify user, allow dispute  
 **Owner:** Nina (Customer Support)  
-**ADR:** [ADR-13](./ADR/ADR_12_CONVERSATIONAL_UX_AND_AI_ASSISTANT.md)
+**ADR:** [ADR-12](./ADR/ADR_12_CONVERSATIONAL_UX_AND_AI_ASSISTANT.md)
 
 ---
 
@@ -401,7 +401,7 @@ graph TB
 **When:** Failure probability exceeds threshold within defined timeframe  
 **Then:** Deactivate vehicle, create maintenance task  
 **Owner:** Operations Team  
-**ADR:** [ADR-15](./ADR/ADR_14_MLOps_Pipeline.md)
+**ADR:** [ADR-14](./ADR/ADR_14_MLOps_Pipeline.md)
 
 ---
 
@@ -442,8 +442,8 @@ graph TB
 - **[ADR-02: AI-Driven Relocation Incentives](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md)**
 - **[ADR-03: Vehicle Telemetry](./ADR/ADR_03_Vehicle_Telemetry.md)**
 - **[ADR-06: Event-Driven Architecture](./ADR/ADR_06_EVENT_DRIVEN_ARCHITECTURE.md)**
-- **[ADR-13: Conversational UX & AI Assistant](./ADR/ADR_12_CONVERSATIONAL_UX_AND_AI_ASSISTANT.md)**
-- **[ADR-14: Data Compliance](./ADR/ADR_14_DATA_COMPLIANT.md)**
+- **[ADR-12: Conversational UX & AI Assistant](./ADR/ADR_12_CONVERSATIONAL_UX_AND_AI_ASSISTANT.md)**
+- **[ADR-13: Data Compliance](./ADR/ADR_13_DATA_COMPLIANT.md)**
 - **[ADR-16: MLOps Pipeline](./ADR/ADR_16_MLOps_Pipeline.md)**
 
 ### Related Documents
