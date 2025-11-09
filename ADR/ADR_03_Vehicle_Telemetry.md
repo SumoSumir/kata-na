@@ -85,19 +85,19 @@ Adopt a **hybrid edge-cloud vehicle telemetry architecture** with intelligent wo
 **3. Predictive Maintenance (Local Aggregation + Cloud Training)**
 
 **Edge Processing & Data Collection:**
-- **AWS IoT Greengrass v2** on vehicle for local processing (see [ADR-11](ADR_11_IoT_Enabled_Vehicles.md))
+- **IoT Enabled** on vehicle for local processing (see [ADR-11](ADR_11_IoT_Enabled_Vehicles.md))
 - **Local aggregation:** Vehicles continuously collect and compress sensor data
   - Battery: voltage curves, temperature profiles, charging cycles, degradation rate
   - Mechanical: vibration spectra (FFT), brake wear indicators, suspension stress
   - Operational: error codes, usage intensity, environmental conditions, GPS
-- **Edge preprocessing:** Greengrass Lambda functions compute rolling statistics and compress data
+- **Edge preprocessing:** compute rolling statistics and compress data
 
 **Cloud Data Pipeline:**
 - **Periodic uploads:** Compressed telemetry sent periodically (WiFi preferred) or on cellular
   - Protocol: MQTT over TLS 1.3 to AWS IoT Core
   - Payload: Protobuf-serialized metrics for efficient transmission
-- **Data flow:** AWS IoT Core → Kinesis Data Firehose → S3 (Data Lakehouse Bronze Layer)
-  - IoT Rules route telemetry to Firehose for batching and Parquet conversion
+- **Data flow:** AWS IoT Core → Kafka → Apache Airflow + BEAM → S3 (Data Lakehouse Bronze Layer)
+  - IoT Rules route telemetry to Apache Airflow + BEAM for batching and Parquet conversion
   - Data Lakehouse transformation pipeline (Bronze → Silver → Gold) - see [ADR-17](ADR_17_Data_Lakehouse_Strategy.md)
 
 **ML Training Pipeline (AWS SageMaker):**
@@ -106,16 +106,16 @@ Adopt a **hybrid edge-cloud vehicle telemetry architecture** with intelligent wo
   - **Battery failure prediction:** LSTM time-series model for advance warning
   - **Brake wear prediction:** XGBoost regression for distance-based maintenance scheduling
   - **Anomaly detection:** Isolation Forest for detecting unusual component behavior
-- **Model deployment:** SageMaker Model Registry → Greengrass component OTA updates
+- **Model deployment:** SageMaker Model Registry → firmware/model component OTA updates
   - Phased rollout strategy for safety (canary → gradual deployment)
   - Edge-optimized models (TensorFlow Lite) for local inference
 
 **Inference & Alerting:**
 - **Edge inference:** Greengrass Lambda runs predictions on local data
   - Battery health scores computed locally
-  - Critical predictions trigger immediate cloud alerts
+  - Critical predictions trigger immediate cloud alerts such as accidents
 - **Cloud aggregation:** SageMaker batch transform jobs for fleet-wide predictions
-- **Fleet Operations Dashboard:** Amazon QuickSight showing maintenance forecasts and priorities
+- **Fleet Operations Dashboard:** For live metrics - Grafana is used. For BI showing maintenance forecasts and priorities OpenSearch Dashboard is used.
 
 ### Operational Practices
 
@@ -128,7 +128,7 @@ Adopt a **hybrid edge-cloud vehicle telemetry architecture** with intelligent wo
 
 **Privacy and Compliance**
 
-- **Data minimization:** Only collect and transmit necessary data (stream at regular intervals for time sensitive data); raw images ephemeral by default
+- **Data minimization:** Only collect and transmit necessary data (stream at regular intervals for time sensitive data)
 - **Consent management:** Users explicitly opt-in to image uploads and data sharing for model training
 - **Regional compliance:** Separate data retention policies per jurisdiction (GDPR, DPDP Act, etc.)
 - **Encryption:** End-to-end encryption for all telemetry data in transit and at rest
@@ -139,13 +139,14 @@ Adopt a **hybrid edge-cloud vehicle telemetry architecture** with intelligent wo
 - **Continuous monitoring:** Track model performance metrics (latency, accuracy, drift, false positive/negative rates)
 - **Automated retraining:** Trigger retraining pipelines when drift detected or performance degrades
 - **Model cards:** Document training data, performance benchmarks, failure modes, and ethical considerations
-- **Explainability:** Generate SHAP values or attention maps for critical predictions (collision, damage classification)
+- **Explainability:** Generate SHAP values or attention maps for critical predictions (collision, damage classification). Additionally since we're not using GenAI the results are deterministic.
 
 **Cost Optimization**
 
 - **Adaptive telemetry:** Adjust upload frequency based on vehicle status (stationary vs. active, WiFi vs. cellular)
 - **Compression:** Use efficient encoding (Protocol Buffers, AVRO) and compression (gzip, Brotli) for uploads
 - **Batch processing:** Group telemetry uploads to reduce API overhead and connection costs
+- **Using light models:** at the edge & in the backend instead of gen-ai models makes it significantly cheaper to operate
 
 ## Consequences
 

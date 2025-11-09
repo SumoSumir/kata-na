@@ -23,7 +23,7 @@ Business requirements include high testability for minimal bug and rapid feature
 - **Accepted:** Best meets scaling, reliability, and development velocity requirements
 
 ## Decision
-Implement microservices architecture with services organized by business capability. Core services include Vehicle Telemetry, Booking, Payment, User/KYC, and Fleet Operations.
+Implement microservices architecture with services organized by business capability. Core services include Vehicle Telemetry, Booking, Payment, Insurance, User/KYC, and Fleet Operations.
 
 **Container Orchestration:** AWS EKS
 **Load Balancing:** Application Load Balancer (ALB) with health checks

@@ -69,7 +69,7 @@ Implement an **AI-driven dynamic pricing and relocation incentive system** that 
   - Transit disruptions (metro closures, traffic accidents via Map API - [ADR-04](ADR_04_EXTERNAL_APIS.md))
 - **Output:** Predicted demand per 500m grid cell at 15-minute intervals
 - **Real-time inference:** SageMaker endpoints with ElastiCache Redis caching for performance
-- **Model retraining:** Weekly automated retraining via Step Functions orchestration
+- **Model retraining:** Weekly automated retraining via Apache Airflow+BEAM orchestration
 - **Data source:** Historical data from Data Lakehouse [ADR-17](ADR_17_Data_Lakehouse_Strategy.md)
 
 **2. Supply Tracking and Availability Prediction**
