@@ -22,7 +22,5 @@ This C3 diagram has been significantly enhanced to include:
 - [C4 Diagrams Collection (Mermaid)](C4_DIAGRAMS_MERMAID.md)
 - [ADR-14: MLOps Pipeline](./ADR/ADR_14_MLOps_Pipeline.md)
 - [ADR-16: Data Lakehouse Strategy](./ADR/ADR_16_Data_Lakehouse_Strategy.md)
-- [ADR-17: Agentic AI Framework](./ADR/ADR_17_Agentic_AI_Framework.md)
-- [ADR-18: Edge vs Cloud AI Strategy](./ADR/ADR_18_Edge_Cloud_AI_Strategy.md)
 
 ---

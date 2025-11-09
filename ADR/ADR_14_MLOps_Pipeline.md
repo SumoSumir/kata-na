@@ -222,7 +222,7 @@ Strategy: Shadow Mode → Full Replacement
 
 ## Related Decisions
 - **ADR-16:** Data Lakehouse Strategy - Feature Store integration
-- **ADR-17:** Agentic AI Framework - Model serving for LLMs
+
 - **ADR-06:** Event-Driven Architecture - Triggers for retraining
 
 ## References

@@ -98,7 +98,7 @@ Adopt a **hybrid edge-cloud vehicle telemetry architecture** with intelligent wo
   - Payload: Protobuf-serialized metrics for efficient transmission
 - **Data flow:** AWS IoT Core → Kafka → Apache Airflow + BEAM → S3 (Data Lakehouse Bronze Layer)
   - IoT Rules route telemetry to Apache Airflow + BEAM for batching and Parquet conversion
-  - Data Lakehouse transformation pipeline (Bronze → Silver → Gold) - see [ADR-17](ADR_17_Data_Lakehouse_Strategy.md)
+  - Data Lakehouse transformation pipeline (Bronze → Silver → Gold) - see [ADR-15](ADR_15_Data_Lakehouse_Strategy.md)
 
 **ML Training Pipeline (AWS SageMaker):**
 - **Training data:** Historical fleet-wide telemetry from Data Lakehouse Silver layer

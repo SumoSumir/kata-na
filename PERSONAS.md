@@ -28,7 +28,7 @@ This document introduces the key people and personas that guide our architectura
 
 **How We Solve This:**
 - **[ADR-02: AI-Driven Demand Forecasting](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md)** - ML models predict demand 24 hours ahead
-- **[ADR-16: MLOps Pipeline](./ADR/ADR_16_MLOps_Pipeline.md)** - Automated training, validation, A/B testing
+- **[ADR-14: MLOps Pipeline](./ADR/ADR_14_MLOps_Pipeline.md)** - Automated training, validation, A/B testing
 - **Analytics Dashboards** - Real-time KPI tracking
 
 **Impact:**
@@ -185,7 +185,7 @@ This document introduces the key people and personas that guide our architectura
 **Quote:** *"I need to trust that the vehicle will be clean, charged, and reliable—my kids depend on it."*
 
 **How We Solve This:**
-- **[ADR-17: Computer Vision](./ADR/ADR_17_Agentic_AI_Framework.md)** - ResNet-50 CNN detects damage/dirt with 88% accuracy
+
 - **Battery Health Prediction** - ML predicts remaining range with 95% accuracy (±2 km)
 - See [Use Case 4](#use-case-4-lisas-family-rental-quality-assurance) for booking journey
 
@@ -244,7 +244,7 @@ This document introduces the key people and personas that guide our architectura
 **Quote:** *"If the system could automatically verify returns and detect damage, I could focus on real customer issues."*
 
 **How We Solve This:**
-- **[ADR-17: Computer Vision Automation](./ADR/ADR_17_Agentic_AI_Framework.md)** - ResNet-50 CNN + AWS Rekognition for damage detection
+
 - **Automated Dispute Resolution** - 70% of cases auto-resolved with photo evidence
 - **Audit Trail** - Immutable photo history in S3 with 30-day retention
 
@@ -309,8 +309,8 @@ This matrix shows exactly where each persona's needs are addressed in our archit
 | **David (CTO/CISO)** | Microservices + Multi-Region + Zero-Trust | [ADR-01](./ADR/ADR_01_microservices_architecture.md), [ADR-09](./ADR/ADR_09_MULTI_REGION.md), | [Event Storming](EVENT_STORMING.md) | Uptime: 99.95% SLA, Zero breaches |
 | **Emma (Commuter)** | Predictive Rebalancing | [ADR-02](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md) | [Booking Flow](WORKFLOWS/CUSTOMER_WORKFLOWS.md#workflow-vehicle-discovery-and-booking) | Availability: 75% → 95% |
 | **Alex (Tourist)** | Conversational AI | [ADR-12](./ADR/ADR_12_CONVERSATIONAL_UX_AND_AI_ASSISTANT.md) | [Customer Workflows](WORKFLOWS/CUSTOMER_WORKFLOWS.md) | Conversion: +40% |
-| **Lisa (Family User)** | Computer Vision Quality | [ADR-17](./ADR/ADR_17_Agentic_AI_Framework.md) | [Return Verification](WORKFLOWS/CUSTOMER_WORKFLOWS.md#5-return--verification) | NPS: +25 points |
-| **Nina (Support)** | Automated Dispute AI | [ADR-17](./ADR/ADR_17_Agentic_AI_Framework.md) | [Support Automation](WORKFLOWS/CUSTOMER_WORKFLOWS.md#6-payment--feedback) | Auto-resolve: 70% |
+| **Lisa (Family User)** | Computer Vision Quality | Computer Vision AI | [Return Verification](WORKFLOWS/CUSTOMER_WORKFLOWS.md#5-return--verification) | NPS: +25 points |
+| **Nina (Support)** | Automated Dispute AI | Computer Vision AI | [Support Automation](WORKFLOWS/CUSTOMER_WORKFLOWS.md#6-payment--feedback) | Auto-resolve: 70% |
 
 ---
 
@@ -345,7 +345,7 @@ Post-Rental:
 - Relocation Incentive Engine (ADR-02)
 - Booking Service (ADR-01)
 - Vehicle Telemetry (ADR-03)
-- Analytics Dashboard (ADR-16)
+- Analytics Dashboard (ADR-14)
 
 **Success Metrics:** Emma's retention → 100% | Sarah's KPI: +22% DAU | Marcus's cost: €3 AI incentive vs €15 manual
 
@@ -511,7 +511,7 @@ Data Handling Check:
 - David's compliance audit: ✅ Passed GDPR data handling review
 
 **Systems Involved:**
-- Computer Vision Service (ADR-17)
+
 - Booking Service (ADR-01)
 - Payment Service (ADR-05)
 - Data Compliance (ADR-14)

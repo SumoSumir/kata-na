@@ -70,7 +70,7 @@ Implement an **AI-driven dynamic pricing and relocation incentive system** that 
 - **Output:** Predicted demand per 500m grid cell at 15-minute intervals
 - **Real-time inference:** SageMaker endpoints with ElastiCache Redis caching for performance
 - **Model retraining:** Weekly automated retraining via Apache Airflow+BEAM orchestration
-- **Data source:** Historical data from Data Lakehouse [ADR-17](ADR_17_Data_Lakehouse_Strategy.md)
+- **Data source:** Historical data from Data Lakehouse [ADR-15](ADR_15_Data_Lakehouse_Strategy.md)
 
 **2. Supply Tracking and Availability Prediction**
 - **Real-time inventory:** Vehicle locations from TimeScaleDB & Kafka streams (updated via IoT Core - [ADR-11](ADR_11_IoT_Enabled_Vehicles.md))

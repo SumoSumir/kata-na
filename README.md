@@ -257,7 +257,7 @@ Read [PERSONAS.md](PERSONAS.md) to understand who we're building for (Sarah, Mar
 Read key ADRs in order:
 1. [ADR-01: Microservices Architecture](./ADR/ADR_01_microservices_architecture.md)
 2. [ADR-14: MLOps Pipeline](./ADR/ADR_14_MLOps_Pipeline.md)
-3. [ADR-16: Data Lakehouse](./ADR/ADR_16_Data_Lakehouse_Strategy.md)
+3. [ADR-16: Data Lakehouse](./ADR/ADR_15_Data_Lakehouse_Strategy.md)
 
 5. **Explore Architecture**
 - **High-Level:** [System Context Diagram](ARCHITECTURAL_DIAGRAMS/C1_System_Context.md)
@@ -273,7 +273,6 @@ Read key ADRs in order:
 7. **Understand AI Usage**
 - [ADR-02: Dynamic Pricing](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md) - ML models and demand forecasting
 - [ADR-14: MLOps Pipeline](./ADR/ADR_14_MLOps_Pipeline.md) - Training and deployment
-- [ADR-17: Agentic AI Framework](./ADR/ADR_17_Agentic_AI_Framework.md) - Conversational AI implementation
 
 ### For Domain Experts
 8. **Review Domain Modeling**
@@ -306,7 +305,6 @@ Read key ADRs in order:
 
 ### 5. Edge-Cloud Hybrid Processing
 **Why:** Low latency for critical operations, cost optimization
-- **ADR:** [ADR-18: Edge vs Cloud AI](./ADR/ADR_18_Edge_Cloud_AI_Strategy.md)
 
 **All ADRs:** [ADR Directory](./ADR/)
 
@@ -385,7 +383,7 @@ Read key ADRs in order:
 ## 📚 Documentation
 
 ### Architecture Documentation
-- **ADRs (19):** [ADR Directory](./ADR/) - All architectural decisions with rationale
+- **ADRs (16):** [ADR Directory](./ADR/) - All architectural decisions with rationale
 - **Diagrams:** [ARCHITECTURAL_DIAGRAMS](ARCHITECTURAL_DIAGRAMS/) - C4 model diagrams
 - **HLD:** [HLD Directory](HLD/) - Detailed scenario walkthroughs
 - **Glossary:** [GLOSSARY.md](GLOSSARY.md) - Domain terminology
@@ -413,7 +411,7 @@ Read key ADRs in order:
 ### For Architects
 1. Read [Problem Statement](PROBLEM_STATEMENTS/PROBLEM_STATEMENT.md)
 2. Review [System Context](ARCHITECTURAL_DIAGRAMS/C1_System_Context.md)
-3. Study key ADRs (01, 15, 16, 17, 18, 19)
+3. Study key ADRs (01, 14, 15, 16)
 4. Explore [HLD Scenarios](HLD/scenarios/)
 
 ### For Developers
@@ -554,7 +552,6 @@ Read key ADRs in order:
 - Traditional ML: €3K/month
 - **Savings: €924K/year by choosing the right tool**
 
-**Details:** See [ADR-02](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md), [ADR-14](./ADR/ADR_14_MLOps_Pipeline.md), and [ADR-17](./ADR/ADR_17_Agentic_AI_Framework.md)
 
 ---
 
