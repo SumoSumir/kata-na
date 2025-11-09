@@ -233,11 +233,8 @@ kata-na/
 ├── THREAT_MODEL/
 │   └── THREAT_MODEL.md                # Security analysis
 │
-├── TESTING_APPROACHES/
-│   └── TESTING_APPROACHES.md
-│
-└── ROLLOUT_STRATEGY/
-    └── ROLLOUT_STRATEGY.md            # Original phased deployment
+└── TESTING_APPROACHES/
+    └── TESTING_APPROACHES.md
 ```
 
 ### For Everyone
@@ -395,7 +392,7 @@ Read key ADRs in order:
 - **Security:** [THREAT_MODEL.md](THREAT_MODEL/THREAT_MODEL.md) - Comprehensive threat analysis
 - **Testing:** [TESTING_APPROACHES.md](TESTING_APPROACHES/TESTING_APPROACHES.md)
 - **Metrics:** [FITNESS_FUNCTIONS.md](FITNESS_FUNCTIONS/FITNESS_FUNCTIONS.md)
-- **Deployment:** [ROLLOUT_STRATEGY.md](ROLLOUT_STRATEGY/ROLLOUT_STRATEGY.md)
+- **Deployment:** [PHASED_IMPLEMENTATION.md](PHASED_IMPLEMENTATION.md) - Migration & feature rollout strategy
 - **Cost:** [COST_ANALYSIS.md](COST_ANALYSIS.md) - TCO estimates
 
 ### Workflows
@@ -432,7 +429,7 @@ Read key ADRs in order:
 
 ### For DevOps/SRE
 1. Review [Deployment Architecture](ARCHITECTURAL_DIAGRAMS/Deployment_Multi_Region.md)
-2. Study [Rollout Strategy](ROLLOUT_STRATEGY/ROLLOUT_STRATEGY.md)
+2. Study [Phased Implementation](PHASED_IMPLEMENTATION.md)
 3. Check [Observability](#observability) stack
 4. Review [Fitness Functions](FITNESS_FUNCTIONS/FITNESS_FUNCTIONS.md)
 
@@ -529,8 +526,7 @@ Read key ADRs in order:
 
 **Payback Period:** 8.7 months | **3-Year NPV:** €12.4M | **IRR:** 187%
 
-**Detailed plan with personas & ROI:** [PHASED_IMPLEMENTATION.md](PHASED_IMPLEMENTATION.md)  
-**Original rollout strategy:** [ROLLOUT_STRATEGY.md](ROLLOUT_STRATEGY/ROLLOUT_STRATEGY.md)
+**Detailed migration & rollout plan:** [PHASED_IMPLEMENTATION.md](PHASED_IMPLEMENTATION.md)
 
 ---
 

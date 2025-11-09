@@ -271,6 +271,19 @@ This document outlines the detailed, phased approach to migrating from MobilityC
 
 ---
 
+## 🎬 Feature Activation Roadmap
+
+While the migration phases above detail **how to migrate** infrastructure, this roadmap shows **what capabilities to activate** and when. The feature rollout runs in parallel with technical migration.
+
+| Rollout Phase | Timeline | Key Capabilities | Success Metric |
+|---------------|----------|------------------|----------------|
+| **1. Analytics Foundation** | Phases 1-2 | • Data lake & ETL pipelines<br>• Observability stack (OpenTelemetry, Grafana)<br>• Shadow-mode ML models (Demand, Maintenance)<br>• BI dashboards | Organization becomes data-driven |
+| **2. AI Activation** | Phases 2-4 | • Dynamic pricing engine<br>• Predictive maintenance alerts<br>• AI-powered staff task routing<br>• Relocation incentive engine<br>• Conversational AI assistant<br>• Automated damage detection | -50% ops costs, +15% revenue/vehicle, +20 NPS points |
+| **3. Geographic Scale** | Phase 5 | • Region launch playbook<br>• Multi-region compliance (GDPR, DPDP)<br>• Model localization per region<br>• Local ops team onboarding | New city launch: 6 months → 12 days |
+| **4. Continuous Innovation** | Post-migration | • A/B testing framework<br>• Automated MLOps (retraining, drift)<br>• Cost/performance optimization<br>• R&D on emerging tech | Platform evolves continuously |
+
+---
+
 ## 📈 Business Metrics Tracking
 
 ### Key Performance Indicators (KPIs) by Phase

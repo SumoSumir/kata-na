@@ -314,4 +314,4 @@ User → LangChain Agent → LLM (Bedrock) → Tool(s) → Response
 - **[Non-Functional Requirements](../NON_FUNCTIONAL_REQUIREMENTS/NON_FUNCTIONAL_REQUIREMENTS.md)**
 - **[Fitness Functions](../FITNESS_FUNCTIONS/FITNESS_FUNCTIONS.md)**
 - **[Threat Model](../THREAT_MODEL/THREAT_MODEL.md)**
-- **[Rollout Strategy](../ROLLOUT_STRATEGY/ROLLOUT_STRATEGY.md)**
+- **[Phased Implementation](../PHASED_IMPLEMENTATION.md)** - Migration & rollout strategy
