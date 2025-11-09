@@ -23,7 +23,6 @@ This document outlines the detailed, phased approach to migrating from MobilityC
 │                                                          │
 │  • Single Node.js/Express application                   │
 │  • PostgreSQL database (single instance)                │
-│  • Manual vehicle rebalancing (spreadsheets)            │
 │  • Reactive battery management                          │
 │  • No predictive capabilities                           │
 │  • Limited observability                                │
@@ -34,7 +33,6 @@ This document outlines the detailed, phased approach to migrating from MobilityC
 **Current Pain Points (from Marcus, Sarah, David):**
 - ⚠️ **System downtime:** 2-3 hours/month during deployments
 - ⚠️ **Scaling limits:** Cannot handle >70K concurrent users
-- ⚠️ **Manual operations:** Inefficient labor processes
 - ⚠️ **Lost revenue:** Significant losses from vehicle unavailability
 - ⚠️ **Technical debt:** 6-month feature delivery cycle
 
