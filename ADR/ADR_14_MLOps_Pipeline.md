@@ -82,7 +82,7 @@ Adopt AWS-native MLOps using **Apache Airflow** (orchestration) and **Amazon Sag
 - Behavioral nudge: Standard tier priced closer to premium to encourage upgrades to Premium.
 - Data: historical telemetry, claims, and driving patterns; retrain weekly.
 - Serving: real-time risk scoring integrated into the booking flow.
-Example Case study - 
+[Case study proving the insurance business model - 6/30/2025 report](https://investor-relations.zoomcar.com/financials-reports/)
 
 
 ### Feature Store Architecture
