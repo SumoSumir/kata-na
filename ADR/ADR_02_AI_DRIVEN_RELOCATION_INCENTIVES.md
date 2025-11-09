@@ -3,13 +3,12 @@
 ## Status
 Accepted  
 
-## Prerequisites
+## Related ADRs
 This ADR builds upon foundational architectural decisions:
 - **[ADR-01](ADR_01_microservices_architecture.md):** Microservices architecture enables independent scaling of the Pricing Service
 - **[ADR-03](ADR_03_Vehicle_Telemetry.md):** Real-time vehicle location data is critical for supply tracking
 - **[ADR-06](ADR_06_EVENT_DRIVEN_ARCHITECTURE.md):** Event-driven architecture propagates pricing updates to consumers
-
-**Read this after:** [ADR-16 (MLOps Pipeline)](ADR_16_MLOps_Pipeline.md) for model training/deployment details
+- **[ADR-16 (MLOps Pipeline)](ADR_16_MLOps_Pipeline.md):** for model training/deployment details
 
 ---
 
@@ -73,16 +72,16 @@ Implement an **AI-driven dynamic pricing and relocation incentive system** that 
 - **Data source:** Historical data from Data Lakehouse [ADR-17](ADR_17_Data_Lakehouse_Strategy.md)
 
 **2. Supply Tracking and Availability Prediction**
-- **Real-time inventory:** Vehicle locations from DynamoDB (updated via IoT Core - [ADR-11](ADR_11_IoT_Enabled_Vehicles.md))
+- **Real-time inventory:** Vehicle locations from TimeScaleDB & Kafka streams (updated via IoT Core - [ADR-11](ADR_11_IoT_Enabled_Vehicles.md))
 - **Caching:** ElastiCache Redis for fast zone-level vehicle counts
-- **Availability forecasting:** Lightweight XGBoost model predicts vehicle return times
-  - Features: Historical trip durations, distance, vehicle type, time of day
+- **Availability forecasting:** Lightweight XGBoost model predicts 
+  service Features: Airflow durations, distance to Sagemaker, vehicle type, time of day
   - Triggered by booking events via Kafka
 - **Supply score calculation:** Available vehicles + predicted returns - predicted demand
 - **Update frequency:** Real-time updates via event-driven architecture
 
 **3. Dynamic Pricing Engine**
-- **Compute:** AWS Lambda functions triggered by EventBridge scheduler and Kafka events
+- **Compute:** service triggered by Airflow and Kafka events to Sagemaker
 - **Pricing zones:** Cities divided into 500m H3 hexagonal grid cells
 - **Pricing algorithm:**
   - **Base price:** Per vehicle type and city
@@ -91,12 +90,13 @@ Implement an **AI-driven dynamic pricing and relocation incentive system** that 
   - **Elasticity modeling:** Per-customer segment price sensitivity from A/B test results
 - **Regulatory compliance:** Max 2.5x surge pricing per EU consumer protection laws
 - **Transparency:** Pricing updates published to Kafka for real-time consumption
-  - Booking Service displays current prices with explanations
+  - Booking Service displays current prices with explanations for e.g "High demand in this area"
   - Analytics tracks pricing effectiveness
-- **Storage:** DynamoDB for zone pricing with ElastiCache Redis for high-frequency lookups
+- **Storage:** Postgres for zone pricing with ElastiCache Redis for high-frequency lookups
 
 **4. Relocation Incentive Engine**
-- **Opt-in Service:** Users can enable this while booking. Our preferred destination will be within 2 km of theirs, and they won’t be billed if going slightly past their stop to our target zone. The system checks for existing bookings and nearby riders (within 2 km) finishing trips before scheduling a pickup.
+- **Opt-in Service:** Users can enable this feature during booking. Our preferred destination will be within 2 km of theirs, and they won’t be charged if the ride slightly extends beyond their stop to reach our target zone. The system first checks for existing bookings and nearby riders (within 2 km) completing trips before scheduling a pickup. It prioritizes riders based on proximity, offering the lowest discount and earliest alerts to those nearest, then gradually expanding the alert radius and increasing the discount for riders farther away, up to 2 km.
+
 - **Route identification:** Identify beneficial relocation routes from high-supply to high-demand zones.
 - **Incentive calculation:**
  - Distance-based: Longer relocations earn higher incentives.

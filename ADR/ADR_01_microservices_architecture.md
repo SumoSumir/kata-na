@@ -4,9 +4,9 @@
 Accepted
 
 ## Context
-MobilityCorp operates a multi-modal transportation platform across multiple EU countries, managing bikes, scooters, cars, and vans with distinct operational characteristics. The system must support vehicle diversity, scaling variance across services, geographic expansion, and critical reliability.
+MobilityCorp operates a multi-modal transportation platform across multiple EU countries, managing bikes, scooters, cars, and vans with distinct operational characteristics. The system must support vehicle diversity, scaling variance across services, geographic expansion, and critical reliability while providing indepth business insights via observability.
 
-Business requirements include high testability for minimal bug and rapid feature iteration, independent service scaling to optimize costs, and fault isolation to prevent cascading failures.
+Business requirements also include high testability for minimal bug and rapid feature iteration, independent service scaling to optimize costs, and fault isolation to prevent cascading failures.
 
 ## Alternatives Considered
 

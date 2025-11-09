@@ -21,7 +21,7 @@ Isolate business logic from provider specifics, maximizing flexibility
 
 
 ### Decision
-We have accepted the idea of building an independent orchestrator module for each critical third-party service, which manages routing, circuit breaking, and provider selection based on business rules and system health. This orchestrators are scaled based on events.
+We have accepted the idea of building an independent orchestrator module for each critical third-party service, which manages routing, circuit breaking, and provider selection based on business rules and system health. These orchestrators are scaled based on incoming events.
 
 ### Consequences
 Trade-offs and Impacts:
