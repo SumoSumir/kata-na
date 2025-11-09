@@ -64,7 +64,7 @@ This document introduces the key people and personas that guide our architectura
 
 **How We Solve This:**
 - **[ADR-02: AI Task Prioritization](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md)** - Prioritizes tasks by urgency × impact, reducing planning time from 2 hours → 15 minutes
-- **[ADR-15: Predictive Maintenance](./ADR/ADR_15_MLOps_Pipeline.md)** - Predicts failures 7 days ahead with 92% confidence
+- **[ADR-15: Predictive Maintenance](./ADR/ADR_14_MLOps_Pipeline.md)** - Predicts failures 7 days ahead with 92% confidence
 - **[WORKFLOWS/STAFF_WORKFLOWS.md](./WORKFLOWS/STAFF_WORKFLOWS.md)** - AI-powered task prioritization system
 - See [Use Case 3](#use-case-3-marcuss-ai-optimized-morning-operational-efficiency) for detailed morning workflow
 
@@ -159,7 +159,7 @@ This document introduces the key people and personas that guide our architectura
 **Quote:** *"Make it as easy as Google Maps—I shouldn't need to think about logistics."*
 
 **How We Solve This:**
-- **[ADR-13: Conversational AI](./ADR/ADR_13_CONVERSATIONAL_UX_AND_AI_ASSISTANT.md)** - Claude 3.7 Sonnet with multilingual support
+- **[ADR-13: Conversational AI](./ADR/ADR_12_CONVERSATIONAL_UX_AND_AI_ASSISTANT.md)** - Claude 3.7 Sonnet with multilingual support
 - **[ADR-04: Maps Integration](./ADR/ADR_04_EXTERNAL_APIS.md)** - Route planning and parking zones
 - See [Use Case 2](#use-case-2-alexs-tourist-experience-conversational-ai) for interaction example
 
@@ -309,7 +309,7 @@ This matrix shows exactly where each persona's needs are addressed in our archit
 | **Marcus (VP Fleet Ops)** | AI Relocation Incentives | [ADR-02](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md) | [Staff Workflows](WORKFLOWS/STAFF_WORKFLOWS.md) | Cost: €15 → €6/swap |
 | **David (CTO/CISO)** | Microservices + Multi-Region + Zero-Trust | [ADR-01](./ADR/ADR_01_microservices_architecture.md), [ADR-09](./ADR/ADR_09_MULTI_REGION.md), [ADR-12](./ADR/ADR_12_SECURITY_ARCHITECTURE.md) | [Event Storming](EVENT_STORMING.md) | Uptime: 99.95% SLA, Zero breaches |
 | **Emma (Commuter)** | Predictive Rebalancing | [ADR-02](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md) | [Booking Flow](WORKFLOWS/CUSTOMER_WORKFLOWS.md#workflow-vehicle-discovery-and-booking) | Availability: 75% → 95% |
-| **Alex (Tourist)** | Conversational AI | [ADR-13](./ADR/ADR_13_CONVERSATIONAL_UX_AND_AI_ASSISTANT.md) | [Customer Workflows](WORKFLOWS/CUSTOMER_WORKFLOWS.md) | Conversion: +40% |
+| **Alex (Tourist)** | Conversational AI | [ADR-13](./ADR/ADR_12_CONVERSATIONAL_UX_AND_AI_ASSISTANT.md) | [Customer Workflows](WORKFLOWS/CUSTOMER_WORKFLOWS.md) | Conversion: +40% |
 | **Lisa (Family User)** | Computer Vision Quality | [ADR-17](./ADR/ADR_17_Agentic_AI_Framework.md) | [Return Verification](WORKFLOWS/CUSTOMER_WORKFLOWS.md#5-return--verification) | NPS: +25 points |
 | **Nina (Support)** | Automated Dispute AI | [ADR-17](./ADR/ADR_17_Agentic_AI_Framework.md) | [Support Automation](WORKFLOWS/CUSTOMER_WORKFLOWS.md#6-payment--feedback) | Auto-resolve: 70% |
 

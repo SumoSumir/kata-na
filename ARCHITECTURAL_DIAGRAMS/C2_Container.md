@@ -38,7 +38,7 @@ This diagram zooms into the MobilityCorp platform, showing the high-level contai
 - [C1: System Context](C1_System_Context.md)
 - [C3: AI/ML Component Diagram](C3_Component_AIML.md)
 - [ADR-05: Orchestrator Pattern](./ADR/ADR_05_Orchestrator.md)
-- [ADR-15: MLOps Pipeline](./ADR/ADR_15_MLOps_Pipeline.md)
+- [ADR-15: MLOps Pipeline](./ADR/ADR_14_MLOps_Pipeline.md)
 - [ADR-16: Data Lakehouse Strategy](./ADR/ADR_16_Data_Lakehouse_Strategy.md)
 - [ADR-18: Edge vs Cloud AI Strategy](./ADR/ADR_18_Edge_Cloud_AI_Strategy.md)
 

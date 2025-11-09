@@ -1,4 +1,4 @@
-# ADR-16: Data Lakehouse Strategy (Medallion Architecture)
+# ADR-15: Data Lakehouse Strategy (Medallion Architecture)
 
 ## Status
 Accepted

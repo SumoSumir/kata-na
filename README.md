@@ -2,7 +2,7 @@
 
 > A comprehensive, production-ready architecture for transforming MobilityCorp's multi-modal transportation platform with AI-enabled intelligence
 
-[![ADRs](https://img.shields.io/badge/ADRs-19-blue)]()
+[![ADRs](https://img.shields.io/badge/ADRs-16-blue)]()
 
 ---
 
@@ -180,7 +180,7 @@ kata-na/
 │   ├── ADR_01_microservices_architecture.md  # Links to ADR-06
 │   ├── ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md  # Links to ADR-01, ADR-15
 │   ├── ADR_03_Vehicle_Telemetry.md
-│   ├── ADR_15_MLOps_Pipeline.md         # Links to ADR-02, ADR-16
+│   ├── ADR_14_MLOps_Pipeline.md         # Links to ADR-02, ADR-16
 │   ├── ADR_16_Data_Lakehouse_Strategy.md
 │   ├── ADR_17_Agentic_AI_Framework.md
 │   └── ADR_18_Edge_Cloud_AI_Strategy.md
@@ -248,7 +248,7 @@ Read [PERSONAS.md](PERSONAS.md) to understand who we're building for (Sarah, Mar
 4. **Review Architecture Decisions**
 Read key ADRs in order:
 1. [ADR-01: Microservices Architecture](./ADR/ADR_01_microservices_architecture.md)
-2. [ADR-15: MLOps Pipeline](./ADR/ADR_15_MLOps_Pipeline.md)
+2. [ADR-15: MLOps Pipeline](./ADR/ADR_14_MLOps_Pipeline.md)
 3. [ADR-16: Data Lakehouse](./ADR/ADR_16_Data_Lakehouse_Strategy.md)
 
 5. **Explore Architecture**
@@ -264,7 +264,7 @@ Read key ADRs in order:
 ### For AI/ML Engineers
 7. **Understand AI Usage**
 - [ADR-02: Dynamic Pricing](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md) - ML models and demand forecasting
-- [ADR-15: MLOps Pipeline](./ADR/ADR_15_MLOps_Pipeline.md) - Training and deployment
+- [ADR-15: MLOps Pipeline](./ADR/ADR_14_MLOps_Pipeline.md) - Training and deployment
 - [ADR-17: Agentic AI Framework](./ADR/ADR_17_Agentic_AI_Framework.md) - Conversational AI implementation
 
 ### For Domain Experts
@@ -551,7 +551,7 @@ Read key ADRs in order:
 - Traditional ML: €3K/month
 - **Savings: €924K/year by choosing the right tool**
 
-**Details:** See [ADR-02](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md), [ADR-15](./ADR/ADR_15_MLOps_Pipeline.md), and [ADR-17](./ADR/ADR_17_Agentic_AI_Framework.md)
+**Details:** See [ADR-02](./ADR/ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md), [ADR-15](./ADR/ADR_14_MLOps_Pipeline.md), and [ADR-17](./ADR/ADR_17_Agentic_AI_Framework.md)
 
 ---
 

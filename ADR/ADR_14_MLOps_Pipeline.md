@@ -1,4 +1,4 @@
-# ADR-15: MLOps Pipeline Architecture
+# ADR-14: MLOps Pipeline Architecture
 
 - Status: Accepted
 - Deciders: ML Platform Team, Data Science Lead
