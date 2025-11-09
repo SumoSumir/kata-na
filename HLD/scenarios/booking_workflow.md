@@ -21,15 +21,16 @@ The booking workflow is the core revenue-generating flow for MobilityCorp. It en
 - **User (Customer):** Mobile app user searching for and booking a vehicle
 - **Mobile App:** React Native frontend (iOS/Android)
 - **API Gateway:** AWS API Gateway (entry point for all API calls)
-- **Booking Service:** ECS Fargate microservice (booking orchestration)
-- **Fleet Service:** ECS Fargate microservice (vehicle availability)
-- **User Service:** ECS Fargate microservice (user authentication, profile)
-- **Payment Service:** ECS Fargate microservice (Stripe integration)
-- **Pricing Service:** ECS Fargate microservice (dynamic pricing)
-- **Notification Service:** ECS Fargate microservice (push/email/SMS)
-- **Vehicle IoT Agent:** IoT Greengrass agent on vehicle (unlock command)
-- **Databases:** Aurora PostgreSQL, DynamoDB, ElastiCache (Redis)
-- **Event Bus:** Apache Kafka (MSK)
+- **Booking Service:** EKS microservice (booking orchestration)
+- **Fleet Service:** EKS microservice (vehicle availability)
+- **User Service:** EKS microservice (user authentication, profile)
+- **Payment Service:** EKS microservice (Stripe integration)
+- **Pricing Service:** EKS microservice (dynamic pricing)
+- **Insurance Service:** EKS microservice (dynamic insurance)
+- **Notification Service:** EKS microservice (push/email/SMS)
+- **Vehicle IoT Agent:** IoT agent on vehicle (unlock command)
+- **Databases:** PostgreSQL, DynamoDB, ElastiCache (Redis)
+- **Event Bus:** Apache Kafka
 
 ---
 
@@ -42,11 +43,12 @@ sequenceDiagram
     participant BS as Booking Service
     participant FS as Fleet Service
     participant PS as Pricing Service
+    participant IS as Insurance Service
     participant PY as Payment Service
     participant NS as Notification Service
-    participant DB as Aurora PostgreSQL
+    participant DB as PostgreSQL
     participant Cache as Redis Cache
-    participant Kafka as Kafka (MSK)
+    participant Kafka as Kafka
     participant IoT as AWS IoT Core
     participant V as Vehicle (IoT Agent)
 
@@ -160,7 +162,7 @@ sequenceDiagram
 **System Processing:**
 1. **Cache Check:** Fleet Service first checks Redis cache for nearby available vehicles
    - **Cache Hit:** Returns cached results immediately (30s TTL)
-   - **Cache Miss:** Queries Aurora PostgreSQL using geospatial queries (PostGIS extension)
+   - **Cache Miss:** Queries PostgreSQL using geospatial queries (PostGIS extension)
 
 2. **Pricing Enrichment:** Fleet Service calls Pricing Service to get current rates for each vehicle
 
@@ -272,7 +274,7 @@ sequenceDiagram
    - Quality of Service (QoS) 1 ensures at-least-once delivery
    - Command includes booking context for vehicle-side verification
 
-3. **Vehicle Processing:** IoT agent on vehicle (AWS IoT Greengrass):
+3. **Vehicle Processing:** IoT agent on vehicle:
    - Verifies command signature to prevent spoofing
    - Activates unlock mechanism (solenoid/relay)
    - Publishes status confirmation
@@ -293,7 +295,7 @@ sequenceDiagram
 
 ### 5.1 Write Path (Booking Creation)
 
-**Flow:** User → API Gateway → Booking Service → Aurora PostgreSQL → Kafka → Downstream Consumers
+**Flow:** User → API Gateway → Booking Service → PostgreSQL → Kafka → Downstream Consumers
 
 - **Database:** Transactional writes to bookings table
 - **Event Bus:** BookingConfirmed events for Analytics, Notification, and Audit services
@@ -301,7 +303,7 @@ sequenceDiagram
 
 ### 5.2 Read Path (Vehicle Search)
 
-**Flow:** User → API Gateway → Fleet Service → Redis Cache (with Aurora fallback)
+**Flow:** User → API Gateway → Fleet Service → Redis Cache (with Postgres fallback)
 
 - **Cache Strategy:** 30-second TTL for availability data
 - **Geospatial Queries:** PostGIS extension for proximity search
@@ -349,10 +351,10 @@ sequenceDiagram
 
 ### 6.4 Database Unavailable
 
-**Scenario:** Aurora PostgreSQL primary failure during booking
+**Scenario:** PostgreSQL primary failure during booking
 
 **Handling:**
-- Aurora auto-failover to read replica (~1 minute)
+- auto-failover to read replica (~1 minute)
 - During failover: API returns 503 Service Unavailable
 - Client implements exponential backoff retry (1s, 2s, 4s, 8s)
 - **Circuit Breaker:** Opens after 3 consecutive failures, prevents cascading
@@ -379,7 +381,7 @@ sequenceDiagram
 | API Gateway | < 5ms | 3ms |
 | Booking Service (logic) | < 10ms | 8ms |
 | Fleet Service (cache hit) | < 20ms | 15ms |
-| Aurora PostgreSQL (query) | < 50ms | 40ms |
+| PostgreSQL (query) | < 50ms | 40ms |
 | Redis Cache (read) | < 5ms | 2ms |
 | Network (user ↔ AWS) | < 100ms | 80ms |
 | **Total** | **< 200ms** | **~150ms** |
@@ -387,8 +389,8 @@ sequenceDiagram
 ### 7.2 Throughput (Peak: 500 bookings/second)
 
 **Scaling Strategy:**
-- **Horizontal Scaling:** 20 ECS Fargate tasks for Booking Service
-- **Database:** Aurora read replicas (2×) for search queries
+- **Horizontal Scaling:** 20 EKS tasks for Booking Service
+- **Database:** read replicas (2×) for search queries
 - **Cache:** ElastiCache Redis cluster (3 nodes, sharded by geohash)
 
 **Load Test Results:**
@@ -397,7 +399,7 @@ sequenceDiagram
 - 2,000 req/s: ❌ P95 latency > 1 second (database bottleneck)
 
 **Bottleneck Mitigation:**
-1. Increase Aurora instance size or use Serverless v2 (auto-scales)
+1. Increase Postgres instance size
 2. Implement per-user rate limiting (10 bookings/minute)
 3. Use RDS Proxy for connection pooling
 
@@ -414,11 +416,11 @@ sequenceDiagram
 
 ### 7.4 Connection Pooling
 
-**Challenge:** Each ECS task opens multiple connections to Aurora
+**Challenge:** Each microservice task opens multiple connections to Postgres
 
 **Solution:** RDS Proxy provides connection pooling
 - Tasks connect to proxy (unlimited connections)
-- Proxy maintains optimized pool to Aurora
+- Proxy maintains optimized pool to Postgre
 - Reduces connection overhead and improves latency
 
 ---
@@ -428,7 +430,7 @@ sequenceDiagram
 ### 8.1 Cost Structure
 
 **Infrastructure Costs:**
-- API Gateway, ECS Fargate, Aurora, Redis, Kafka, Lambda for request handling
+- API Gateway, EKS, Postgres, Redis, Kafka, Lambda for request handling
 - Relatively minimal compared to third-party service costs
 
 **Third-Party Costs:**
@@ -447,7 +449,6 @@ sequenceDiagram
 - ACH/SEPA for recurring customers: ~30% savings on eligible transactions
 
 **Infrastructure:**
-- Aurora Serverless v2: Pay-per-use reduces idle costs (~20%)
 - Aggressive caching: Reduces database query costs (~10%)
 
 **Total Potential Savings:** ~42% reduction in overall costs
@@ -474,7 +475,7 @@ sequenceDiagram
 - Verify database state, Kafka events, and cache invalidation
 - Assert correct statuses and event publication
 
-**Tools:** Jest, Testcontainers (Aurora, Redis, Kafka)
+**Tools:** Jest, Testcontainers (Postgres, Redis, Kafka)
 
 ### 9.3 Load Tests
 
@@ -495,7 +496,7 @@ sequenceDiagram
 ### 9.4 Chaos Engineering
 
 **Failure Scenarios Tested:**
-1. **Aurora Primary Failure:** Verify automatic failover < 1 minute, no data loss
+1. **Postgre Primary Failure:** Verify automatic failover < 1 minute, no data loss
 2. **Kafka Broker Outage:** Verify Transactional Outbox Pattern maintains consistency
 3. **Redis Cache Eviction:** Verify graceful fallback to database
 4. **Network Latency Injection:** Verify no timeouts under 250ms added latency

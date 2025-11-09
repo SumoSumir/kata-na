@@ -21,13 +21,12 @@ Demand forecasting enables MobilityCorp to proactively reposition vehicles, prev
 - **Data Engineer:** Maintains ETL pipelines
 - **Data Scientist:** Trains and evaluates ML models
 - **Operations Team:** Uses forecasts for repositioning decisions
-- **AWS Glue:** ETL for feature engineering
+- **Apache BEAM:** ETL for feature engineering
 - **SageMaker:** Model training, inference, monitoring
 - **Feature Store:** Centralized feature repository
 - **S3 Data Lake:** Historical data (Bronze, Silver, Gold layers)
-- **Lambda:** Scheduled inference triggers
-- **DynamoDB:** Stores demand forecasts for operational use
-- **EventBridge:** Triggers daily/hourly forecast jobs
+- **Apache Airflow:** Scheduled inference triggers
+- **Redis:** Stores demand forecasts for operational use
 
 ---
 
@@ -36,13 +35,13 @@ Demand forecasting enables MobilityCorp to proactively reposition vehicles, prev
 ```mermaid
 sequenceDiagram
     participant EB as EventBridge (Scheduler)
-    participant L as Lambda (Forecast Trigger)
+    participant L as Apache Airflow (Forecast Trigger)
     participant SM as SageMaker Pipeline
     participant FS as Feature Store
     participant S3 as S3 Data Lake
-    participant Glue as AWS Glue
+    participant AB as Apache BEAM
     participant Model as SageMaker Endpoint
-    participant DB as DynamoDB
+    participant DB as Redis
     participant Ops as Operations Dashboard
 
     Note over EB,Ops: Phase 1: Scheduled Trigger (Daily 2 AM)
@@ -50,13 +49,13 @@ sequenceDiagram
     L->>SM: Start SageMaker Pipeline (ForecastPipeline)
 
     Note over EB,Ops: Phase 2: Feature Engineering
-    SM->>Glue: Execute ETL job (Bronze → Silver)
-    Glue->>S3: Read raw telemetry, bookings (Bronze)
-    S3-->>Glue: Return historical data (90 days)
-    Glue->>Glue: Transform: Clean, aggregate, enrich
-    Glue->>S3: Write Silver layer (features)
-    Glue->>FS: Ingest features (offline store)
-    FS-->>Glue: Ingestion complete
+    SM->>AB: Execute ETL job (Bronze → Silver)
+    AB->>S3: Read raw telemetry, bookings (Bronze)
+    S3-->>AB: Return historical data (90 days)
+    AB->>AB: Transform: Clean, aggregate, enrich
+    AB->>S3: Write Silver layer (features)
+    AB->>FS: Ingest features (offline store)
+    FS-->>AB: Ingestion complete
 
     Note over EB,Ops: Phase 3: Model Training (Weekly)
     alt Training Day (Sunday)
@@ -98,7 +97,7 @@ sequenceDiagram
 
 **Bronze Layer Ingestion:**
 
-AWS Glue ETL jobs handle raw data ingestion:
+Apache BEAM ETL jobs handle raw data ingestion:
 - Raw telemetry data flows continuously from vehicles via IoT → Kafka → S3
 - Booking events captured and stored in append-only format
 - Third-party weather data ingested hourly
@@ -113,7 +112,7 @@ AWS Glue ETL jobs handle raw data ingestion:
 
 **Silver Layer Transformation:**
 
-AWS Glue ETL jobs transform raw data into ML-ready features:
+Apache BEAM ETL jobs transform raw data into ML-ready features:
 
 **Key Feature Categories:**
 1. **Historical Demand:** Aggregated booking counts by zone, hour, and vehicle type
@@ -159,7 +158,7 @@ EventBridge triggers daily batch prediction job:
 - Retrieves latest features for next 24 hours
 - Generates predictions for all zone/hour/vehicle-type combinations
 - Outputs predictions with confidence intervals
-- Stores results in DynamoDB for operational queries
+- Stores results in Redis for operational queries
 
 **Prediction Scope:**
 - 24 hours × 100 zones × 4 vehicle types = 9,600 predictions daily
@@ -169,7 +168,7 @@ EventBridge triggers daily batch prediction job:
 ### 4.5 Phase 5: Operational Use
 
 **Operations Dashboard:**
-- Queries DynamoDB for next 6-hour demand forecasts
+- Queries Redis for next 6-hour demand forecasts
 - Displays heatmap of high-demand zones
 - Generates repositioning recommendations
 - Operations team assigns drivers to move vehicles proactively
@@ -216,11 +215,11 @@ EventBridge triggers daily batch prediction job:
 
 **Infrastructure Components:**
 - Feature Store (Offline): Historical training data storage
-- AWS Glue (ETL): Feature engineering and data preparation
+- Apache BEAM (ETL): Feature engineering and data preparation
 - SageMaker Training: Model training compute
 - SageMaker Inference (Batch): Daily forecast generation  
-- DynamoDB: Forecast storage and serving
-- Lambda: Workflow orchestration
+- Redis: Forecast storage and serving (caching)
+- Apache Airflow: Workflow orchestration
 
 **Value Proposition:**
 - Improved vehicle placement increases revenue through better supply-demand matching
@@ -242,11 +241,11 @@ EventBridge triggers daily batch prediction job:
 | Component | Cost |
 |-----------|------|
 | Feature Store (Offline) | $46 |
-| AWS Glue (ETL) | $660 |
+| Apache BEAM (ETL) | $660 |
 | SageMaker Training | $88 |
 | SageMaker Inference (Batch) | $8 |
-| DynamoDB (Forecasts) | $5 |
-| Lambda (Orchestration) | $2 |
+| Redis (Forecasts) | $5 |
+| Apache Airflow (Orchestration) | $2 |
 | **Total** | **$809/month** |
 
 **ROI:**
