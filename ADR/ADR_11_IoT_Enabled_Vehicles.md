@@ -16,33 +16,7 @@ Available alternatives include:
 - Event-driven analytics without ML or sensor fusion
 
 ## Decision
-We will implement **AWS IoT Core with X.509 certificate-based mTLS authentication** for secure communication between vehicles and the cloud backend. Edge computing will be powered by **AWS IoT Greengrass v2** running on vehicle hardware.
-
-**IoT Infrastructure:**
-- **Protocol:** MQTT over TLS 1.3 (lightweight, pub/sub)
-- **Broker:** AWS IoT Core (fully managed, auto-scaling)
-- **Authentication:** X.509 certificates issued by AWS IoT CA
-- **Device Registry:** AWS IoT Device Registry (identity, metadata, certificates)
-
-**Edge Computing Platform:**
-- **Software:** AWS IoT Greengrass v2 (edge runtime)
-- **Hardware:** 
-  - Light vehicles (scooters/eBikes): Compact edge computing devices (ARM-based)
-  - Heavy vehicles (cars/vans): More powerful edge computing devices with GPU acceleration
-- **OTA Updates:** Greengrass component deployment for zero-touch updates
-- **Local Storage:** Telemetry buffering during offline periods
-
-**Edge Processing:**
-- **Collision Detection:** TensorFlow Lite model for real-time safety events
-- **Battery Health:** On-device analytics for Remaining Useful Life estimation
-- **Data Aggregation:** Local buffering with periodic batch uploads
-- **Offline Operation:** Buffer capability with sync when connectivity restored
-
-**Security:**
-- **Certificate Rotation:** Automated via IoT Device Management
-- **Least Privilege:** Each vehicle has unique certificate, can only publish to own topics
-- **Encryption:** AES-256 for data at rest on device, TLS 1.3 for data in transit
-- **Device Defender:** AWS IoT Device Defender for anomaly detection and compromised device identification
+We will implement **mutual TLS (mTLS)** with our custom CA for secure authentication of IoT vehicles to the backend server, ensuring only valid devices send telemetry and battery data. Edge computing modules will process sensor data locally—detecting collision events and aggregating driver analytics (speeding events, collision frequency) before transmitting summaries to the backend.
 
 **Justification:**
 - mTLS provides strong cryptographic assurance of device identity and secure transmission.
@@ -64,7 +38,7 @@ We will implement **AWS IoT Core with X.509 certificate-based mTLS authenticatio
   - Firmware updates needed for mTLS and analytics logic on IoT devices.
   - Some analytics might require backend processing for longitudinal, cross-vehicle analysis.
 
-**Comparison Against Alternatives:**
+**Alternatives Considered:**
 - **Simple Auth (API keys/tokens):** Lower security, risks forged/fraudulent data streams.
 - **Cloud-centric Analytics:** Higher latency for urgent events, significantly increased bandwidth usage.
 - **No Edge Analytics:** Limits ability to respond in real time and puts heavy load on backend infrastructure.
