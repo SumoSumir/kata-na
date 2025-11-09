@@ -11,6 +11,7 @@ Modern distributed applications require robust tracing and logging for monitorin
 - **Zipkin**/ **Jaeger** (dedicated distributed tracing systems)
 - **AWS X-Ray**, **Google Cloud Trace**, **Datadog**, **NewRelic** (vendor-managed solutions)
 - **Opencensus** (predecessor to OpenTelemetry, less actively maintained)
+- **OpenSearch** (open-source search, observability, and analytics suite increasingly used for centralized logging and trace storage/visualization when paired with OpenTelemetry)
 
 Requirements include:
 - Support for distributed tracing and contextual logging.
@@ -18,52 +19,15 @@ Requirements include:
 - Vendor-neutral and future-proof.
 
 ## Decision
-We will adopt **OpenTelemetry** as the observability framework with **AWS CloudWatch** and **AWS X-Ray** as the backend for logs, metrics, and distributed tracing.
-
-**Architecture:**
-
-1. **OpenTelemetry Instrumentation**
-   - OpenTelemetry SDKs in all microservices (Python, Node.js, Java)
-   - Auto-instrumentation for common frameworks (FastAPI, Express, Spring Boot)
-   - Custom spans for business-critical operations (booking, payment processing)
-   - Baggage for cross-service context propagation (user_id, request_id, trace_id)
-
-2. **AWS X-Ray (Distributed Tracing)**
-   - OpenTelemetry Collector exports traces to X-Ray via OTLP exporter
-   - Service map visualization showing microservices and dependencies
-   - Configurable trace retention policy
-   - Sampling strategy: Full sampling for errors, reduced sampling for successful requests (cost optimization)
-
-3. **AWS CloudWatch Logs (Centralized Logging)**
-   - OpenTelemetry Logs API → CloudWatch Logs via AWS for Fluent Bit sidecar
-   - Log groups organized per microservice
-   - Structured JSON logs with trace context (trace_id, span_id injected)
-   - Tiered retention: Hot storage with cold archive to S3 via Kinesis Firehose
-   - CloudWatch Logs Insights for querying (SQL-like syntax)
-
-4. **AWS CloudWatch Metrics (Application Metrics)**
-   - OpenTelemetry Metrics SDK → CloudWatch Metrics via EMF (Embedded Metric Format)
-   - Custom application metrics (latency, availability, success rates)
-   - High-resolution metrics for critical SLIs
-   - CloudWatch Alarms for SLO violations
-
-5. **OpenTelemetry Collector Deployment**
-   - ECS Fargate sidecar pattern for containerized workloads
-   - Batch processor for efficient data transmission
-   - Memory limiter for resource management
-   - Exporters: AWS X-Ray, CloudWatch Logs, CloudWatch EMF
-   - High availability: Multi-AZ deployment with auto-scaling
-
-6. **Grafana for Visualization (Optional)**
-   - Amazon Managed Grafana workspace
-   - Unified dashboards combining X-Ray traces, CloudWatch metrics, and logs
+We will adopt **OpenTelemetry & OpenSearch** as the basis for our tracing and logging system.
 
 **Justification:**
-- **OpenTelemetry** provides vendor-neutral instrumentation (can switch backends if needed)
-- **AWS X-Ray** offers native service map and deep AWS service integration (RDS, DynamoDB, Lambda)
-- **CloudWatch** is cost-effective for AWS-native workloads with native ECS/Fargate integration
-- **Unified observability:** Trace IDs link logs, metrics, and traces for root cause analysis
-- **Cost optimization:** Sampling strategy reduces trace ingestion while maintaining error visibility
+- It is the industry standard for open, vendor-neutral observability.
+- It unifies previous standards (OpenTracing, OpenCensus), promoting simplicity and compatibility.
+- Wide ecosystem support and active development.
+- Facilitates seamless integration with existing tracing systems (Jaeger, Zipkin) and commercial services (Datadog, AWS X-Ray, etc).
+- Modular architecture allows for incremental adoption and future extensibility.
+- Rich support for metrics, logs, and traces in distributed environments.
 
 ## Consequences
 
@@ -82,9 +46,13 @@ We will adopt **OpenTelemetry** as the observability framework with **AWS CloudW
   - Smaller organizations may prefer simpler or vendor-specific tools (e.g., Datadog, Cloud-provider tracing).
 
 **Comparison Against Alternatives:**
-- Compared to **Prometheus**: OpenTelemetry covers logs and traces (not just metrics), but Prometheus is more battle-tested for metrics.
-- Compared to **Jaeger/Zipkin**: These are focused on tracing alone; OpenTelemetry covers full observability, and can export to Jaeger/Zipkin.
-- Compared to **Vendor Solutions**: OpenTelemetry avoids lock-in and gives more control, but vendors can simplify setup and offer advanced features out-of-the-box.
+| Solution                       | Tracing | Logging | Metrics | Vendor-lock-in | Extensibility | OpenSearch Integration |
+| ------------------------------ | ------- | ------- | ------- | -------------- | ------------- | ---------------------- |
+| OpenTelemetry                  | Yes     | Yes     | Yes     | No             | High          | Yes                    |
+| Prometheus                     | Partial | No      | Yes     | No             | Med           | Via integration        |
+| Jaeger/Zipkin                  | Yes     | No      | No      | No             | Med           | Yes                    |
+| Vendor-Managed (Datadog, etc.) | Yes     | Yes     | Yes     | Yes            | Low           | Via export             |
+| OpenSearch(with OpenTelemetry) | Yes     | Yes     | Partial | No             | High          | Native                 |
 
 **Summary:**  
-By adopting OpenTelemetry, we gain flexibility, interoperability, and reduce vendor risk. Some operational overhead and evolution risk remain, but this approach best fits our long-term engineering objectives for distributed tracing and logging.
+By adopting OpenTelemetry, we gain flexibility, interoperability, and reduce vendor risk. Some operational overhead and evolution risk remain, but this approach best fits our long-term engineering objectives for distributed tracing and logging with a managed opensearch storage solution.
