@@ -17,77 +17,14 @@ Key requirements:
 - Compatibility with Grafana dashboards, alerting, and integrations
 
 ## Decision
-We will use **Amazon CloudWatch** as the primary metrics and monitoring platform, with **VictoriaMetrics** as an optional long-term storage backend for cost optimization, and **Amazon Managed Grafana** for visualization.
-
-**AWS-Native Monitoring Architecture:**
-
-1. **Amazon CloudWatch (Primary Metrics Store)**
-   - **Native AWS service integration:** Automatic metrics from ECS, Lambda, Aurora, DynamoDB, MSK, etc.
-   - **Custom application metrics:** OpenTelemetry → CloudWatch EMF (Embedded Metric Format)
-   - **High-resolution metrics:** Sub-minute granularity for critical SLIs
-   - **Configurable metric retention**
-
-2. **CloudWatch Alarms & Anomaly Detection**
-   - **Static alarms:** SLO violations with threshold-based alerting
-   - **Anomaly detection:** ML-based anomaly detection for metrics
-   - **Composite alarms:** Logical combinations for complex conditions
-   - **SNS integration:** Alarms → SNS topics → Lambda → PagerDuty/Slack/Email
-
-3. **VictoriaMetrics (Long-Term Storage, Optional)**
-   - **Use case:** Store extended metric history for capacity planning and compliance
-   - **Data flow:** CloudWatch → Lambda → VictoriaMetrics remote write API
-   - **Deployment:** ECS Fargate with appropriate resource allocation
-   - **Storage optimization:** Superior compression compared to Prometheus
-   - **PromQL queries:** Grafana queries VictoriaMetrics for historical analysis
-   - **Cost advantage:** Significant savings vs extended CloudWatch retention
-
-4. **Amazon Managed Grafana (Visualization)**
-   - **Grafana workspace** with CloudWatch and VictoriaMetrics data sources
-   - **Pre-built dashboards:**
-     - Service health: Request rate, latency, error rate (RED metrics)
-     - Infrastructure: ECS CPU/memory, Aurora connections, MSK lag
-     - Business KPIs: Active bookings, revenue, vehicle utilization
-     - AI model performance: Inference latency, prediction accuracy, cost per request
-   - **Alerting:** Grafana alerts → SNS → PagerDuty (alternative to CloudWatch Alarms)
-
-5. **Amazon Timestream (Optional for IoT Telemetry Metrics)**
-   - **Use case:** Store high-frequency vehicle telemetry metrics (battery, GPS, speed)
-   - **Time-series optimized:** Cost-effective for time-series data
-   - **Tiered retention:** Hot and cold storage tiers
-   - **Query:** SQL-like syntax for time-series analysis
-
-6. **PagerDuty Integration (Incident Management)**
-   - **On-call rotation:** Primary/secondary engineers for critical alerts
-   - **Escalation policy:** Automated escalation based on severity
-   - **Incident timeline:** Integrates alerts, CloudWatch graphs, and X-Ray traces
-
-7. **Monitoring Agents & Instrumentation**
-   - **OpenTelemetry Collector:** ECS Fargate sidecar exports metrics to CloudWatch EMF
-   - **CloudWatch Agent:** EC2/Fargate logs and custom metrics
-   - **AWS Distro for OpenTelemetry (ADOT):** AWS-supported OpenTelemetry distribution
-   - **Auto-scaling triggers:** CloudWatch alarms → ECS service auto-scaling policies
-
-**Metrics Strategy:**
-- **Golden Signals (SRE best practices):**
-  - **Latency:** Percentiles (P50, P95, P99) for all API endpoints
-  - **Traffic:** Requests/sec per microservice
-  - **Errors:** Error rate percentage
-  - **Saturation:** Resource utilization (CPU, memory, database connections)
-- **Business metrics:**
-  - Revenue tracking
-  - Active bookings
-  - Vehicle utilization
-  - Customer satisfaction indicators
-- **AI-specific metrics:**
-  - Model inference latency
-  - Prediction accuracy (monitored via A/B testing)
-  - Cost per inference
+We will use **VictoriaMetrics** as our primary metrics data store.
 
 **Justification:**
-- **CloudWatch** provides zero-config integration with all AWS services
-- **VictoriaMetrics** reduces long-term storage costs significantly
-- **Grafana** offers superior visualization and cross-source querying
-- **PagerDuty** ensures rapid incident response with escalation policies
+- Offers lower memory footprint and resource usage compared to standard Prometheus, reducing operational costs.
+- Highly performant and scalable for high-cardinality, long-retention setups.
+- Maintains compatibility with Prometheus protocols (scraping, querying, remote write/read), ensuring seamless integration with Grafana and existing alert systems (including PagerDuty).
+- It also integrates easily with existing OpenTelemetry collector to export the metrics while being more efficient in storage & memory
+- Open-source and widely adopted in performance-intensive environments.
 
 ## Consequences
 
