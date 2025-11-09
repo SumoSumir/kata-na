@@ -176,15 +176,23 @@ kata-na/
 ├── GLOSSARY.md                        # Domain terminology
 ├── COST_ANALYSIS.md                   # Infrastructure cost estimates (percentage-based)
 │
-├── ADR/                               # Architecture Decision Records (19)
-│   ├── ADR_01_microservices_architecture.md  # Links to ADR-06
-│   ├── ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md  # Links to ADR-01, ADR-15
+├── ADR/                               # Architecture Decision Records (16)
+│   ├── ADR_01_microservices_architecture.md
+│   ├── ADR_02_AI_DRIVEN_RELOCATION_INCENTIVES.md
 │   ├── ADR_03_Vehicle_Telemetry.md
-│   ├── ADR_14_MLOps_Pipeline.md         # Links to ADR-02, ADR-16
-│   ├── ADR_16_Data_Lakehouse_Strategy.md
-│   ├── ADR_17_Agentic_AI_Framework.md
-│   └── ADR_18_Edge_Cloud_AI_Strategy.md
-│   # Each ADR now links to related decisions
+│   ├── ADR_04_EXTERNAL_APIS.md
+│   ├── ADR_05_Orchestrator.md
+│   ├── ADR_06_EVENT_DRIVEN_ARCHITECTURE.md
+│   ├── ADR_07_Tracing_and_Logging.md
+│   ├── ADR_08_SCHEDULER_FRAMEWORK.md
+│   ├── ADR_09_MULTI_REGION.md
+│   ├── ADR_10_Monitoring_and_Metrics.md
+│   ├── ADR_11_IoT_Enabled_Vehicles.md
+│   ├── ADR_12_CONVERSATIONAL_UX_AND_AI_ASSISTANT.md
+│   ├── ADR_13_DATA_COMPLIANT.md
+│   ├── ADR_14_MLOps_Pipeline.md
+│   ├── ADR_15_Data_Lakehouse_Strategy.md
+│   └── ADR_16_NOTIFICATION_SERVICE.md
 │
 ├── ARCHITECTURAL_DIAGRAMS/            # Visual architecture (C4 model)
 │   ├── C1_System_Context.md
