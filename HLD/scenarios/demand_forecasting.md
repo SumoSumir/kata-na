@@ -263,8 +263,3 @@ EventBridge triggers daily batch prediction job:
 - **[ADR-15: MLOps Pipeline](.././ADR/ADR_14_MLOps_Pipeline.md)** - SageMaker pipelines
 - **[ADR-16: Data Lakehouse Strategy](.././ADR/ADR_16_Data_Lakehouse_Strategy.md)** - Medallion architecture
 - **[Scenario 3: Dynamic Pricing](dynamic_pricing.md)** - Uses demand forecasts
-
----
-
-**Last Updated:** 2025-01-07  
-**Maintained By:** Data Science Team

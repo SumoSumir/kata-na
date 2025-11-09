@@ -579,8 +579,3 @@ This glossary defines key terms, acronyms, and concepts used throughout the Mobi
 - **[ADRs](./ADR/)** - All architectural decisions
 - **[Functional Requirements](FUNCTIONAL_REQUIREMENTS/FUNCTIONAL_REQUIREMENTS.md)**
 - **[Non-Functional Requirements](NON_FUNCTIONAL_REQUIREMENTS/NON_FUNCTIONAL_REQUIREMENTS.md)**
-
----
-
-**Last Updated:** 2025-11-07  
-**Maintained By:** Team kata-na

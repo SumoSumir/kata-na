@@ -315,8 +315,3 @@ User → LangChain Agent → LLM (Bedrock) → Tool(s) → Response
 - **[Fitness Functions](../FITNESS_FUNCTIONS/FITNESS_FUNCTIONS.md)**
 - **[Threat Model](../THREAT_MODEL/THREAT_MODEL.md)**
 - **[Rollout Strategy](../ROLLOUT_STRATEGY/ROLLOUT_STRATEGY.md)**
-
----
-
-**Last Updated:** 2025-01-07  
-**Maintained By:** Platform Architecture Team
