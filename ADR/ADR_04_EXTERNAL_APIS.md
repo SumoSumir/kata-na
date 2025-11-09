@@ -24,7 +24,7 @@ Alternatives considered:
 4. **Orchestrator-based integration:** As detailed in [ADR-05](./ADR_05_Orchestrator.md), an orchestrator could manage API calls, but this might centralize failure points.
 
 ## Decision
-Implement **orchestrators** (see [ADR-05](ADR_05_Orchestrator.md) for orchestrator pattern) which integrate with external APIs and provide normalized data to our services while dynamically scaling up/down the service based on requests in queue using KEDA.
+Implement a separate **orchestrators** (see [ADR-05](ADR_05_Orchestrator.md) for orchestrator pattern) by business function/data required which integrate with external APIs and provide normalized data to our services while dynamically scaling up/down the service based on requests in queue using KEDA.
 
 **Unified Data Schema:**
 External data normalized into consistent format:

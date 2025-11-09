@@ -86,7 +86,7 @@ Adopt a **hybrid edge-cloud vehicle telemetry architecture** with intelligent wo
 
 **Edge Processing & Data Collection:**
 - **IoT Enabled** on vehicle for local processing (see [ADR-11](ADR_11_IoT_Enabled_Vehicles.md))
-- **Local aggregation:** Vehicles continuously collect and compress sensor data
+- **Local aggregation:** Vehicles continuously collect, compress & stream minimal sensor data at short intervals:
   - Battery: voltage curves, temperature profiles, charging cycles, degradation rate
   - Mechanical: vibration spectra (FFT), brake wear indicators, suspension stress
   - Operational: error codes, usage intensity, environmental conditions, GPS
@@ -103,9 +103,9 @@ Adopt a **hybrid edge-cloud vehicle telemetry architecture** with intelligent wo
 **ML Training Pipeline (AWS SageMaker):**
 - **Training data:** Historical fleet-wide telemetry from Data Lakehouse Silver layer
 - **Models:**
-  - **Battery failure prediction:** LSTM time-series model for advance warning
-  - **Brake wear prediction:** XGBoost regression for distance-based maintenance scheduling
-  - **Anomaly detection:** Isolation Forest for detecting unusual component behavior
+  - **Battery failure prediction:** LSTM time-series model for 7-14 day advance warning
+  - **Brake wear prediction:** XGBoost regression for distance & accelerometer based maintenance scheduling
+  - **Anomaly detection:** Isolation Forest for detecting unusual component behavior & providing personalized maintenance schedules
 - **Model deployment:** SageMaker Model Registry → firmware/model component OTA updates
   - Phased rollout strategy for safety (canary → gradual deployment)
   - Edge-optimized models (TensorFlow Lite) for local inference
