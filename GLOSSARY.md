@@ -47,7 +47,7 @@ This glossary defines key terms, acronyms, and concepts used throughout the Mobi
 - First layer in Medallion Architecture
 - Raw, unprocessed data from sources
 - Append-only, schema-on-read
-- Retention: 90 days
+- Retention: 30 days
 
 ---
 
@@ -173,7 +173,7 @@ This glossary defines key terms, acronyms, and concepts used throughout the Mobi
 - Third layer in Medallion Architecture
 - Business-ready aggregations and metrics
 - Optimized for BI and reporting
-- Retention: 5 years
+- Retention: 3 years
 
 **Greengrass (AWS IoT Greengrass v2)**
 - AWS edge runtime for IoT devices

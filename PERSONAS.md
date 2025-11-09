@@ -247,7 +247,7 @@ This document introduces the key people and personas that guide our architectura
 **How We Solve This:**
 - **[ADR-17: Computer Vision Automation](./ADR/ADR_17_Agentic_AI_Framework.md)** - ResNet-50 CNN + AWS Rekognition for damage detection
 - **Automated Dispute Resolution** - 70% of cases auto-resolved with photo evidence
-- **Audit Trail** - Immutable photo history in S3 with 90-day retention
+- **Audit Trail** - Immutable photo history in S3 with 30-day retention
 
 **Impact:**
 - Resolution Time: 15 min → 2 min (87% reduction)
@@ -500,7 +500,7 @@ Status: ✅ No customer dispute (AI auto-resolved with photo evidence)
 ```
 Data Handling Check:
 • Photos stored in S3 with AES-256 encryption ✅
-• Retention: 90 days, auto-deleted after (GDPR compliant) ✅
+• Retention: 30 days, auto-deleted after (GDPR compliant) ✅
 • PII redaction: License plates blurred in stored images ✅
 • Access logs: Only Lisa, Nina, and authorized staff viewed photos ✅
 ```
