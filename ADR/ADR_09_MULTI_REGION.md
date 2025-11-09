@@ -20,22 +20,19 @@ Adopt a **multi-region active-active deployment architecture** with **region-awa
 
 **AWS Multi-Region Architecture:**
 
-1. **Primary Regions**
+1. **Some of the Primary Regions**
    - **eu-central-1 (Frankfurt):** Primary EU region for Germany, Central Europe
    - **eu-west-1 (Ireland):** Secondary EU region for UK, Western Europe
-   - **eu-west-3 (Paris):** Future expansion for France-specific compliance
-   - Active-active: Both regions serve production traffic with local data residency
+   - **eu-west-3 (Paris):** for France-specific compliance
+   - Active-active: All regions serve production traffic with local data residency
 
 2. **Data Layer (Regional Isolation)**
-   - **Aurora PostgreSQL Global Database**
+   - **PostgreSQL Database**
      - Primary cluster in each region with cross-region replication
      - Regional read replicas for low-latency queries
      - Automatic failover with promotion of secondary to primary
-   - **DynamoDB Global Tables**
-     - Multi-region replication for session data, user preferences
-     - Last-writer-wins conflict resolution
    - **S3 Cross-Region Replication (CRR)**
-     - Vehicle images, ML artifacts replicated to secondary region
+     - Vehicle images, ML artifacts replicated to secondary region (if under compliance requirements)
      - Versioning enabled for compliance audit trails
 
 3. **Compute Layer (Regional Isolation)**
