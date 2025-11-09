@@ -25,20 +25,19 @@ Business requirements include high testability for minimal bug and rapid feature
 ## Decision
 Implement microservices architecture with services organized by business capability. Core services include Vehicle Telemetry, Booking, Payment, User/KYC, and Fleet Operations.
 
-**Deployment Platform:** AWS ECS Fargate (serverless containers)
-**Container Orchestration:** ECS with Service Discovery (AWS Cloud Map)
+**Container Orchestration:** AWS EKS
 **Load Balancing:** Application Load Balancer (ALB) with health checks
-**Service Mesh:** AWS App Mesh for advanced traffic management (optional, Phase 3+)
+**Service Mesh:** AWS App Mesh for additional traffic management beyond the orchestrator model used (optional, Phase 3+)
 
 **Core Services:**
-- **Vehicle Telemetry Service:** Node.js (real-time processing)
-- **Booking Service:** Python FastAPI
-- **Payment Service:** Python, 15 tasks (PCI-DSS compliant)
-- **User/KYC Service:** Python FastAPI
-- **Fleet Operations Service:** Python
-- **Pricing Service:** Python
-- **Analytics Service:** Python
-- **Notification Service:** Python
+- **Vehicle Telemetry Service** (real-time processing)
+- **Booking Service**
+- **Payment Service** (PCI-DSS compliant)
+- **User/KYC Service**
+- **Fleet Operations Service**
+- **Pricing Service**
+- **Analytics Service**
+- **Notification Service**
 
 **Rationale for Microservices over Service-Based Architecture:**
 - **Independent Scaling:** Telemetry processes continuous high-volume data streams requiring aggressive scaling, while booking/payment services handle low-volume transactional loads. Service-based architecture would force scaling entire service groups together, wasting resources. Microservices enable precise capacity allocation per service.
