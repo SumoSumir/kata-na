@@ -1,4 +1,4 @@
-# ADR-13: Conversational UX and AI Assistant Integration with MCP Server
+# ADR-12: Conversational UX and AI Assistant Integration with MCP Server
 
 ## Status
 Proposed
@@ -70,3 +70,12 @@ Flow example:
 - Each region may use localized LLMs for language and compliance.
 - Conversational memory limited to session scope for privacy.
 - Model responses audited to ensure safe and authorized actions only.
+- LangChain + AWS Bedrock enable agentic ReAct workflows and tool-calling, with DynamoDB for session memory and OpenSearch Serverless + Titan embeddings for RAG.
+- Claude 3.5 Sonnet on Bedrock provides a 200K token context, native tool integration, multilingual support, and streaming responses for real-time UX.
+- RAG powers semantic retrieval across FAQs, manuals, and policies to ground assistant responses.
+- Bedrock guardrails enforce safety and compliance via content filtering, PII redaction, and topic blocking.
+
+**EU Compliance Benefits:**
+- All data stays in Frankfurt region (eu-central-1) for GDPR compliance
+- No data sent to third-party servers (vs. OpenAI)
+- AWS DPA (Data Processing Agreement) for regulatory requirements

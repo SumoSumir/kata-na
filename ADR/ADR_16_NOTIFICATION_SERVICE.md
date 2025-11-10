@@ -1,4 +1,4 @@
-# ADR-12: Intelligent Notification Service
+# ADR-16: Intelligent Notification Service
 
 ## Status
 Accepted
@@ -34,10 +34,10 @@ Implement an **AI-powered, event-driven Notification Service** that delivers per
 **2. Notification Orchestrator**
 - **Event router:** Maps events to notification types with priority (Critical/High/Medium/Low)
 - **User preferences:** Manages quiet hours, channel preferences (push, SMS, email), and opt-outs
-- **Rate limiter:** Prevents notification fatigue (max N per hour/day, critical notifications bypass)
+- **Rate limiter:** Prevents notification fatigue (max N per user/day, critical notifications bypass)
 - **Deduplication:** Prevents redundant notifications for same event
 
-**3. AI-Driven Personalization (ADR-05, ADR-13)**
+**3. AI-Driven Personalization (ADR-05, ADR-12)**
 
 a) **Proactive Commute Recommendations**
 - Pattern detection analyzes telemetry to identify regular trips (e.g., A→B at 9 AM daily)
@@ -48,7 +48,7 @@ a) **Proactive Commute Recommendations**
 b) **Relocation Incentive Offers (ADR-02)**
 - Listens to `incentives.relocation_opportunity` events
 - AI identifies beneficial relocations based on supply/demand and user's next likely trip
-- Example: *"Park near Zone C instead of Zone B and get 20% off your next ride! Help us balance the fleet."*
+- Example: *"Park near Zone C instead of Zone B and get a 10% discount on your next ride! Help us balance the fleet."*
 - Gamification: Track relocations, monthly badges, credits
 
 c) **Smart Alternative Mode Suggestions**
@@ -67,7 +67,7 @@ e) **Feedback Follow-Up**
 **4. Staff-Facing Notifications**
 - **Predictive maintenance:** *"Vehicle #1234 flagged: Likely battery failure in 5-7 days. Schedule maintenance."*
 - **Collision alerts:** *"COLLISION DETECTED: Vehicle #5678 at [Location]. User check-in pending. Dispatch support."*
-- **Battery cluster alerts:** *"Zone: Shoreditch - 8 vehicles < 20% battery. Priority area for swaps."*
+- **Battery cluster alerts:** *"Zone: Shoreditch - 8 vehicles with <20% battery. Priority area for swaps."*
 - **Task assignments:** Optimized route updates pushed to staff dashboard
 
 **5. Delivery Channels**
@@ -84,7 +84,7 @@ e) **Feedback Follow-Up**
 - Publishes `notifications.engagement_event` to Kafka
 
 ### Integration Points
-- **AI/ML Services:** Multi-Provider AI Orchestrator (ADR-05), Conversational AI (ADR-13), Demand Forecasting, Pricing Engine
+- **AI/ML Services:** Multi-Provider AI Orchestrator (ADR-05), Conversational AI (ADR-12), Demand Forecasting, Pricing Engine
 - **Core Services:** Booking, Telemetry, Fleet Operations, Vehicle Management
 - **External APIs:** Weather, traffic, events (ADR-04)
 - **Infrastructure:** Kafka event bus (ADR-06), OpenTelemetry tracing (ADR-07)
@@ -102,7 +102,7 @@ e) **Feedback Follow-Up**
 
 **Customer Engagement**
 - AI-powered personalization makes platform habitual vs. ad-hoc
-- Relocation incentive uptake >25% reduces manual rebalancing costs (£10-15/vehicle)
+- Relocation incentive uptake reduces manual rebalancing costs (from £10-15/vehicle to less than £5)
 - Usage milestones and gamification increase customer lifetime value
 - Smart alternatives retain users when preferred vehicle unavailable
 
@@ -120,14 +120,14 @@ e) **Feedback Follow-Up**
 **Scalability**
 - Horizontally scalable with Kafka consumers
 - Multi-region deployment ready (ADR-09)
-- 10,000+ notifications/sec throughput during peak
+- High throughput during peak
 
 ### ❌ Negative
 
 **Complexity**
 - Event-driven architecture adds debugging complexity
 - Multi-channel delivery requires vendor management (FCM, Twilio, SendGrid)
-- GenAI integration adds latency (<2s for message generation)
+- GenAI integration adds latency for message generation
 
 **Privacy Risks**
 - Personalization requires behavioral data collection (requires explicit consent)
@@ -142,7 +142,7 @@ e) **Feedback Follow-Up**
 **Operational Costs**
 - Multi-provider AI costs for message generation
 - SMS costs for critical alerts at scale
-- Storage costs for 90-day notification history
+- Storage costs for notification history
 
 ### Mitigation Strategies
 
@@ -150,7 +150,7 @@ e) **Feedback Follow-Up**
 - Transparent opt-in/opt-out for personalization
 - Anonymous pattern detection where possible
 - Quarterly privacy impact assessments
-- Automated deletion workflows (90-day TTL)
+- Automated deletion workflows (30-day TTL)
 
 **Quality Assurance**
 - A/B testing for message variants before full rollout
@@ -159,9 +159,9 @@ e) **Feedback Follow-Up**
 - Fallback to template-based messages if GenAI fails
 
 **Notification Fatigue Prevention**
-- Strict rate limiting (max N per hour/day)
+- Strict rate limiting per user
 - User-controlled quiet hours
-- Engagement metrics monitoring (dismiss rate >30% = reduce frequency)
+- Engagement metrics monitoring (excessive dismiss rate = reduce frequency)
 - Priority-based routing (critical notifications always delivered)
 
 ## Alternatives Considered

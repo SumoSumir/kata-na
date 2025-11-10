@@ -4,9 +4,9 @@
 Accepted
 
 ## Context
-MobilityCorp operates a multi-modal transportation platform across multiple EU countries, managing bikes, scooters, cars, and vans with distinct operational characteristics. The system must support vehicle diversity, scaling variance across services, geographic expansion, and critical reliability.
+MobilityCorp operates a multi-modal transportation platform across multiple EU countries, managing bikes, scooters, cars, and vans with distinct operational characteristics. The system must support vehicle diversity, scaling variance across services, geographic expansion, and critical reliability while providing indepth business insights via observability.
 
-Business requirements include high testability for minimal bug and rapid feature iteration, independent service scaling to optimize costs, and fault isolation to prevent cascading failures.
+Business requirements also include high testability for minimal bug and rapid feature iteration, independent service scaling to optimize costs, and fault isolation to prevent cascading failures.
 
 ## Alternatives Considered
 
@@ -23,7 +23,22 @@ Business requirements include high testability for minimal bug and rapid feature
 - **Accepted:** Best meets scaling, reliability, and development velocity requirements
 
 ## Decision
-Implement microservices architecture with services organized by business capability. Core services include Vehicle Telemetry, Booking, Payment, User/KYC, and Fleet Operations.
+Implement microservices architecture with services organized by business capability. Core services include Vehicle Telemetry, Booking, Payment, Insurance, User/KYC, and Fleet Operations.
+
+**Container Orchestration:** AWS EKS
+**Load Balancing:** Application Load Balancer (ALB) with health checks
+**Service Mesh:** AWS App Mesh for additional traffic management beyond the orchestrator model used (optional, Phase 3+)
+
+**Core Services:**
+- **Vehicle Telemetry Service** (real-time processing)
+- **Booking Service**
+- **Payment Service** (PCI-DSS compliant)
+- **User/KYC Service**
+- **Fleet Operations Service**
+- **Pricing Service**
+- **Analytics Service**
+- **Notification Service**
+- **Insurance Service**
 
 **Rationale for Microservices over Service-Based Architecture:**
 - **Independent Scaling:** Telemetry processes continuous high-volume data streams requiring aggressive scaling, while booking/payment services handle low-volume transactional loads. Service-based architecture would force scaling entire service groups together, wasting resources. Microservices enable precise capacity allocation per service.

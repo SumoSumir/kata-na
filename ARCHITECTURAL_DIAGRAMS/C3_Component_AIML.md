@@ -2,129 +2,25 @@
 
 This diagram is a Level 3 view, zooming into the AI/ML Services Layer to show the key components that make up the intelligence of the platform.
 
-```
-┌────────────────────────────────────────────────────────────────────────┐
-│                     AI/ML ARCHITECTURE DETAIL                          │
-└────────────────────────────────────────────────────────────────────────┘
+Refer Image Below (open in new tab if required):
+[![C3 image](https://img.plantuml.biz/plantuml/svg/dLhRSjl84NtNLqnKPLjAoAMzikBTrDRMKgHk4IdH8crddr13O4WY0Z3O6O0odSfhFY2Vc2_9wHbSEQ2sQlrYeZ7JtTFJVVe2_Q8phh8yZex-52P-b0U2_JHwFnYzzqOoJcKYakpdewCip2B1AWeRXtojUCpwR7Wxc4xOKFcRC1D-bYl1JgPo6KPXjXj9bPuU7Ks6lpvyMdYBXvatVlXoVmBI6tRvDHCguH4BUCQPbhdoXJwQxtGcOWylJvxuwedtsF4mvVv6i3jwFCRpvPOKq9aIF0wJzV5fSvC-ynH_nghv6RjGClac1lCmsWerk9PHm2Py9nGnUUJFXU1CAhuMRIwXpBnL94I6bRTomJwBJUZZ_5T4e-tdR-_OrX9rZttuxlif4wIM7WHyTspEDoRkjybQw2oK2NlDhWGtrfb3ec0NCay2hdP78vbaF4o4yahI2IdcHQGgH1taSvciiKqeOmFshoE6VzK5dV1GhIBvNDjlQ0diB-m2XZkkNj2lXUA9NaaLQwCs3j1cbeMnq3wF1At5xpdzPkEBu-OpFTYp6H8K4ztinikJbJs39vC8Py36jd4U39aOZdS9ZwMLz2Xur2TLMB5Tiv_UlONEinz_X2F6FC551covOtFycF8dNFKBebUhRjcMVcnzQCRLRxczyvkGV2N4KMlvi1dB5AxFEcBRQgMajP9vgXk2hWt1IAWKnKEkwS8Bj-gnRvAqUyQU3T6DVrMI8UpVv6K8lKKXdyt2L93gB_fMgItaJISFgNQtwmvlIejtdaISmnCLXocQ-ZTsasTzcTD_3zLYcAeKp9wbUY9Fr8x1ZDzlUHJY1tozTFxF5OMONYFkCw172h0nH6j8I8evekEtd1FoC3pxJww8pIuLAkM0BW7uyRAyiCLDYyuMXawCBn26EkG9UqZXUk6tIe_pjpXIo2DShE0gsX6If6cN7on3hhr043hQKrs0mCObeUK7R1Hn5QvsnlT5B06oAVo1GRKNJbNQrlkdN6eRpzRMVyTpc_yybSQRFxnznNof0QHyYvKEJqIAW8qLmYt9F0ZmdwobBYigkOwXEfuy5J2Dht4TI2tXYliPt5ff7DRQnxgk34J47iKQSQLsBpgjAXOHw_Qkrx1Z6iaTwUFwBGuHqthl80D7zSzMJ-28sGbhyZHL4bvPEQxhjvKAdW_bbOmY2zqLdOqgEWcPxRADlVWHG8lKkeXoqOTh2_Z7S731CeBx3byImLf0I9o6LaHziVT2DaBlQdRs_V_-yz_R-yKFFVR-AwCjW0qwcW4jubDUn2YIUO0Kin9A93vmKAXjY6JyufNujCaBoqrqb0DiEk0aGAmcWGT5XCzrPdqT57PLK0gd-iVrXOIF3YRpnPIUtvttaVAPtKv0Rp5oEfnT8XMSlt9lXj97w7iftD6wxzXIsCnI6bAG6H_po0AObPEd0K5NZz8CvPa8Juc_SwJ0ia68MDuABuQPi8XRayog5snQlo01jrf61ahCaOtmyf0V-k_UepRPiHKF8qeNSBybjmLL1sJ6y80MkemDgOqllpvC7hO_z27UECbi8pF9u7hHJeSutyy_dhzYtFTp1BGhGub8-aPPtBSF2ivZqd59ngKNP6B-iJy181huUPoOD438YVYfDZFaK3-tvtVHacT0u1sE1Eoh4i65fU9K5TMMSKaWuyA6jaQ82-ZxfCKgZzWaN945xJrqY4Cgpf3M6k1EN8Ze8Fxr_JskQVXdWt1vb8LzWdnc2aMcn997kDskeFLpB8mHFLgi2GrACQE2Zb2fwSJzhZyLF2ayyTrRHfK1GssE0bMvwEzlSfLuzHc9Cv7Oh3usQ1D9a0VN1_OLK43aBq8yHPHPQCTBhgRfyWp8rOvpF2-9R5WGJTAyV5omAm167mbM10QGX0YMI1UiOiEqBrKZ7rm2aXhmyHBu61HiOe_PEvrqG8qFq0tfhAqO6PNKTfWiHAAbkg8oUO9kXetkxqsmJZ-nNnWmuEORiE0SKD1ZXApiR7hXc6ajv8gqQicxBeXxMV_pbF8zhc8L5eb10YNwOT9FPRHRqrOBFMx6vp7IS4l6mf3Q4lPXncI8H28QTwonzwVlEuL8b6EsggPKyx0Oiay64G5cXcZkDLJnCrTYOFDg0PbrQcEKzH1EFSYBKCnLcBf1DPzjweh6fYAPKA5WL0PY36zVpa5OxV7GtEV-lfF7uVLfXpyWHjV-1emyd22Xr3C1PKGKDYHAdPyHA4FVFF_0CYcf5eXDs6SKAfJfnTVCCLeKnPHkOfFMaHGvTTHdtvspkKmIsqaWHwC92vJqd-WHnhyhsVNOvIT6rKe7L17d5OyY2YFogTcY_rvQW1N9yDRS1bA6X2NODkIiMQkxXKIy5450bP_fuJ9Kk9SLoSHmhU2xtldPNraGajzhohs48XeWxsywoiOjl4e2wwYRCWKLFThcgbHsRlSIQpfx87tzDtOr_4WMvabkYcf403Aqw2fC_SPjUnlJbktsd81DKJpRygxPGfwzDObTM_Y354HVXiXcuYkSWffiDvvphWBKqwHJQHHsNH4RDTVizXPN5_0YgCoDKiiMHfbGhS8t2JC3VIzwTrmjgwhMnixNx669hB2jqDejigYRAjeXhs1MjbGVYowfOEXKmJSofvOcG2kIrK31JkucFJRQ8F61hnAdZh5ijUqAjUh_djGn3BghwX2srOnQPrHwcSepnzLiNrNBi5sLqRXBGBEpAd8U2Yo5ZbKVQglA1XwrXmgNUO6pPHS_hAb6qCrmrk0TWedAgDnZPVFKvSbKCp_ppDzuiUsPoaBw2n5PqKWrd6nYQr0qdKf9fNksYIFWVtU72cjRb6JkOJWQXimw4oe1Qg2X7xQzPiFY3R7_fCcvg5KWrwrZbKLolRP-DoFe7-UuHosoFBKp86JYW1aHcfsCqAlId6Hm4wutWocAa3mUJEIpwo-heYhm8YdJPfKmmRCzRhmCkDKCofRhKOTTMzTOa6iWZ9SqVQXhYNAug8icf3dTMzeWTe5uCfcoggfeJmGbB64oZSLQDfmLU6lXc65hUuFrNCzuRiiDctgRKCi1USq3bBD3Cwr3xMtlSnEc-WWbjpUMpqav6ws7V7Cp3jN55DBKaBI42hfCeWO2t_tDpQ7U7zX-S2JqEwnC-pcTcD44opOS-2AJDrH0_vQ7DDPSJ9hId75TDU4b8rLPXPZYBghvsC0CTyqCLJVPLHQhs92y1WDddwk1CzURoPIw6LlspCTtUnlBTSxGSxvBVDX0rjjmzzNifZImSOGN3E9EpHgJIdfPZ3B9PHkMSBOT6eqLupV4TyMiFABbT63Z_b3gWjfSispFJdiBdN6PiKWva6bltL_RFR82tcaMrr0wdHHZd0xfphp8JehW3bto3mI1UoNDKQWTb8kKNUM9Nu8rHNqzBcfV-RvEX-PDGpEfgaPN7LTrOASxpB6wLCvPeLVbH8TOxG-eHlQdhgTElVsfLKE_lTrEdrUgXVBsk6X9R4DXBLXtZmvkEfySt1cK-tsXLJwUThDn9an_Y4r73ryal8Cid0Dq3BlieAnSGapMZxEHDPRRCvLUvpP9xQQ6yYJ1DHowsIeqdAEJGQDtgV9caytDOZ6R7sAmrrMWksFOIT-Osat5IqeSw1lcnLpKjhfnqGFkMRlPB-tfSfi4uYiydDgOlGwdKAHflLO_CN9wX4RdrR6vBbrkKFOXqctjIRLXlRgsSrMrj5SR2vKJbqpQy6SQsUZe8YGkZU-VJWWkH2G8ItS3X3QvbuNKZuj5eK9hQj3yakfC2Eg9GcdaFM4kBbrInLBDoUZRx8WgWDEzlieDVuVLWVQeXf0wTHRQEImETJlrt4st61nOlzV7D6h-kXCuf49d0r5-Vh7Vo0ypsjlNw10M6s3EXhwOBy62KfTn75f0NxtMQwhtAoXhrV1xXI_A_ZxYRXK6ngYQnsda5aej3kxNB2DGurQhRwsz_U_Q1Qksz7rE4wgocuKCtSpHu4tn1mfVRXSttkJo-l9-V7BwPd1qz8j80lhBYFy3)](https://editor.plantuml.com/uml/dLhRSjl84NtNLqnKPLjAoAMzikBTrDRMKgHk4IdH8crddr13O4WY0Z3O6O0odSfhFY2Vc2_9wHbSEQ2sQlrYeZ7JtTFJVVe2_Q8phh8yZex-52P-b0U2_JHwFnYzzqOoJcKYakpdewCip2B1AWeRXtojUCpwR7Wxc4xOKFcRC1D-bYl1JgPo6KPXjXj9bPuU7Ks6lpvyMdYBXvatVlXoVmBI6tRvDHCguH4BUCQPbhdoXJwQxtGcOWylJvxuwedtsF4mvVv6i3jwFCRpvPOKq9aIF0wJzV5fSvC-ynH_nghv6RjGClac1lCmsWerk9PHm2Py9nGnUUJFXU1CAhuMRIwXpBnL94I6bRTomJwBJUZZ_5T4e-tdR-_OrX9rZttuxlif4wIM7WHyTspEDoRkjybQw2oK2NlDhWGtrfb3ec0NCay2hdP78vbaF4o4yahI2IdcHQGgH1taSvciiKqeOmFshoE6VzK5dV1GhIBvNDjlQ0diB-m2XZkkNj2lXUA9NaaLQwCs3j1cbeMnq3wF1At5xpdzPkEBu-OpFTYp6H8K4ztinikJbJs39vC8Py36jd4U39aOZdS9ZwMLz2Xur2TLMB5Tiv_UlONEinz_X2F6FC551covOtFycF8dNFKBebUhRjcMVcnzQCRLRxczyvkGV2N4KMlvi1dB5AxFEcBRQgMajP9vgXk2hWt1IAWKnKEkwS8Bj-gnRvAqUyQU3T6DVrMI8UpVv6K8lKKXdyt2L93gB_fMgItaJISFgNQtwmvlIejtdaISmnCLXocQ-ZTsasTzcTD_3zLYcAeKp9wbUY9Fr8x1ZDzlUHJY1tozTFxF5OMONYFkCw172h0nH6j8I8evekEtd1FoC3pxJww8pIuLAkM0BW7uyRAyiCLDYyuMXawCBn26EkG9UqZXUk6tIe_pjpXIo2DShE0gsX6If6cN7on3hhr043hQKrs0mCObeUK7R1Hn5QvsnlT5B06oAVo1GRKNJbNQrlkdN6eRpzRMVyTpc_yybSQRFxnznNof0QHyYvKEJqIAW8qLmYt9F0ZmdwobBYigkOwXEfuy5J2Dht4TI2tXYliPt5ff7DRQnxgk34J47iKQSQLsBpgjAXOHw_Qkrx1Z6iaTwUFwBGuHqthl80D7zSzMJ-28sGbhyZHL4bvPEQxhjvKAdW_bbOmY2zqLdOqgEWcPxRADlVWHG8lKkeXoqOTh2_Z7S731CeBx3byImLf0I9o6LaHziVT2DaBlQdRs_V_-yz_R-yKFFVR-AwCjW0qwcW4jubDUn2YIUO0Kin9A93vmKAXjY6JyufNujCaBoqrqb0DiEk0aGAmcWGT5XCzrPdqT57PLK0gd-iVrXOIF3YRpnPIUtvttaVAPtKv0Rp5oEfnT8XMSlt9lXj97w7iftD6wxzXIsCnI6bAG6H_po0AObPEd0K5NZz8CvPa8Juc_SwJ0ia68MDuABuQPi8XRayog5snQlo01jrf61ahCaOtmyf0V-k_UepRPiHKF8qeNSBybjmLL1sJ6y80MkemDgOqllpvC7hO_z27UECbi8pF9u7hHJeSutyy_dhzYtFTp1BGhGub8-aPPtBSF2ivZqd59ngKNP6B-iJy181huUPoOD438YVYfDZFaK3-tvtVHacT0u1sE1Eoh4i65fU9K5TMMSKaWuyA6jaQ82-ZxfCKgZzWaN945xJrqY4Cgpf3M6k1EN8Ze8Fxr_JskQVXdWt1vb8LzWdnc2aMcn997kDskeFLpB8mHFLgi2GrACQE2Zb2fwSJzhZyLF2ayyTrRHfK1GssE0bMvwEzlSfLuzHc9Cv7Oh3usQ1D9a0VN1_OLK43aBq8yHPHPQCTBhgRfyWp8rOvpF2-9R5WGJTAyV5omAm167mbM10QGX0YMI1UiOiEqBrKZ7rm2aXhmyHBu61HiOe_PEvrqG8qFq0tfhAqO6PNKTfWiHAAbkg8oUO9kXetkxqsmJZ-nNnWmuEORiE0SKD1ZXApiR7hXc6ajv8gqQicxBeXxMV_pbF8zhc8L5eb10YNwOT9FPRHRqrOBFMx6vp7IS4l6mf3Q4lPXncI8H28QTwonzwVlEuL8b6EsggPKyx0Oiay64G5cXcZkDLJnCrTYOFDg0PbrQcEKzH1EFSYBKCnLcBf1DPzjweh6fYAPKA5WL0PY36zVpa5OxV7GtEV-lfF7uVLfXpyWHjV-1emyd22Xr3C1PKGKDYHAdPyHA4FVFF_0CYcf5eXDs6SKAfJfnTVCCLeKnPHkOfFMaHGvTTHdtvspkKmIsqaWHwC92vJqd-WHnhyhsVNOvIT6rKe7L17d5OyY2YFogTcY_rvQW1N9yDRS1bA6X2NODkIiMQkxXKIy5450bP_fuJ9Kk9SLoSHmhU2xtldPNraGajzhohs48XeWxsywoiOjl4e2wwYRCWKLFThcgbHsRlSIQpfx87tzDtOr_4WMvabkYcf403Aqw2fC_SPjUnlJbktsd81DKJpRygxPGfwzDObTM_Y354HVXiXcuYkSWffiDvvphWBKqwHJQHHsNH4RDTVizXPN5_0YgCoDKiiMHfbGhS8t2JC3VIzwTrmjgwhMnixNx669hB2jqDejigYRAjeXhs1MjbGVYowfOEXKmJSofvOcG2kIrK31JkucFJRQ8F61hnAdZh5ijUqAjUh_djGn3BghwX2srOnQPrHwcSepnzLiNrNBi5sLqRXBGBEpAd8U2Yo5ZbKVQglA1XwrXmgNUO6pPHS_hAb6qCrmrk0TWedAgDnZPVFKvSbKCp_ppDzuiUsPoaBw2n5PqKWrd6nYQr0qdKf9fNksYIFWVtU72cjRb6JkOJWQXimw4oe1Qg2X7xQzPiFY3R7_fCcvg5KWrwrZbKLolRP-DoFe7-UuHosoFBKp86JYW1aHcfsCqAlId6Hm4wutWocAa3mUJEIpwo-heYhm8YdJPfKmmRCzRhmCkDKCofRhKOTTMzTOa6iWZ9SqVQXhYNAug8icf3dTMzeWTe5uCfcoggfeJmGbB64oZSLQDfmLU6lXc65hUuFrNCzuRiiDctgRKCi1USq3bBD3Cwr3xMtlSnEc-WWbjpUMpqav6ws7V7Cp3jN55DBKaBI42hfCeWO2t_tDpQ7U7zX-S2JqEwnC-pcTcD44opOS-2AJDrH0_vQ7DDPSJ9hId75TDU4b8rLPXPZYBghvsC0CTyqCLJVPLHQhs92y1WDddwk1CzURoPIw6LlspCTtUnlBTSxGSxvBVDX0rjjmzzNifZImSOGN3E9EpHgJIdfPZ3B9PHkMSBOT6eqLupV4TyMiFABbT63Z_b3gWjfSispFJdiBdN6PiKWva6bltL_RFR82tcaMrr0wdHHZd0xfphp8JehW3bto3mI1UoNDKQWTb8kKNUM9Nu8rHNqzBcfV-RvEX-PDGpEfgaPN7LTrOASxpB6wLCvPeLVbH8TOxG-eHlQdhgTElVsfLKE_lTrEdrUgXVBsk6X9R4DXBLXtZmvkEfySt1cK-tsXLJwUThDn9an_Y4r73ryal8Cid0Dq3BlieAnSGapMZxEHDPRRCvLUvpP9xQQ6yYJ1DHowsIeqdAEJGQDtgV9caytDOZ6R7sAmrrMWksFOIT-Osat5IqeSw1lcnLpKjhfnqGFkMRlPB-tfSfi4uYiydDgOlGwdKAHflLO_CN9wX4RdrR6vBbrkKFOXqctjIRLXlRgsSrMrj5SR2vKJbqpQy6SQsUZe8YGkZU-VJWWkH2G8ItS3X3QvbuNKZuj5eK9hQj3yakfC2Eg9GcdaFM4kBbrInLBDoUZRx8WgWDEzlieDVuVLWVQeXf0wTHRQEImETJlrt4st61nOlzV7D6h-kXCuf49d0r5-Vh7Vo0ypsjlNw10M6s3EXhwOBy62KfTn75f0NxtMQwhtAoXhrV1xXI_A_ZxYRXK6ngYQnsda5aej3kxNB2DGurQhRwsz_U_Q1Qksz7rE4wgocuKCtSpHu4tn1mfVRXSttkJo-l9-V7BwPd1qz8j80lhBYFy3)
 
-┌─────────────────────────────────────────────────────────────────────┐
-│                    DATA INGESTION & PREPARATION                     │
-├─────────────────────────────────────────────────────────────────────┤
-│                                                                     │
-│  Kafka Topics ───────► Feature Store (Feast/Tecton)                │
-│  • bookings.*           • Real-time features                        │
-│  • vehicles.*           • Historical aggregates                     │
-│  • weather.data         • Feature versioning                        │
-│  • events.data                                                      │
-│                                                                     │
-│  S3 Data Lake ────────► Offline Training Data                       │
-│  • Historical bookings  • Anonymized datasets                       │
-│  • Telemetry archives   • Regional partitioning                     │
-│  • Customer behavior    • Compliance-filtered                       │
-│                                                                     │
-└─────────────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│                    MODEL TRAINING PIPELINES                         │
-├─────────────────────────────────────────────────────────────────────┤
-│                                                                     │
-│  Airflow DAGs (Batch Training):                                    │
-│  ┌────────────────────────────────────────────────────┐            │
-│  │  1. Demand Forecasting (Weekly)                    │            │
-│  │     • Model: XGBoost / LSTM                        │            │
-│  │     • Features: Time, weather, events, history     │            │
-│  │     • Output: 15-min demand predictions per 500m   │            │
-│  │                                                    │            │
-│  │  2. Predictive Maintenance (Weekly)                │            │
-│  │     • Model: Isolation Forest + LSTM               │            │
-│  │     • Features: Battery voltage curves, vibration  │            │
-│  │     • Output: 7-14 day failure predictions         │            │
-│  │                                                    │            │
-│  │  3. Vision Models (Monthly)                        │            │
-│  │     • Model: MobileNetV3 + YOLOv8-nano             │            │
-│  │     • Training: Labeled damage images              │            │
-│  │     • Output: Damage classification models         │            │
-│  └────────────────────────────────────────────────────┘            │
-│                                                                     │
-│  MLflow / Weights & Biases:                                        │
-│  • Experiment tracking                                             │
-│  • Model versioning                                                │
-│  • Hyperparameter tuning                                           │
-│  • Performance metrics                                             │
-│                                                                     │
-└─────────────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│                    MODEL REGISTRY & DEPLOYMENT                      │
-├─────────────────────────────────────────────────────────────────────┤
-│                                                                     │
-│  Model Registry (MLflow):                                          │
-│  • Versioned models per region                                     │
-│  • Model metadata (training data, metrics, artifacts)              │
-│  • Staging → Production promotion workflow                         │
-│  • Rollback capability                                             │
-│                                                                     │
-│  Deployment Strategies:                                            │
-│  • Canary rollouts (5% → 25% → 100%)                               │
-│  • A/B testing infrastructure                                      │
-│  • Shadow deployment for validation                                │
-│  • Blue-green for zero-downtime updates                            │
-│                                                                     │
-└─────────────────────────────────────────────────────────────────────┘
-                              │
-                              ▼
-┌─────────────────────────────────────────────────────────────────────┐
-│                    INFERENCE SERVICES (Runtime)                     │
-├─────────────────────────────────────────────────────────────────────┤
-│                                                                     │
-│  ┌───────────────────────────────────────────────────┐              │
-│  │  Demand Forecasting Service                       │              │
-│  │  • Input: Location, time, weather, events         │              │
-│  │  • Model: XGBoost/LSTM (region-specific)          │              │
-│  │  • Output: Demand probability distribution        │              │
-│  │  • Latency: <500ms                                │              │
-│  │  • Publishes: predictions.demand_forecast         │              │
-│  └───────────────────────────────────────────────────┘              │
-│                                                                     │
-│  ┌───────────────────────────────────────────────────┐             │
-│  │  Dynamic Pricing Engine                           │             │
-│  │  • Input: Demand forecast + current supply        │             │
-│  │  • Logic: Supply-demand multipliers               │             │
-│  │  • Output: Zone-specific pricing                  │             │
-│  │  • Latency: <100ms                                │             │
-│  │  • Publishes: pricing.updated                     │             │
-│  └────────────────────────────────────────────────────              |
-│                                                                     │
-│  ┌───────────────────────────────────────────────────┐             │
-│  │  Predictive Maintenance Service                   │             │
-│  │  • Input: Vehicle telemetry streams               │             │
-│  │  • Model: Isolation Forest + LSTM                 │             │
-│  │  • Output: Failure probability + lead time        │             │
-│  │  • Latency: Near real-time (streaming)            │             │
-│  │  • Publishes: predictions.maintenance_alert       │             │
-│  └───────────────────────────────────────────────────┘             │
-│                                                                     │
-│  ┌───────────────────────────────────────────────────┐             │
-│  │  Vision AI Service (Damage Detection)             │             │
-│  │  • Input: Pickup/dropoff photos                   │             │
-│  │  • Model: MobileNetV3 + YOLOv8-nano               │             │
-│  │  • Processing: Edge (privacy) + Cloud (backup)    │             │
-│  │  • Output: Damage classification + confidence     │             │
-│  │  • Latency: <2s                                   │             │
-│  │  • Publishes: photos.verified                     │             │
-│  └───────────────────────────────────────────────────┘             │
-│                                                                     │
-│  ┌───────────────────────────────────────────────────┐             │
-│  │  Conversational AI (MCP Integration)              │             │
-│  │  • Input: User text/voice messages                │             │
-│  │  • NLU: Multi-provider LLM (OpenAI/Anthropic)     │             │
-│  │  • Intent extraction + entity recognition         │             │
-│  │  • MCP command execution (bookings, queries)      │             │
-│  │  • Output: Natural language responses             │             │
-│  │  • Latency: <3s                                   │             │
-│  └───────────────────────────────────────────────────┘             │
-│                                                                     │
-└─────────────────────────────────────────────────────────────────────┘
-```
+## Component Overview
+
+This C3 diagram has been significantly enhanced to include:
+
+- **10+ ML Models** (was 5): Added relocation incentive, battery degradation, route optimization, customer segmentation, churn prediction, sentiment analysis
+- **Edge ML Section**: Collision detection, geofence monitoring, tamper detection on vehicles
+- **MLOps Pipeline Details**: Training, monitoring, deployment strategies
+- **RAG Knowledge Base**: OpenSearch with embeddings for conversational AI
+- **Multi-Region Deployment**: Region-specific models and failover
+- **Model Monitoring**: Drift detection, bias monitoring, A/B testing
+
+## Related Documents:
+- [C1: System Context](C1_System_Context.md)
+- [C2: Container Diagram](C2_Container_UPDATED.md)
+- [C4 Diagrams Collection (Mermaid)](C4_DIAGRAMS_MERMAID.md)
+- [ADR-14: MLOps Pipeline](./ADR/ADR_14_MLOps_Pipeline.md)
+- [ADR-16: Data Lakehouse Strategy](./ADR/ADR_16_Data_Lakehouse_Strategy.md)
+
+---

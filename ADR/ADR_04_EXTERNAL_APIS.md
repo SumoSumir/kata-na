@@ -24,20 +24,18 @@ Alternatives considered:
 4. **Orchestrator-based integration:** As detailed in [ADR-05](./ADR_05_Orchestrator.md), an orchestrator could manage API calls, but this might centralize failure points.
 
 ## Decision
-Implement a separate orchestrator by business function/data required which integrates with external APIs and provides normalized data to our services.
+Implement a separate **orchestrators** (see [ADR-05](ADR_05_Orchestrator.md) for orchestrator pattern) by business function/data required which integrate with external APIs and provide normalized data to our services while dynamically scaling up/down the service based on requests in queue using KEDA.
 
-Key design:
-- **Providers:** OpenWeatherMap (primary), Tomorrow.io (fallback); Calendarific for holidays; PredictHQ for events.  
-- **Caching:** Redis for low-latency responses, S3 for historical storage. The caching strategy will be tiered:
-    - **Real-time data (e.g., traffic, current weather):** Fetched frequently with a short TTL (Time To Live).
-    - **Semi-static data (e.g., event schedules, weather forecasts):** Fetched less often, with a medium TTL.
-    - **Static data (e.g., public holidays):** Fetched infrequently with a long TTL.
-- **Fallback logic:** Circuit breaker pattern for failed providers.  
-- **Normalized schema:** For consistent access by ML and analytics services.
+**Unified Data Schema:**
+External data normalized into consistent format:
+- Data type classification (weather/events/traffic/holidays)
+- Timestamp and location (H3 index, lat/lon)
+- Type-specific attributes (temperature, event details, traffic metrics)
+- Enables consistent processing across all AI/ML models and services
 
 ## Consequences
 ✅ **Positive:**
-- **Consistency:** Unified schema across providers and models.
+- **Consistency:** Unified schema across providers and models for consistent access by ML and analytics services.
 - **Reliability:** Resilient against provider outages.
 - **Efficiency:** Cached data reduces API cost and latency.
 - **Reusability:** Enables historical reprocessing for retraining.
@@ -50,4 +48,4 @@ Key design:
 
 AI-Specific Impacts:
 - Weather and event data used as regressors in demand and battery models
-- Historical archives enable model drift analysis and retraining consistency  
+- Storage of API responses allows historical archives enable model drift analysis and retraining consistency

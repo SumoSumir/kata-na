@@ -19,15 +19,15 @@ Requirements:
 - Integration with Prometheus, Grafana, and Slack alerts
 
 Alternatives considered:
-1. **Airflow only:** Simple, mature DAG orchestration, but limited for real-time tasks  
+1. **Airflow only:** Simple, mature DAG orchestration, but limited for real-time tasks, doesn't support distributed ETL (needed at scale) without Apache Beam.
 2. **Temporal only:** Reliable event-driven orchestration, but lacks rich DAG visualization  
 3. **Kubernetes CronJobs:** Simple setup, but no dependency tracking or retry orchestration
 
 ## Decision
-Adopt a **hybrid orchestration model** using **Airflow** for batch pipelines and **Temporal** for real-time, event-driven AI workflows.
+Adopt a **hybrid orchestration model** using **Apache Airflow & Apache Beam** for batch pipelines and **Temporal** for real-time, event-driven AI workflows.
 
 Architecture:
-- Airflow: Daily ETL, weekly retraining, data validation, and reporting
+- Airflow+BEAM: Daily ETL, weekly retraining, data validation, and reporting
 - Temporal: Event-triggered workflows, retraining triggers, real-time inference orchestration
 - Both integrated with common monitoring and alerting stack
 
@@ -35,12 +35,12 @@ Architecture:
 ✅ **Positive:**
 - Unified orchestration for both batch and event-driven AI workflows  
 - Reliable retries and task recovery (Temporal persistence)  
-- Clear DAG management and visualization (Airflow UI)  
+- Clear DAG management and visualization (Airflow & Beam UI)  
 - Scalable worker-based execution  
 - Simplified dependency tracking and logging
 
 ❌ **Negative:**
-- Two systems to manage (Airflow + Temporal)  
+- Three systems to manage (Airflow + Beam + Temporal)  
 - Added operational complexity and setup effort  
 - Temporal workflow definitions require SDK familiarity  
 - Higher infra overhead compared to a single orchestrator

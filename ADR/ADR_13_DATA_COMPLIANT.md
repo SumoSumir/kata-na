@@ -1,4 +1,4 @@
-# ADR-14: Data Residency and Classification Compliance
+# ADR-13: Data Residency and Classification Compliance
 
 ## Status
 Accepted

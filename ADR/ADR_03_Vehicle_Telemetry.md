@@ -84,17 +84,38 @@ Adopt a **hybrid edge-cloud vehicle telemetry architecture** with intelligent wo
 
 **3. Predictive Maintenance (Local Aggregation + Cloud Training)**
 
-- **Edge aggregation:** Vehicles continuously collect, compress & stream minimal sensor data at short intervals:
+**Edge Processing & Data Collection:**
+- **IoT Enabled** on vehicle for local processing (see [ADR-11](ADR_11_IoT_Enabled_Vehicles.md))
+- **Local aggregation:** Vehicles continuously collect, compress & stream minimal sensor data at short intervals:
   - Battery: voltage curves, temperature profiles, charging cycles, degradation rate
-  - Operational: error codes, usage intensity, environmental conditions (temperature, humidity), GPS.
-- **Periodic uploads:** Compressed, anonymized telemetry aggregates sent to cloud every couple of hours or when on WiFi.
-  - E.g. Mechanical: vibration spectra (FFT), brake wear indicators, suspension stress
-- **Cloud-based training:** Fleet-wide models trained on aggregated data to predict:
-  - Battery failure (7-14 day advance warning)
-  - Brake replacement needs (distance-based prediction)
-  - Component degradation patterns (personalized maintenance schedules)
-- **Model deployment:** Updated predictive models pushed to vehicles via OTA updates (staged canary rollout)
-- **Model specs:** Time-series forecasting (LSTM/Transformer), anomaly detection (Isolation Forest), fleet-level ensemble models
+  - Mechanical: vibration spectra (FFT), brake wear indicators, suspension stress
+  - Operational: error codes, usage intensity, environmental conditions, GPS
+- **Edge preprocessing:** compute rolling statistics and compress data
+
+**Cloud Data Pipeline:**
+- **Periodic uploads:** Compressed telemetry sent periodically (WiFi preferred) or on cellular
+  - Protocol: MQTT over TLS 1.3 to AWS IoT Core
+  - Payload: Protobuf-serialized metrics for efficient transmission
+- **Data flow:** AWS IoT Core → Kafka → Apache Airflow + BEAM → S3 (Data Lakehouse Bronze Layer)
+  - IoT Rules route telemetry to Apache Airflow + BEAM for batching and Parquet conversion
+  - Data Lakehouse transformation pipeline (Bronze → Silver → Gold) - see [ADR-15](ADR_15_Data_Lakehouse_Strategy.md)
+
+**ML Training Pipeline (AWS SageMaker):**
+- **Training data:** Historical fleet-wide telemetry from Data Lakehouse Silver layer
+- **Models:**
+  - **Battery failure prediction:** LSTM time-series model for 7-14 day advance warning
+  - **Brake wear prediction:** XGBoost regression for distance & accelerometer based maintenance scheduling
+  - **Anomaly detection:** Isolation Forest for detecting unusual component behavior & providing personalized maintenance schedules
+- **Model deployment:** SageMaker Model Registry → firmware/model component OTA updates
+  - Phased rollout strategy for safety (canary → gradual deployment)
+  - Edge-optimized models (TensorFlow Lite) for local inference
+
+**Inference & Alerting:**
+- **Edge inference:** runs predictions on local data
+  - Battery health scores computed locally
+  - Critical predictions trigger immediate cloud alerts such as accidents
+- **Cloud aggregation:** SageMaker batch transform jobs for fleet-wide predictions
+- **Fleet Operations Dashboard:** For live metrics - Grafana is used. For BI showing maintenance forecasts and priorities OpenSearch Dashboard is used.
 
 ### Operational Practices
 
@@ -107,7 +128,7 @@ Adopt a **hybrid edge-cloud vehicle telemetry architecture** with intelligent wo
 
 **Privacy and Compliance**
 
-- **Data minimization:** Only collect and transmit necessary data (stream at regular intervals for time sensitive data); raw images ephemeral by default
+- **Data minimization:** Only collect and transmit necessary data (stream at regular intervals for time sensitive data)
 - **Consent management:** Users explicitly opt-in to image uploads and data sharing for model training
 - **Regional compliance:** Separate data retention policies per jurisdiction (GDPR, DPDP Act, etc.)
 - **Encryption:** End-to-end encryption for all telemetry data in transit and at rest
@@ -118,13 +139,14 @@ Adopt a **hybrid edge-cloud vehicle telemetry architecture** with intelligent wo
 - **Continuous monitoring:** Track model performance metrics (latency, accuracy, drift, false positive/negative rates)
 - **Automated retraining:** Trigger retraining pipelines when drift detected or performance degrades
 - **Model cards:** Document training data, performance benchmarks, failure modes, and ethical considerations
-- **Explainability:** Generate SHAP values or attention maps for critical predictions (collision, damage classification)
+- **Explainability:** Generate SHAP values or attention maps for critical predictions (collision, damage classification). Additionally since we're not using GenAI the results are deterministic.
 
 **Cost Optimization**
 
 - **Adaptive telemetry:** Adjust upload frequency based on vehicle status (stationary vs. active, WiFi vs. cellular)
 - **Compression:** Use efficient encoding (Protocol Buffers, AVRO) and compression (gzip, Brotli) for uploads
 - **Batch processing:** Group telemetry uploads to reduce API overhead and connection costs
+- **Using light models:** at the edge & in the backend instead of gen-ai models makes it significantly cheaper to operate
 
 ## Consequences
 

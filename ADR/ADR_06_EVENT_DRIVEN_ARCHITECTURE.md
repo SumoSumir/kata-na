@@ -33,28 +33,47 @@ Key requirements include:
 ## Decision
 Implement an **event-driven architecture** using **Apache Kafka** as the central event bus.
 
+**Kafka Configuration:**
+- **Cluster:** Multi-broker cluster for high availability
+- **Partitioning:** Topic partitioning strategy for parallel processing
+- **Replication:** Multi-replica configuration for durability
+- **Retention:** Event retention policy balancing cost and replay capability
+- **Compression:** LZ4 compression for efficient storage and transfer
+
 ### Core Event Topics
 - `bookings.created` – New booking initiated  
 - `bookings.completed` – Rental ended  
 - `vehicles.telemetry` – GPS location updates (30s interval)  
-- `vehicles.battery_status` – Battery level updates (60s interval)  
+- `vehicles.battery_status` – Battery level updates (60s interval) 
 - `customers.app_events` – User interactions  
 - `photos.uploaded` – Return validation photos  
 - `predictions.generated` – AI prediction results  
 - `operations.task_completed` – Staff task completion  
 
 ### Event Schema
-- Use **Avro schemas** with **Schema Registry** for schema evolution  
+- Use Avro schemas with Confluent Schema Registry for schema evolution  
 - Include **parent IDs** for distributed tracing (opentelemetry)  
 - Timestamp all events with **event time** (not processing time)
+- Schema evolution with backward compatibility
+- Automatic schema validation on publish
+- Schema evolution with backward compatibility
+- Automatic schema validation on publish
 
 ### Processing Patterns
 - Real-time stream processing using **Kafka Streams**  
 - **Event sourcing** for audit trail  
-- **CQRS** pattern for read-optimized views  
+- **CQRS** pattern for read-optimized views 
 
 ### Event Flow
-`Producer → Kafka Topic → Multiple Consumers`  
+```
+Producer (Microservice) 
+  → Kafka Topics with partitioning
+  → Multiple Consumers:
+      ├─ TimeScaleDB (time series data processing)
+      ├─ Apache Airflow + Beam (ETL + S3 Data Lakehouse layers)
+      ├─ SageMaker (ML model)
+      └─ Microservices (async updates)
+```
 (asynchronous, parallel processing)
 
 ## Consequences

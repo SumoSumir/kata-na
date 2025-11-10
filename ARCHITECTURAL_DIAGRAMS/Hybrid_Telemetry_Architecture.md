@@ -88,14 +88,14 @@ This diagram details the hybrid edge-cloud architecture for processing vehicle t
 │  │  • Geofencing alerts (wrong location)              │            │
 │  │  • Trip reconstruction from GPS points             │            │
 │  └────────────────────────────────────────────────────┘            │
-│                                                                     │
-│  Batch Processing (Airflow):                                       │
+│                                                                    │
+│  Batch Processing (Airflow+BEAM):                                  │
 │  ┌────────────────────────────────────────────────────┐            │
 │  │  • Daily: Historical telemetry ETL to S3           │            │
 │  │  • Weekly: Feature extraction for ML training      │            │
 │  │  • Monthly: Vehicle health reports                 │            │
 │  └────────────────────────────────────────────────────┘            │
-│                                                                     │
+│                                                                    │
 │  Data Storage:                                                     │
 │  ┌────────────────────────────────────────────────────┐            │
 │  │  TimescaleDB (Time-Series):                        │            │

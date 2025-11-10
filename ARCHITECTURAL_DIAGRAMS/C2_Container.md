@@ -1,107 +1,43 @@
 # C2: Container Diagram
 
-This diagram zooms into the MobilityCorp platform, showing the high-level containers (applications, microservices, data stores) that constitute the system.
+This diagram zooms into the MobilityCorp platform, showing the high-level containers (applications, microservices, data stores) that constitute the system. This updated version includes Edge Computing, Orchestrator Layer, Data Lakehouse, and all missing components from the review.
 
-```
-┌────────────────────────────────────────────────────────────────────────┐
-│                      CONTAINER ARCHITECTURE                            │
-└────────────────────────────────────────────────────────────────────────┘
+[![C2 image](https://img.plantuml.biz/plantuml/svg/ZLZTTXet4BxdALGk4ll4phP9UdhJqnCCs2K6cm2fcoiViIj0jNQrbGGEwUbjdw1Fs2VfZ7xs5sBxmglLZhuPZURd4--reSfiKz7vZcUns2QC_Dn_5_NVtVTbPYZFcFgbqp7S24QA6JBWTAreIix9H2wvu6RVboedKq7DIggqqtb9fanfcMb23J4oxxZNatYhZKoPEYFTlXzsOMnH6A5vJhOQfaw3F5YtMe7079yeUPipHGr7PCDeMahI9EKP2FJmYPBplJOi9NOUnC2a2HXFScyZMSfjbb2rxpZ1-ml_VX8aWbtDtNLFoLyT0dyloQK2bx0iGSi5ZvrXzblXgvFKxgtSP2_FqRmPex4XDx1anxeLTvolQCopDKaBbmHWs4GTMUOweNfJzye0PfQIggHGqWt-8x8Kus2t0bMiXMeTbajbg0Zk95FxMaUik9Thut1RiDvFlUc8N5737kc-gItdwqVKKqeW-hNCrb7lRauQyxUzhTcyYJxSBSu8g6H4y9GRyDSP4P8cP4a5pQp_Jdxu_feezcUaMNnQjsOa5qUiuT9OQoeIg1KDQKobY_7y6IOSiS4R0c752CJxZiUi6JPBAHyiQFV2ZSZS2QBs6vcmrtze7FvAiqGm3MeGo9ykp16ZUAvRfvlJVSeo0mkdRbI5_K1t59zJ9S4W3QXUl8s3QGgId-1nn33xAQKPNJEh1ssYS7ejg8TzZ2V-kN_8b542Qo43oOuflZgM2JksuR5Dij_S278zA4QKAud_BmLZfc9I2uPdUglWy11e5CPLg-QmSa8VND4AdYzMaLnnU_1Bgbb281syNL2g16WqQjzIcKbJRClwhtmzujV9LXX-7czebZ51gklRfmGb7TstSnloOpBCrl3L7lJUR6Jcybh8EEIm5zJrjBbLyORPJ9Ug6QsKoyfNJ9bHD1vFQclg2YzO0b7sGFxxvry2vIlhZSYASY5tjlotWhO17uAtYH_2PexHponuBzcpx3XsIlC6zeJcHt6lf5pRwCgr1OV1XVpI0eNIcA-s6SPrBwS0HNfShOHy9A-8dxZ0xbLynz6TL0zMfhG7Z-C56Ix6s4PrJ4MphewYoVXO1ObbjgCSMmiCe4bQE2fWKNaIqPXcw_w6yjgPl2AptbLhKmc3r4b0R607v1AgLqmrbhvMRln-1LLBcsWyNqpQn-dI197s6KrvJAPk1bUEQRfCQ5H3myyCkfU1IllrS0L8ARQUp2VlLB64npRO9-M7bfMzJAPKx4d238iFmguODLiehH06Y7lfNiaStsjmaTsA75pOBfK9M0rkl5sjx2Z0jCs6l1QAhR63xYr7W7SoynCjWzrdF4mm5XrMYuO1DHHBJoCG1iiJkbLIKNGC7CfQiVd7iKtwmHmV2wXUciO-F190QTe948dTNx8Cf-QtUYCzrYSiURRz0mZuTBadXUa4Q1Efkl80FfwO1foXm93gsnoPuPmbHo57N2J4-7e6SQ_reR87Q10fpEOBRY-CdSNuUWufmvc5NeJIJ4v-Ulrc4YLqVte04AXJfXc5p7HqAvlRbwvjEJ7iYJXqI1poaCb7mP8riusWVaR37POjE5n8VsmLc4ZeyMPFfAi7MbQFQtojLui6KBi4lSNWUMk3WepX53OIUhQDgBVHW0a_QzCUMEnN5isvWCYAhgH8YA1x23AapSxi2OGRR39OVBkqPCEHurP81r4RiCMw5_LLdbULYHwLNetwGcwJHsfWE8NlQh1r2mR00O2xzE8OEcuC2TCJJ1a8cmcS88_HuB-HwG-_k3Wash9K7JW-p2F7ympFSmKR1Zy2KriXFm28YZ3xOjgCoTD0NJQQCzTbwckXisZVJdmdruqMSeR_bxP_53Sck2sHLRXMA2PSPzy0b-j0ZxuVoCVgBQguN43wEJguM4pdW5V8-XjKULSuAkblK7N-tvJkL2uzO6cLs1T0mQWgjuVy4uVL5fOzJxnctZUNT6ht3hIsQ9I05cuU9S-UoQrncvqDvujeFPlsdU8WMaR2awAU7ZyfLnBN9qMBTbwNT1lr0UOAi2lbRfV5za95cMwNWclW5uJjBBD7xctBYzDMRF8uwO8RpHQcxTAAdQq5zUG9TuhQ4TLCR5En9pIs5lYKEwmBwL88WRQZWdjRJ1Pfx17zOKsjEM070EdGNohgRIdEeLmW9x00_b1ihKQMj-ELAcyfuYjF7Fql6EFGHedjenQapb4AbdOPE0TMgS6rDxakN3AnvqXNAC1pnEkKxF2A1lyfZBT4vzkofUtF4AxRqbpGARdJDpAe854pHXCTtIdkqn0PaDFgqluPWeNnWVOK3CTo7Y34qiXO2Y_kuwJAQfgexQvNtye5Ho3_0uVhWGNrYVeoHSUx--N7nSAhTT9EUOKeeQ-wPq6mC-vzllsqkByRBNwz7m-lXZU34vXz3nq2VrRy7m00)](https://editor.plantuml.com/uml/ZLZTTXet4BxdALGk4ll4phP9UdhJqnCCs2K6cm2fcoiViIj0jNQrbGGEwUbjdw1Fs2VfZ7xs5sBxmglLZhuPZURd4--reSfiKz7vZcUns2QC_Dn_5_NVtVTbPYZFcFgbqp7S24QA6JBWTAreIix9H2wvu6RVboedKq7DIggqqtb9fanfcMb23J4oxxZNatYhZKoPEYFTlXzsOMnH6A5vJhOQfaw3F5YtMe7079yeUPipHGr7PCDeMahI9EKP2FJmYPBplJOi9NOUnC2a2HXFScyZMSfjbb2rxpZ1-ml_VX8aWbtDtNLFoLyT0dyloQK2bx0iGSi5ZvrXzblXgvFKxgtSP2_FqRmPex4XDx1anxeLTvolQCopDKaBbmHWs4GTMUOweNfJzye0PfQIggHGqWt-8x8Kus2t0bMiXMeTbajbg0Zk95FxMaUik9Thut1RiDvFlUc8N5737kc-gItdwqVKKqeW-hNCrb7lRauQyxUzhTcyYJxSBSu8g6H4y9GRyDSP4P8cP4a5pQp_Jdxu_feezcUaMNnQjsOa5qUiuT9OQoeIg1KDQKobY_7y6IOSiS4R0c752CJxZiUi6JPBAHyiQFV2ZSZS2QBs6vcmrtze7FvAiqGm3MeGo9ykp16ZUAvRfvlJVSeo0mkdRbI5_K1t59zJ9S4W3QXUl8s3QGgId-1nn33xAQKPNJEh1ssYS7ejg8TzZ2V-kN_8b542Qo43oOuflZgM2JksuR5Dij_S278zA4QKAud_BmLZfc9I2uPdUglWy11e5CPLg-QmSa8VND4AdYzMaLnnU_1Bgbb281syNL2g16WqQjzIcKbJRClwhtmzujV9LXX-7czebZ51gklRfmGb7TstSnloOpBCrl3L7lJUR6Jcybh8EEIm5zJrjBbLyORPJ9Ug6QsKoyfNJ9bHD1vFQclg2YzO0b7sGFxxvry2vIlhZSYASY5tjlotWhO17uAtYH_2PexHponuBzcpx3XsIlC6zeJcHt6lf5pRwCgr1OV1XVpI0eNIcA-s6SPrBwS0HNfShOHy9A-8dxZ0xbLynz6TL0zMfhG7Z-C56Ix6s4PrJ4MphewYoVXO1ObbjgCSMmiCe4bQE2fWKNaIqPXcw_w6yjgPl2AptbLhKmc3r4b0R607v1AgLqmrbhvMRln-1LLBcsWyNqpQn-dI197s6KrvJAPk1bUEQRfCQ5H3myyCkfU1IllrS0L8ARQUp2VlLB64npRO9-M7bfMzJAPKx4d238iFmguODLiehH06Y7lfNiaStsjmaTsA75pOBfK9M0rkl5sjx2Z0jCs6l1QAhR63xYr7W7SoynCjWzrdF4mm5XrMYuO1DHHBJoCG1iiJkbLIKNGC7CfQiVd7iKtwmHmV2wXUciO-F190QTe948dTNx8Cf-QtUYCzrYSiURRz0mZuTBadXUa4Q1Efkl80FfwO1foXm93gsnoPuPmbHo57N2J4-7e6SQ_reR87Q10fpEOBRY-CdSNuUWufmvc5NeJIJ4v-Ulrc4YLqVte04AXJfXc5p7HqAvlRbwvjEJ7iYJXqI1poaCb7mP8riusWVaR37POjE5n8VsmLc4ZeyMPFfAi7MbQFQtojLui6KBi4lSNWUMk3WepX53OIUhQDgBVHW0a_QzCUMEnN5isvWCYAhgH8YA1x23AapSxi2OGRR39OVBkqPCEHurP81r4RiCMw5_LLdbULYHwLNetwGcwJHsfWE8NlQh1r2mR00O2xzE8OEcuC2TCJJ1a8cmcS88_HuB-HwG-_k3Wash9K7JW-p2F7ympFSmKR1Zy2KriXFm28YZ3xOjgCoTD0NJQQCzTbwckXisZVJdmdruqMSeR_bxP_53Sck2sHLRXMA2PSPzy0b-j0ZxuVoCVgBQguN43wEJguM4pdW5V8-XjKULSuAkblK7N-tvJkL2uzO6cLs1T0mQWgjuVy4uVL5fOzJxnctZUNT6ht3hIsQ9I05cuU9S-UoQrncvqDvujeFPlsdU8WMaR2awAU7ZyfLnBN9qMBTbwNT1lr0UOAi2lbRfV5za95cMwNWclW5uJjBBD7xctBYzDMRF8uwO8RpHQcxTAAdQq5zUG9TuhQ4TLCR5En9pIs5lYKEwmBwL88WRQZWdjRJ1Pfx17zOKsjEM070EdGNohgRIdEeLmW9x00_b1ihKQMj-ELAcyfuYjF7Fql6EFGHedjenQapb4AbdOPE0TMgS6rDxakN3AnvqXNAC1pnEkKxF2A1lyfZBT4vzkofUtF4AxRqbpGARdJDpAe854pHXCTtIdkqn0PaDFgqluPWeNnWVOK3CTo7Y34qiXO2Y_kuwJAQfgexQvNtye5Ho3_0uVhWGNrYVeoHSUx--N7nSAhTT9EUOKeeQ-wPq6mC-vzllsqkByRBNwz7m-lXZU34vXz3nq2VrRy7m00)
 
-┌─────────────────────────────────────────────────────────────────────┐
-│                         FRONTEND LAYER                              │
-├─────────────────────────────────────────────────────────────────────┤
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐             │
-│  │   Mobile     │  │  Operations  │  │  Admin       │             │
-│  │   App        │  │  Dashboard   │  │  Portal      │             │
-│  │  (React      │  │  (React)     │  │  (React)     │             │
-│  │   Native)    │  │              │  │              │             │
-│  └──────┬───────┘  └──────┬───────┘  └──────┬───────┘             │
-└─────────┼──────────────────┼──────────────────┼───────────────────┘
-          │                  │                  │
-          │                  │                  │
-┌─────────▼──────────────────▼──────────────────▼───────────────────┐
-│                      API GATEWAY LAYER                             │
-├────────────────────────────────────────────────────────────────────┤
-│  ┌────────────────────────────────────────────────────┐            │
-│  │  API Gateway (Kong/AWS API Gateway)                │            │
-│  │  • Authentication (OAuth2/JWT)                     │            │
-│  │  • Rate Limiting                                   │            │
-│  │  • Request Routing                                 │            │
-│  └────────────────────┬───────────────────────────────┘            │
-└───────────────────────┼────────────────────────────────────────────┘
-                        │
-┌───────────────────────▼────────────────────────────────────────────┐
-│                    CORE SERVICES LAYER                             │
-├────────────────────────────────────────────────────────────────────┤
-│                                                                    │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐              │
-│  │   Booking    │  │   Payment    │  │   User/KYC   │              │
-│  │   Service    │  │   Service    │  │   Service    │              │
-│  └──────────────┘  └──────────────┘  └──────────────┘              │
-│                                                                    │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐              │
-│  │   Vehicle    │  │  Telemetry   │  │    Fleet     │              │
-│  │  Management  │  │   Service    │  │  Operations  │              │
-│  └──────────────┘  └──────────────┘  └──────────────┘              │
-│                                                                    │
-│  ┌──────────────┐                                                  │
-│  │ Notification │                                                  │
-│  │   Service    │                                                  │
-│  └──────────────┘                                                  │
-│                                                                    │
-└────────────────────────────────────────────────────────────────────┘
-                        │
-┌───────────────────────▼────────────────────────────────────────────┐
-│                  AI/ML SERVICES LAYER  ⭐                          │
-├────────────────────────────────────────────────────────────────────┤
-│                                                                    │
-│  ┌──────────────────┐  ┌──────────────────┐  ┌─────────────────┐   │
-│  │  Demand          │  │  Dynamic Pricing │  │  Predictive     │   │
-│  │  Forecasting     │  │  & Incentive     │  │  Maintenance    │   │
-│  │  Engine          │  │  Engine          │  │  Engine         │   │
-│  └──────────────────┘  └──────────────────┘  └─────────────────┘   │
-│                                                                    │
-│  ┌──────────────────┐  ┌──────────────────┐  ┌─────────────────┐   │
-│  │  Vision AI       │  │  Conversational  │  │  Multi-Provider │   │
-│  │  (Damage         │  │  AI Assistant    │  │  AI Orchestrator│   │
-│  │  Detection)      │  │  (MCP)           │  │                 │   │
-│  └──────────────────┘  └──────────────────┘  └─────────────────┘   │
-│                                                                    │
-└────────────────────────────────────────────────────────────────────┘
-                        │
-┌───────────────────────▼────────────────────────────────────────────┐
-│                   DATA & EVENT LAYER                               │
-├────────────────────────────────────────────────────────────────────┤
-│                                                                    │
-│  ┌────────────────────────────────────────────────────┐            │
-│  │  Apache Kafka (Event Bus)                          │            │
-│  │  Topics: bookings.*, vehicles.*, predictions.*     │            │
-│  └────────────────────────────────────────────────────┘            │
-│                                                                    │
-│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐            │
-│  │  PostgreSQL  │  │    Redis     │  │     S3       │            │
-│  │  (Relational)│  │   (Cache)    │  │  (Storage)   │            │
-│  └──────────────┘  └──────────────┘  └──────────────┘            │
-│                                                                    │
-│  ┌──────────────┐  ┌──────────────┐                               │
-│  │ TimescaleDB  │  │  VictoriaM.  │                               │
-│  │ (Telemetry)  │  │  (Metrics)   │                               │
-│  └──────────────┘  └──────────────┘                               │
-└────────────────────────────────────────────────────────────────────┘
-                        │
-┌───────────────────────▼────────────────────────────────────────────┐
-│               INFRASTRUCTURE & OBSERVABILITY                       │
-├────────────────────────────────────────────────────────────────────┤
-│                                                                    │
-│  ┌──────────────────┐  ┌──────────────────┐  ┌─────────────────┐ │
-│  │ OpenTelemetry    │  │   Grafana        │  │   PagerDuty     │ │
-│  │ + VictoriaMetric │  │                  │  │                 │ │
-│  │ (Tracing/Logs)   │  │  (Dashboards)    │  │   (Alerts)      │ │
-│  └──────────────────┘  └──────────────────┘  └─────────────────┘ │
-│                                                                    │
-│  ┌──────────────────┐  ┌──────────────────┐                       │
-│  │  Airflow         │  │   Temporal       │                       │
-│  │  (Batch ML)      │  │  (Workflows)     │                       │
-│  └──────────────────┘  └──────────────────┘                       │
-└────────────────────────────────────────────────────────────────────┘
-```
+###  Components:
+
+1. **Admin Portal** (Frontend)
+2. **KYC Service** (split from User Service)
+3. **Incentive Engine** (relocation incentives calculation)
+4. **Incident Management Service** (collision alerts, dispatch)
+5. **Orchestrator Layer** (AI/LLM, Payment, Map, Weather orchestrators)
+6. **Feature Store** (SageMaker - online/offline)
+7. **Model Registry** (SageMaker - versioning, approval)
+8. **MLOps Pipelines** (SageMaker Pipelines)
+9. **OpenSearch Serverless** (Vector DB for RAG)
+10. **ElastiCache Redis** (caching layer)
+11. **Data Lakehouse** (Bronze/Silver/Gold layers)
+12. **Apache Airflow (scheduler) + BEAM (ETL Jobs)**
+14. **Edge Compute Layer** (Edge ML)
+15. **SageMaker Model Monitor** (drift detection)
+16. **Multi-Region Infrastructure** (Route 53, Global DB, Global Tables, S3 CRR)
+
+### 📊 Scale & Performance:
+
+- **API Gateway:** 10K requests/second
+- **Kafka:** 50 partitions/topic, 3 brokers
+- **Telemetry:** 7.2 million events/day
+- **Edge Devices:** 50K IoT Devices
+- **IoT Core:** 130B MQTT messages/month
+- **Multi-Region:** <30s failover RTO
+
+
+## Related Documents:
+
+- [C1: System Context](C1_System_Context.md)
+- [C3: AI/ML Component Diagram](C3_Component_AIML.md)
+- [ADR-05: Orchestrator Pattern](./ADR/ADR_05_Orchestrator.md)
+- [ADR-14: MLOps Pipeline](./ADR/ADR_14_MLOps_Pipeline.md)
+- [ADR-16: Data Lakehouse Strategy](./ADR/ADR_16_Data_Lakehouse_Strategy.md)
+
+---

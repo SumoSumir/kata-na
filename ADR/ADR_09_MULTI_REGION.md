@@ -16,19 +16,70 @@ Challenges include:
 To ensure compliance, performance, and resilience, the AI platform needs a multi-region strategy with localized deployments and model routing.
 
 ## Decision
-Adopt a **multi-region deployment architecture** combined with **region-aware model selection**.
+Adopt a **multi-region active-active deployment architecture** with **region-aware AI model selection** on AWS.
 
-Key components:
-- **Regional AI Hubs:** Deploy inference services in key regions (e.g., `eu-west-3`, `eu-west-1`).
-- **Data Residency Control:** Ensure user data is processed and stored within its originating region.
-- **Model Registry per Region:** Maintain separate model configurations, versions, and providers per region.
-- **Routing Layer:** A global gateway or service mesh directs traffic to the nearest compliant region.
-- **Provider Selection:** Use preferred providers or models available in each region (e.g., OpenAI for US, OpenAI for EU).
-- **Failover Policy:** If a region’s models are unavailable, traffic is rerouted to a secondary region with compliance exceptions logged.
+**AWS Multi-Region Architecture:**
 
-Example:
-- EU region → Uses Anthropic (GDPR compliant)
-- US region (possible future)→ Uses OpenAI or Gemini depending on cost and latency
+1. **Some of the Primary Regions**
+   - **eu-central-1 (Frankfurt):** Primary EU region for Germany, Central Europe
+   - **eu-west-1 (Ireland):** Secondary EU region for UK, Western Europe
+   - **eu-west-3 (Paris):** for France-specific compliance
+   - Active-active: All regions serve production traffic with local data residency
+
+2. **Data Layer (Regional Isolation)**
+   - **PostgreSQL Database**
+     - Primary cluster in each region with cross-region replication
+     - Regional read replicas for low-latency queries
+     - Automatic failover with promotion of secondary to primary
+   - **S3 Cross-Region Replication (CRR)**
+     - Vehicle images, ML artifacts replicated to secondary region (if under compliance requirements)
+     - Versioning enabled for compliance audit trails
+
+3. **Compute Layer (Regional Isolation)**
+   - **EKS clusters** in each region
+     - Microservices deployed independently per region
+     - Auto-scaling based on regional traffic patterns & events using KEDA
+   - **SageMaker endpoints** per region for AI inference
+
+4. **Traffic Routing**
+   - **Amazon Route 53 Geolocation Routing**
+     - Routes users to nearest region based on latency
+     - Health checks enable automatic failover to secondary region
+   - **AWS Global Accelerator (optional)**
+     - Anycast IPs for faster failover
+     - TCP/UDP performance optimization
+   - **Application Load Balancer (ALB)** in each region
+     - Regional endpoints with health checks on microservices
+     - Sticky sessions for stateful workflows
+
+5. **AI Model Registry per Region**
+   - **SageMaker Model Registry** in each region
+     - Regional model versions for data residency compliance
+     - Provider selection: AWS Bedrock (Claude) in EU regions
+     - Fallback: OpenAI with compliance logging
+   - **Model synchronization:** AWS CodePipeline with cross-region deployment
+     - Canary deployment strategy per region
+     - Blue-green rollback capability
+   - **Regional training:** SageMaker training jobs use regional S3 buckets for data residency
+
+6. **Compliance & Data Residency**
+   - **GDPR enforcement:** User data never leaves EU regions
+   - **Encryption:** AES-256 in-transit (TLS 1.3) and at-rest (KMS regional keys)
+   - **KMS keys per region** for encryption sovereignty
+   - **CloudTrail regional logs:** Audit trail stored in regional S3 buckets
+   - **Bedrock data residency:** All inference requests processed within selected region
+
+7. **Failover Policy**
+   - **Automated failover:** Route 53 health checks promote secondary region
+   - **Manual failover:** For planned maintenance
+   - **Compliance exceptions:** Logged when primary region unavailable
+   - **Data consistency:** cross-region replication for synchronization
+
+**Model Provider Strategy:**
+- **EU regions:** AWS Bedrock (Claude) - GDPR compliant, data stays in EU
+- **Fallback:** OpenAI (with explicit user consent for US data processing)
+- **Future US region:** OpenAI primary, Bedrock secondary
+- **Provider selection logic:** Region-based routing with compliance rules in DynamoDB
 
 ## Consequences
 

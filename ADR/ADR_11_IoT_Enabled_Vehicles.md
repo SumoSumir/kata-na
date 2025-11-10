@@ -38,7 +38,7 @@ We will implement **mutual TLS (mTLS)** with our custom CA for secure authentica
   - Firmware updates needed for mTLS and analytics logic on IoT devices.
   - Some analytics might require backend processing for longitudinal, cross-vehicle analysis.
 
-**Comparison Against Alternatives:**
+**Alternatives Considered:**
 - **Simple Auth (API keys/tokens):** Lower security, risks forged/fraudulent data streams.
 - **Cloud-centric Analytics:** Higher latency for urgent events, significantly increased bandwidth usage.
 - **No Edge Analytics:** Limits ability to respond in real time and puts heavy load on backend infrastructure.

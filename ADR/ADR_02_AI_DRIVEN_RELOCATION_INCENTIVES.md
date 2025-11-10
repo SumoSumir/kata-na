@@ -3,6 +3,15 @@
 ## Status
 Accepted  
 
+## Related ADRs
+This ADR builds upon foundational architectural decisions:
+- **[ADR-01](ADR_01_microservices_architecture.md):** Microservices architecture enables independent scaling of the Pricing Service
+- **[ADR-03](ADR_03_Vehicle_Telemetry.md):** Real-time vehicle location data is critical for supply tracking
+- **[ADR-06](ADR_06_EVENT_DRIVEN_ARCHITECTURE.md):** Event-driven architecture propagates pricing updates to consumers
+- **[ADR-16 (MLOps Pipeline)](ADR_16_MLOps_Pipeline.md):** for model training/deployment details
+
+---
+
 ## Context
 MobilityCorp operates multi-modal vehicle fleets (bikes, scoopers, cars, vans) across multiple EU cities. A critical operational challenge is **vehicle imbalance**: popular pickup locations become depleted while low-demand areas accumulate excess vehicles, leading to:
 
@@ -28,8 +37,8 @@ Traditional approaches include:
 **1. Manual Relocation Only**  
 - Operations staff physically relocate vehicles based on daily patterns  
 - ✅ Pros: Simple, predictable, no customer friction  
-- ❌ Cons: Expensive (~€10-15 per relocation), slow response to demand spikes, doesn't scale  
-- **Rejected:** Cannot keep pace with rapid demand changes or fleet growth  
+- ❌ Cons: Expensive (~€10-15 per relocation), slow response to demand spikes, doesn't scale
+- **Rejected:** Cannot keep pace with rapid demand changes or fleet growth, can be slow to reach physical location if travelling in peak hours to service urgent needs. Normal operation generally occurs in off hours.
 
 **2. Fixed-Price Relocation Incentives**  
 - Offer standard discounts (e.g., 20% off) for predefined "rebalancing routes"  
@@ -50,35 +59,45 @@ Implement an **AI-driven dynamic pricing and relocation incentive system** that 
 
 **1. Demand Forecasting Engine**
 - **Real-time prediction:** Forecast demand at 15-minute intervals for each 500m grid cell in each city
+- **ML Platform:** AWS SageMaker for model training and deployment
+- **Model:** XGBoost gradient boosting trained on historical booking data
 - **Input features:**
   - Historical rental patterns (time of day, day of week, seasonality)
   - Weather conditions (temperature, precipitation, wind via Weather & Events API - [ADR-04](ADR_04_EXTERNAL_APIS.md))
   - Events (concerts, sports, festivals via PredictHQ - [ADR-04](ADR_04_EXTERNAL_APIS.md))
   - Public holidays and school schedules (via Calendarific API - [ADR-04](ADR_04_EXTERNAL_APIS.md))
-  - Transit disruptions (metro closures, traffic accidents, grid lock via Map API - [ADR-04](ADR_04_EXTERNAL_APIS.md))
-- **Model:** Gradient boosting (XGBoost) or deep learning (LSTM) trained on historical data
-- **Output:** Predicted demand probability distribution per location and time window
+  - Transit disruptions (metro closures, traffic accidents via Map API - [ADR-04](ADR_04_EXTERNAL_APIS.md))
+- **Output:** Predicted demand per 500m grid cell at 15-minute intervals
+- **Real-time inference:** SageMaker endpoints with ElastiCache Redis caching for performance
+- **Model retraining:** Weekly automated retraining via Apache Airflow+BEAM orchestration
+- **Data source:** Historical data from Data Lakehouse [ADR-15](ADR_15_Data_Lakehouse_Strategy.md)
 
 **2. Supply Tracking and Availability Prediction**
-- **Real-time inventory:** Current vehicle locations from GPS telemetry (ADR-03, ADR-06)
-- **Availability forecasting:** Predict when rented vehicles will return based on:
-  - Historical trip duration distributions
-  - Current trip progress (distance traveled, time elapsed)
-  - Destination prediction models
-- **Supply score:** Calculate available capacity per location considering in-transit returns
+- **Real-time inventory:** Vehicle locations from TimeScaleDB & Kafka streams (updated via IoT Core - [ADR-11](ADR_11_IoT_Enabled_Vehicles.md))
+- **Caching:** ElastiCache Redis for fast zone-level vehicle counts
+- **Availability forecasting:** Lightweight XGBoost model predicts 
+  service Features: Airflow durations, distance to Sagemaker, vehicle type, time of day
+  - Triggered by booking events via Kafka
+- **Supply score calculation:** Available vehicles + predicted returns - predicted demand
+- **Update frequency:** Real-time updates via event-driven architecture
 
 **3. Dynamic Pricing Engine**
-- **Pricing zones:** Divide cities into 500m grid cells with zone-specific pricing
+- **Compute:** service triggered by Airflow and Kafka events to Sagemaker
+- **Pricing zones:** Cities divided into 500m H3 hexagonal grid cells
 - **Pricing algorithm:**
-  - **Base price:** Standard rate per vehicle type and city
-  - **Demand multiplier:** Increase price in high-demand, low-supply zones (up to 2.5x base)
-  - **Supply multiplier:** Decrease price in low-demand, high-supply zones (down to 0.5x base)
-  - **Elasticity modeling:** Adjust multipliers based on observed price sensitivity per customer segment
-- **Price caps:** Maximum surge limits to maintain customer trust and regulatory compliance
-- **Transparency:** Display dynamic pricing clearly in app with explanations ("High demand in this area")
+  - **Base price:** Per vehicle type and city
+  - **Demand multiplier:** Increases price in high-demand zones (capped at 2.5x)
+  - **Supply multiplier:** Decreases price in high-supply zones (floored at 0.5x)
+  - **Elasticity modeling:** Per-customer segment price sensitivity from A/B test results
+- **Regulatory compliance:** Max 2.5x surge pricing per EU consumer protection laws
+- **Transparency:** Pricing updates published to Kafka for real-time consumption
+  - Booking Service displays current prices with explanations for e.g "High demand in this area"
+  - Analytics tracks pricing effectiveness
+- **Storage:** Postgres for zone pricing with ElastiCache Redis for high-frequency lookups
 
 **4. Relocation Incentive Engine**
-- **Opt-in Service:** Users can enable this while booking. Our preferred destination will be within 2 km of theirs, and they won’t be billed if going slightly past their stop to our target zone. The system checks for existing bookings and nearby riders (within 2 km) finishing trips before scheduling a pickup.
+- **Opt-in Service:** Users can enable this feature during booking. Our preferred destination will be within 2 km of theirs, and they won’t be charged if the ride slightly extends beyond their stop to reach our target zone. The system first checks for existing bookings and nearby riders (within 2 km) completing trips before scheduling a pickup. It prioritizes riders based on proximity, offering the lowest discount and earliest alerts to those nearest, then gradually expanding the alert radius and increasing the discount for riders farther away, up to 2 km.
+
 - **Route identification:** Identify beneficial relocation routes from high-supply to high-demand zones.
 - **Incentive calculation:**
  - Distance-based: Longer relocations earn higher incentives.
@@ -86,7 +105,7 @@ Implement an **AI-driven dynamic pricing and relocation incentive system** that 
  - Vehicle type: Cars/vans get higher incentives than bikes/scooters due to higher relocation value.
  - Customer segmentation: Frequent users may receive personalized offers.
 - **Incentive types:**
- - Percentage discounts (e.g., “50% off if you drop off in Zone B”)
+ - Percentage discounts (e.g., “10% off if you drop off in Zone B”)
  - Flat-rate bonuses (e.g., “Earn €5 credit for this relocation”)
  - Loyalty points multipliers (e.g., “2× points for relocations”)
 - **Real-time updates:** Incentives adjust every 5–15 minutes based on live demand-supply conditions.​
@@ -115,7 +134,7 @@ Implement an **AI-driven dynamic pricing and relocation incentive system** that 
 ### ✅ Positive Impacts
 
 **Financial**
-- Reduction in manual relocation costs (€10-15/vehicle → customer self-relocations)
+- Reduction in manual relocation costs (€10-15/vehicle → minimal < €5 customer self-relocations)
 - Revenue increase from dynamic pricing capturing willingness-to-pay during peak demand
 - Improved fleet utilization and reduced idle inventory from better vehicle distribution
 
