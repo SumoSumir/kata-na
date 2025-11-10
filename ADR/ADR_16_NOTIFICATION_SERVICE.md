@@ -34,7 +34,7 @@ Implement an **AI-powered, event-driven Notification Service** that delivers per
 **2. Notification Orchestrator**
 - **Event router:** Maps events to notification types with priority (Critical/High/Medium/Low)
 - **User preferences:** Manages quiet hours, channel preferences (push, SMS, email), and opt-outs
-- **Rate limiter:** Prevents notification fatigue (critical notifications bypass)
+- **Rate limiter:** Prevents notification fatigue (max N per user/day, critical notifications bypass)
 - **Deduplication:** Prevents redundant notifications for same event
 
 **3. AI-Driven Personalization (ADR-05, ADR-12)**
@@ -48,7 +48,7 @@ a) **Proactive Commute Recommendations**
 b) **Relocation Incentive Offers (ADR-02)**
 - Listens to `incentives.relocation_opportunity` events
 - AI identifies beneficial relocations based on supply/demand and user's next likely trip
-- Example: *"Park near Zone C instead of Zone B and get a discount on your next ride! Help us balance the fleet."*
+- Example: *"Park near Zone C instead of Zone B and get a 10% discount on your next ride! Help us balance the fleet."*
 - Gamification: Track relocations, monthly badges, credits
 
 c) **Smart Alternative Mode Suggestions**
@@ -67,7 +67,7 @@ e) **Feedback Follow-Up**
 **4. Staff-Facing Notifications**
 - **Predictive maintenance:** *"Vehicle #1234 flagged: Likely battery failure in 5-7 days. Schedule maintenance."*
 - **Collision alerts:** *"COLLISION DETECTED: Vehicle #5678 at [Location]. User check-in pending. Dispatch support."*
-- **Battery cluster alerts:** *"Zone: Shoreditch - Multiple vehicles with low battery. Priority area for swaps."*
+- **Battery cluster alerts:** *"Zone: Shoreditch - 8 vehicles with <20% battery. Priority area for swaps."*
 - **Task assignments:** Optimized route updates pushed to staff dashboard
 
 **5. Delivery Channels**
@@ -102,20 +102,20 @@ e) **Feedback Follow-Up**
 
 **Customer Engagement**
 - AI-powered personalization makes platform habitual vs. ad-hoc
-- Relocation incentive uptake reduces manual rebalancing costs significantly
+- Relocation incentive uptake reduces manual rebalancing costs (from £10-15/vehicle to less than £5)
 - Usage milestones and gamification increase customer lifetime value
 - Smart alternatives retain users when preferred vehicle unavailable
 
 **Operational Efficiency**
-- Predictive maintenance alerts reduce unplanned downtime significantly
+- Predictive maintenance alerts reduce unplanned downtime by 30-40%
 - Battery cluster alerts prioritize staff routes, reducing wasted trips
 - Collision alerts enable immediate safety response (<1 min)
 - Task assignments optimize field operations
 
 **Revenue & Cost Optimization**
-- Proactive recommendations increase booking frequency
-- Relocation incentives reduce manual fleet redistribution costs
-- Improved availability from balanced fleet increases revenue
+- Proactive recommendations increase booking frequency by 20%+
+- Relocation incentives reduce manual fleet redistribution costs by 30-50%
+- Improved availability from balanced fleet increases revenue by 10-15%
 
 **Scalability**
 - Horizontally scalable with Kafka consumers
@@ -150,7 +150,7 @@ e) **Feedback Follow-Up**
 - Transparent opt-in/opt-out for personalization
 - Anonymous pattern detection where possible
 - Quarterly privacy impact assessments
-- Automated deletion workflows
+- Automated deletion workflows (30-day TTL)
 
 **Quality Assurance**
 - A/B testing for message variants before full rollout
