@@ -22,7 +22,7 @@ Dynamic pricing maximizes revenue by adjusting prices in real-time based on mark
 - SageMaker Inference Endpoint (XGBoost model)
 - Feature Store (Online)
 - ElastiCache Redis (Price cache)
-- EventBridge (Trigger repricing)
+- Apache Airflow (Trigger repricing)
 - Third-party APIs (Weather, Events)
 - Kafka (Price change events)
 
@@ -32,7 +32,7 @@ Dynamic pricing maximizes revenue by adjusting prices in real-time based on mark
 
 ```mermaid
 sequenceDiagram
-    participant EB as EventBridge
+    participant EB as Apache Airflow
     participant PS as Pricing Service
     participant FS as Feature Store (Online)
     participant SM as SageMaker Endpoint
@@ -107,7 +107,7 @@ sequenceDiagram
 ## 6. Repricing Triggers
 
 ### 6.1 Scheduled (Every 15 minutes)
-EventBridge triggers automatic repricing for all zones and vehicle types
+Apache Airflow triggers automatic repricing for all zones and vehicle types
 
 ### 6.2 Event-Driven (Real-Time)
 

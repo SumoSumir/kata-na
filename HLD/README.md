@@ -63,7 +63,7 @@ Real-time pricing adjustments based on demand, supply, weather, and events.
 - SageMaker Inference Endpoint (XGBoost)
 - Feature Store (Online)
 - ElastiCache (Redis Cache)
-- EventBridge (Trigger Repricing)
+- Apache Airflow (Trigger Repricing)
 - Third-party APIs (Weather, Events)
 
 **Flow:** Trigger Event → Feature Retrieval → ML Prediction → Price Update → Cache Invalidation

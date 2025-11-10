@@ -34,7 +34,7 @@ Demand forecasting enables MobilityCorp to proactively reposition vehicles, prev
 
 ```mermaid
 sequenceDiagram
-    participant EB as EventBridge (Scheduler)
+    participant EB as Apache Airflow (Scheduler)
     participant L as Apache Airflow (Forecast Trigger)
     participant SM as SageMaker Pipeline
     participant FS as Feature Store
@@ -154,7 +154,7 @@ Apache BEAM ETL jobs transform raw data into ML-ready features:
 
 **Prediction Generation:**
 
-EventBridge triggers daily batch prediction job:
+Apache Airflow triggers daily batch prediction job:
 - Retrieves latest features for next 24 hours
 - Generates predictions for all zone/hour/vehicle-type combinations
 - Outputs predictions with confidence intervals
