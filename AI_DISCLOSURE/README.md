@@ -1,0 +1,1 @@
+We have used AI in this project and have performed **deep & very thorough** checks of the solution to maintain it's validity. (Proof is in the git & PR history :p)
