@@ -56,7 +56,7 @@
 ### Medium-Term (3-6 months): **-16% additional savings**
 - Bedrock prompt caching: -5%
 - Fine-tuned domain models: -3%
-- Glue ETL optimization: -3%
+- Apache BEAM ETL optimization: -3%
 - Edge compute bulk purchase: -5%
 
 ### Long-Term (6-12 months): **-10% additional savings**

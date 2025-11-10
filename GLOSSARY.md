@@ -104,11 +104,6 @@ This glossary defines key terms, acronyms, and concepts used throughout the Mobi
 - Adds reliability and performance to Parquet files
 - Used in Silver and Gold layers
 
-**DPU (Data Processing Unit)**
-- AWS Glue compute unit
-- 1 DPU = 4 vCPU + 16GB RAM
-- Billed per DPU-hour ($0.44)
-
 **DynamoDB**
 - AWS managed NoSQL database
 - Low-latency key-value store
@@ -167,11 +162,6 @@ This glossary defines key terms, acronyms, and concepts used throughout the Mobi
 - Virtual geographic boundary
 - Triggers alerts when vehicles enter/exit zones
 - Used for operational areas and parking validation
-
-**Glue (AWS Glue)**
-- AWS serverless ETL service
-- Used for Bronze → Silver → Gold transformations
-- Supports PySpark for big data processing
 
 **Gold Layer**
 - Third layer in Medallion Architecture

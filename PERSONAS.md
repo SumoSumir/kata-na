@@ -602,6 +602,59 @@ SOC 2 Type II Evidence:
 
 ---
 
+### Use Case 6: Emma’s Daily Commute Subscription (Flexible Cancellation)
+
+**Actors:**  
+Emma (Commuter, subscription user)  
+Booking Microservice (Subscription Management)  
+Sarah (CPO tracking engagement & loyalty)
+Billing Service (Handles payments & cancellation fees)
+
+**Scenario Timeline:**
+
+Day 1 (Start of Month):
+• Emma enrolls in the Daily Commute Subscription.
+• She sets her commute time for 8:15 AM on weekdays.
+• Subscription benefits: lower daily rate, automatic booking, predictable monthly cost.
+• Policy: If Emma cancels her ride less than 2 hours before the 8:15 AM slot, a small cancellation fee applies. Cancelling 2+ hours before = no fee.
+Daily (Ongoing):
+
+Each morning, a scooter is automatically reserved for Emma.
+
+Emma is reminded: “Your scooter is ready at your usual location!”
+
+If Emma needs to skip a ride:
+ - Cancels via app by 6:15 AM or earlier ⇒ No fee
+ - Cancels after 6:15 AM, or is a no-show ⇒ Small cancellation fee is charged
+
+Emma completes her ride or manages cancellations directly in the app.
+
+End of Month:
+Emma receives a summary showing ride savings, cancellation instances, and any fees from late cancellations.
+
+**Systems Involved:**
+- Booking Microservice (recurring bookings, cancellation window enforcement)
+- Billing Service (applies subscription charges and any late cancellation fees)
+- Push Notification Service (booking and cancellation reminders)
+- Analytics Dashboard (tracks usage, cancellations, and engagement)
+
+**Success Metrics:**
+- Subscription adoption and renewal rates
+- % rides serviced as scheduled without late cancellations
+- Increase in daily active commuters
+- Predictive accuracy for demand and fleet allocation
+
+**How This Solves Emma’s Needs:**
+- Guaranteed scooter availability for her regular commute
+- Predictable, budget-friendly monthly costs
+- Easy, flexible cancellation with fair fee structure
+- Improved reliability encourages full switch from competitor apps
+
+**Impact:**
+- Increased user retention and lifetime value
+- Higher average ride consistency and reduced churn
+- Better forecasting and operational efficiency for the business
+
 ## 📚 Further Reading
 
 - **[README.md](README.md)** - Complete architecture overview and business case

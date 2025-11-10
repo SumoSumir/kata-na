@@ -74,7 +74,7 @@ sequenceDiagram
     participant TS as TimescaleDB
     participant KF as Apache BEAM
     participant S3 as S3 (Data Lake)
-    participant Glue as AWS Glue
+    participant Glue as Apache BEAM
 
     Note over V,Glue: Real-Time Ingestion (1 msg/sec per vehicle)
     V->>IoT: Publish MQTT (topic: telemetry/{vehicle_id})
@@ -225,7 +225,7 @@ sequenceDiagram
 
 ---
 
-## 12. Batch ETL (Glue Jobs)
+## 12. Batch ETL (Apache BEAM Jobs)
 
 **Hourly Job (Bronze → Silver):**
 - Reads last hour of raw telemetry from Bronze layer
@@ -237,7 +237,7 @@ sequenceDiagram
 - Calculates statistics per vehicle (average battery, max speed, usage seconds)
 - Writes aggregated data to Gold layer for analytics
 
-**Cost:** $18,040/month (AWS Glue DPU-hours)
+**Cost:** $18,040/month
 
 ---
 
@@ -252,7 +252,7 @@ sequenceDiagram
 | **S3 (Bronze)** | 5 minutes | 90 days | 48.6 TB | $1,290 |
 | **S3 (Silver)** | 1 hour | 2 years | 30 TB | $690 |
 | **S3 (Gold)** | 1 day | 5 years | 5 TB | $115 |
-| **Glue (ETL)** | Hourly/Daily | N/A | N/A | $18,040 |
+| **Apache BEAM (ETL)** | Hourly/Daily | N/A | N/A | $18,040 |
 | **Total** | - | - | **84.6 TB** | **$46,610** |
 
 ---
@@ -267,7 +267,7 @@ sequenceDiagram
 - Lambda: Increase concurrency (500 → 1,000) ✅
 - TimescaleDB: Auto-scales ✅
 - S3: Unlimited capacity ✅
-- Glue: Increase DPUs (50 → 100) ✅
+- Apache BEAM: Increase DPUs (50 → 100) ✅
 
 **Bottleneck:** Kafka throughput at 100K vehicles (50 MB/sec ingress)
 **Solution:** Increase partition count or add more brokers
@@ -280,7 +280,7 @@ sequenceDiagram
 1. **IoT Core:** Enterprise pricing negotiation → Save $500/month
 2. **TimescaleDB:** Reduce memory store retention (3 → 1 day) → Save $3,000/month
 3. **S3:** Intelligent-Tiering (automatic cost optimization) → Save $400/month
-4. **Glue:** Optimize jobs (20% DPU reduction) → Save $3,600/month
+4. **Apache BEAM:** Optimize jobs (20% DPU reduction) → Save $3,600/month
 
 **Total Potential Savings:** $7,500/month (16% reduction)
 

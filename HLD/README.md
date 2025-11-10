@@ -166,7 +166,7 @@ Producer → Kafka → Consumer(s) → Side Effects
 ### Pattern 3: Batch Processing (Scheduled)
 
 ```
-S3 (Raw Data) → Glue (ETL) → S3 (Transformed) → Analytics
+S3 (Raw Data) → Apache BEAM (ETL) → S3 (Transformed) → Analytics
 ```
 
 **Use Cases:** Daily aggregations, model training, reporting  
@@ -215,7 +215,7 @@ User → LangChain Agent → LLM (Bedrock) → Tool(s) → Response
 | **IoT Core** | IoT | Vehicle telemetry | Auto-scales |
 | **TimescaleDB** | Time-Series | Telemetry storage | Auto-scales |
 | **Redshift** | Data Warehouse | Analytics | Add nodes |
-| **Glue** | ETL | Data transformation | Add DPUs |
+| **Apache BEAM** | ETL | Data transformation | Add DPUs |
 | **OpenSearch** | Vector DB | RAG knowledge base | Add shards |
 
 ---
@@ -293,7 +293,7 @@ User → LangChain Agent → LLM (Bedrock) → Tool(s) → Response
 | Scenario | Monthly Cost | Cost per Transaction | Key Drivers |
 |----------|-------------|---------------------|-------------|
 | **Booking Workflow** | $25,000 | $0.025 (per booking) | ECS, Aurora, Stripe |
-| **Demand Forecasting** | $30,000 | N/A (batch) | SageMaker, Glue |
+| **Demand Forecasting** | $30,000 | N/A (batch) | SageMaker, Apache BEAM |
 | **Dynamic Pricing** | $15,000 | $0.000015 (per query) | SageMaker, Redis |
 | **Predictive Maintenance** | $18,000 | $0.36 (per alert) | TimescaleDB, SageMaker |
 | **Telemetry Processing** | $71,335 | $0.000017 (per message) | IoT Core |
