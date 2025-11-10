@@ -129,23 +129,31 @@ sequenceDiagram
     NS->>U: Push notification "Booking confirmed!"
     NS->>U: Email confirmation
 
-    Note over U,V: Phase 6: Vehicle Unlock
-    U->>AG: POST /vehicles/:id/unlock
-    AG->>FS: Unlock vehicle
+    Note over U,V: Phase 6: Vehicle Unlock (Direct Phone-to-Vehicle via NFC)
+    U->>AG: GET /vehicles/:id/unlock-token
+    AG->>FS: Request unlock token
     FS->>DB: Verify booking is active
     DB-->>FS: Booking confirmed
-    FS->>IoT: Publish MQTT message unlock/{vehicle_id}
-    IoT->>V: MQTT message (unlock command)
-    V->>V: Execute unlock (relay, solenoid)
-    V->>IoT: MQTT message status/{vehicle_id} (unlocked)
-    IoT->>Kafka: Publish VehicleUnlocked event
-    Kafka->>FS: VehicleUnlocked event
-    FS->>DB: UPDATE vehicles SET status='in_use', trip_start_time=NOW()
-    FS->>Cache: Invalidate availability cache
-    FS-->>AG: 200 Vehicle unlocked
-    AG-->>U: 200 Unlocked successfully
-
-    U->>U: Start trip (ride the vehicle)
+    FS->>FS: Generate time-limited unlock token (JWT, 60s expiry)
+    FS-->>AG: Return unlock_token
+    AG-->>U: 200 OK + unlock_token
+    
+    U->>V: NFC tap + unlock_token
+    V->>V: Verify token signature (offline validation)
+    V->>V: Check token expiry and booking_id
+    alt Token Valid
+        V->>V: Execute unlock (relay, solenoid)
+        V->>U: NFC ACK (unlocked)
+        V->>IoT: MQTT message status/{vehicle_id} (unlocked, booking_id)
+        IoT->>Kafka: Publish VehicleUnlocked event
+        Kafka->>FS: VehicleUnlocked event
+        FS->>DB: UPDATE vehicles SET status='in_use', trip_start_time=NOW()
+        FS->>Cache: Invalidate availability cache
+        U->>U: Display "Vehicle unlocked" + Start trip
+    else Token Invalid/Expired
+        V->>U: NFC error (invalid token)
+        U->>U: Display error + retry button
+    end
 ```
 
 ---
@@ -265,29 +273,47 @@ sequenceDiagram
 
 ---
 
-### 4.6 Phase 6: Vehicle Unlock
+### 4.6 Phase 6: Vehicle Unlock (Direct Phone-to-Vehicle via NFC)
 
 **Unlock Flow:**
-1. **Verification:** Fleet Service verifies booking is confirmed and vehicle is reserved for requesting user
+1. **Token Request:** Mobile app requests time-limited unlock token from Fleet Service
+   - Fleet Service verifies booking is confirmed and active
+   - Generates JWT token with booking_id, vehicle_id, user_id, and 60-second expiry
+   - Token signed with vehicle's public key (pre-provisioned during manufacturing)
 
-2. **IoT Command:** Unlock command published to vehicle via AWS IoT Core using MQTT protocol
-   - Quality of Service (QoS) 1 ensures at-least-once delivery
-   - Command includes booking context for vehicle-side verification
+2. **Direct Communication:** Mobile app establishes direct connection to vehicle
+   - **Primary:** NFC (Near Field Communication) tap (range: <10 cm, contactless)
+   - **Fallback:** Bluetooth Low Energy (BLE) connection for NFC-incompatible devices
+   - No internet connectivity required for unlock operation
 
-3. **Vehicle Processing:** IoT agent on vehicle:
-   - Verifies command signature to prevent spoofing
-   - Activates unlock mechanism (solenoid/relay)
-   - Publishes status confirmation
+3. **Vehicle-Side Processing:** IoT agent on vehicle performs offline validation
+   - Verifies JWT signature using pre-loaded public key
+   - Checks token expiry timestamp (prevents replay attacks)
+   - Validates booking_id matches current reservation
+   - Activates unlock mechanism (solenoid/relay) if valid
 
-4. **Status Update:** Fleet Service consumes vehicle status event, updates database:
-   - Vehicle status: 'reserved' → 'in_use'
-   - Records trip start time
-   - Invalidates availability caches
+4. **Asynchronous Status Update:** Vehicle reports unlock event when connectivity available
+   - Publishes VehicleUnlocked event to AWS IoT Core via MQTT
+   - Fleet Service consumes event and updates database:
+     - Vehicle status: 'reserved' → 'in_use'
+     - Records trip start time
+     - Invalidates availability caches
+   - Works offline: Status update delayed until vehicle has connectivity
 
 **Performance:**
-- Unlock command delivery: ~500ms (MQTT roundtrip)
-- Total unlock flow: ~2 seconds (request to confirmed unlock)
-- Target: < 3 seconds P95
+- Token generation: ~50ms (backend verification + JWT signing)
+- NFC tap recognition: ~100ms
+- Token validation + unlock: ~200ms (local processing on vehicle)
+- Total unlock flow: ~350ms (token request to physical unlock)
+- Target: < 500ms P95
+
+**Security Benefits:**
+- **Offline Operation:** Works without cellular connectivity
+- **Reduced Attack Surface:** No remote unlock commands over internet
+- **Token Expiry:** 60-second validity window prevents token reuse
+- **Local Verification:** Vehicle validates token independently
+- **No Cloud Dependency:** Unlock succeeds even during AWS outage
+- **Physical Proximity Required:** NFC requires user to be at vehicle (<10cm range)
 
 ---
 
@@ -336,18 +362,32 @@ sequenceDiagram
 - User prompted to try alternative payment method
 - **Idempotency:** Retries use same booking ID to prevent duplicates
 
-### 6.3 Vehicle Offline
+### 6.3 Vehicle Connection Failure
 
-**Scenario:** Vehicle has no network connectivity
+**Scenario:** User cannot establish NFC connection with vehicle
 
 **Handling:**
-- IoT Core detects missing heartbeat (> 5 minutes)
-- Fleet Service marks vehicle as 'offline'
-- Vehicle automatically excluded from search results
-- For confirmed bookings: User warned and advised to retry
-- Booking auto-expires after 10 minutes with automatic refund
+- **NFC Not Detected:** App displays "Tap your phone on the NFC reader" instruction
+- **NFC Unavailable (older phones):** Fallback to Bluetooth Low Energy (BLE) unlock
+  - Automatic BLE pairing with vehicle
+  - Adds ~300ms latency but ensures compatibility
+- **Both NFC/BLE Fail:** Fallback to legacy MQTT unlock via backend
+  - Backend sends unlock command through AWS IoT Core
+  - Requires vehicle to have cellular connectivity
+  - Adds ~2 seconds latency but ensures unlock succeeds
+- **Vehicle Completely Offline:** 
+  - App displays "Vehicle may be offline" warning
+  - Customer support contacted automatically
+  - Alternative vehicle suggested with automatic reservation transfer
+  - Full refund issued if customer chooses alternative
 
-**Graceful Degradation:** May allow booking with staleness warning
+**User Experience:**
+- Primary path (NFC): ~350ms unlock time
+- Fallback 1 (Bluetooth): ~650ms unlock time
+- Fallback 2 (MQTT): ~2.5s unlock time
+- Offline path: Manual intervention required
+
+**Monitoring Alert:** NFC unlock failure rate > 5% triggers vehicle hardware investigation
 
 ### 6.4 Database Unavailable
 
@@ -374,7 +414,9 @@ sequenceDiagram
 
 ## 7. Performance Considerations
 
-### 7.1 Latency Budget (Total: < 200ms)
+### 7.1 Latency Budget
+
+#### Booking Flow (Search to Confirmation): < 200ms
 
 | Component | Target | Actual (P95) |
 |-----------|--------|--------------|
@@ -385,6 +427,18 @@ sequenceDiagram
 | Redis Cache (read) | < 5ms | 2ms |
 | Network (user ↔ AWS) | < 100ms | 80ms |
 | **Total** | **< 200ms** | **~150ms** |
+
+#### Vehicle Unlock Flow (Phone-to-Vehicle): < 500ms
+
+| Component | Target | Actual (P95) |
+|-----------|--------|--------------|
+| Token Request (API) | < 50ms | 45ms |
+| NFC Tap Recognition | < 100ms | 80ms |
+| Token Validation (Vehicle) | < 100ms | 85ms |
+| Unlock Mechanism | < 200ms | 150ms |
+| **Total (NFC)** | **< 500ms** | **~360ms** |
+| **Fallback (Bluetooth)** | **< 1s** | **~650ms** |
+| **Fallback (MQTT)** | **< 3s** | **~2.5s** |
 
 ### 7.2 Throughput (Peak: 500 bookings/second)
 
@@ -477,6 +531,16 @@ sequenceDiagram
 
 **Tools:** Jest, Testcontainers (Postgres, Redis, Kafka)
 
+**NFC Unlock Integration Tests:**
+- Simulate NFC tap detection and data transfer
+- Token generation and JWT signature validation
+- Token expiry scenarios (valid, expired, not-yet-valid)
+- Offline vehicle validation (no backend connection required)
+- Fallback to Bluetooth when NFC unavailable
+- Fallback to MQTT when both NFC/Bluetooth fail
+
+**Tools:** React Native Testing Library, NFC/BLE simulators
+
 ### 9.3 Load Tests
 
 **Scenario:** 1M bookings/day (11.5 bookings/second average, 500 peak)
@@ -496,11 +560,13 @@ sequenceDiagram
 ### 9.4 Chaos Engineering
 
 **Failure Scenarios Tested:**
-1. **Postgre Primary Failure:** Verify automatic failover < 1 minute, no data loss
+1. **Postgres Primary Failure:** Verify automatic failover < 1 minute, no data loss
 2. **Kafka Broker Outage:** Verify Transactional Outbox Pattern maintains consistency
 3. **Redis Cache Eviction:** Verify graceful fallback to database
 4. **Network Latency Injection:** Verify no timeouts under 250ms added latency
 5. **Stripe API Timeout:** Verify retry logic and eventual consistency
+6. **NFC Connection Failure:** Verify fallback to Bluetooth and MQTT unlock pathways
+7. **Vehicle Offline (No Cellular):** Verify unlock works via NFC token validation
 
 **Tools:** AWS Fault Injection Simulator (FIS), Chaos Toolkit
 
