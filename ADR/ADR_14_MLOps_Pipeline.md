@@ -21,7 +21,7 @@ Adopt AWS-native MLOps using **Apache Airflow** (orchestration) and **Amazon Sag
 │     └─ Approval gates for model deployment                      │
 │                                                                  │
 │  2. Feature Store (SageMaker - Fully Managed)                   │
-│     ├─ Online Store: DynamoDB (AWS-managed, zero config)        │
+│     ├─ Online Store: DynamoDB (Internally used by SageMaker)    │
 │     ├─ Offline Store: S3 (Parquet, for training)               │
 │     ├─ Feature Groups: user, vehicle, zone, weather, events    │
 │     └─ Point-in-time correct queries for historical joins       │
