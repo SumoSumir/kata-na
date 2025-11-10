@@ -328,9 +328,9 @@ Read key ADRs in order:
   - Bronze: Raw data (Parquet)
   - Silver: Cleaned/validated (Delta Lake)
   - Gold: Business aggregations (Delta Lake)
-- **Data Warehouse:** Amazon Redshift
+- **Data Warehouse:** S3 + ETL
 - **Real-time DB:** DynamoDB
-- **Relational DB:** Amazon Aurora PostgreSQL
+- **Relational DB:** Amazon PostgreSQL
 - **Cache:** Amazon ElastiCache (Redis)
 - **Time-Series:** Amazon TimescaleDB
 

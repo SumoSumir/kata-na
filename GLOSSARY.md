@@ -95,7 +95,7 @@ This glossary defines key terms, acronyms, and concepts used throughout the Mobi
 - Detected by SageMaker Model Monitor
 
 **Data Lakehouse**
-- Hybrid architecture combining data lake (S3) + data warehouse (Redshift)
+- Hybrid architecture combining data lake (S3) + data warehouse
 - Enables both batch analytics and real-time queries
 - Our implementation uses Medallion Architecture
 

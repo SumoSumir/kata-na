@@ -49,7 +49,7 @@
 ## Cost Optimization Strategy
 
 ### Immediate Wins (0-3 months): **-12% savings**
-- Reserved Instances (RDS, Redshift): -8%
+- Reserved Instances (RDS): -8%
 - S3 Intelligent-Tiering: -2%
 - Right-sizing dev/staging: -2%
 

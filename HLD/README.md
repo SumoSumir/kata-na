@@ -31,7 +31,7 @@ End-to-end user journey from searching for a vehicle to completing a rental.
 - Fleet Service
 - Payment Service (Stripe integration)
 - Notification Service
-- Aurora PostgreSQL
+- PostgreSQL
 - ElastiCache (Redis)
 
 **Flow:** User Search → Vehicle Selection → Payment → Booking Confirmation → Vehicle Unlock
@@ -113,7 +113,7 @@ All scenarios adhere to these design principles:
 ### 2. **CQRS (Command Query Responsibility Segregation)**
 - Separate read and write paths
 - Optimized for different access patterns
-- Example: Booking writes to Aurora, reads from Redis
+- Example: Booking writes to Postgres, reads from Redis
 
 ### 3. **Microservices**
 - Each service owns its data
@@ -132,7 +132,7 @@ All scenarios adhere to these design principles:
 
 ### 6. **Multi-Region HA (High Availability)**
 - Active-active in eu-central-1 (Frankfurt) and eu-west-1 (Ireland)
-- Cross-region replication for Aurora, S3
+- Cross-region replication for Postgres, S3
 - Failover in < 1 minute
 
 ---
@@ -205,7 +205,7 @@ User → LangChain Agent → LLM (Bedrock) → Tool(s) → Response
 |-----------|------|---------|------------------|
 | **API Gateway** | AWS Managed | API routing, throttling | Auto-scales |
 | **EKS** | Compute | Microservices | Horizontal (tasks) |
-| **Aurora PostgreSQL** | RDBMS | Transactional data | Read replicas |
+| **PostgreSQL** | RDBMS | Transactional data | Read replicas |
 | **DynamoDB** | NoSQL | Operational data | On-demand |
 | **ElastiCache** | Cache | Hot data, sessions | Sharding |
 | **Kafka/MSK** | Streaming | Event backbone | Add brokers/partitions |
@@ -265,7 +265,7 @@ User → LangChain Agent → LLM (Bedrock) → Tool(s) → Response
 
 ### Data Consistency
 
-- **Strong Consistency:** Aurora PostgreSQL (ACID)
+- **Strong Consistency:** PostgreSQL (ACID)
 - **Eventual Consistency:** DynamoDB, S3, Kafka
 - **Idempotency:** All event consumers use idempotency keys
 - **Event Sourcing:** Booking and payment services
@@ -292,7 +292,7 @@ User → LangChain Agent → LLM (Bedrock) → Tool(s) → Response
 
 | Scenario | Monthly Cost | Cost per Transaction | Key Drivers |
 |----------|-------------|---------------------|-------------|
-| **Booking Workflow** | $25,000 | $0.025 (per booking) | ECS, Aurora, Stripe |
+| **Booking Workflow** | $25,000 | $0.025 (per booking) | EKS, Postgres, Stripe |
 | **Demand Forecasting** | $30,000 | N/A (batch) | SageMaker, Apache BEAM |
 | **Dynamic Pricing** | $15,000 | $0.000015 (per query) | SageMaker, Redis |
 | **Predictive Maintenance** | $18,000 | $0.36 (per alert) | TimescaleDB, SageMaker |

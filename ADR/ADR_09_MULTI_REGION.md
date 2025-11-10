@@ -73,7 +73,7 @@ Adopt a **multi-region active-active deployment architecture** with **region-awa
    - **Automated failover:** Route 53 health checks promote secondary region
    - **Manual failover:** For planned maintenance
    - **Compliance exceptions:** Logged when primary region unavailable
-   - **Data consistency:** Aurora cross-region replication for synchronization
+   - **Data consistency:** cross-region replication for synchronization
 
 **Model Provider Strategy:**
 - **EU regions:** AWS Bedrock (Claude) - GDPR compliant, data stays in EU
